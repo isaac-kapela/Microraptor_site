@@ -49,12 +49,12 @@ export default function ListarDados() {
 	}));
 
 	const cores = {
-		temp1: '#3b82f6',
-		temp2: '#ef4444',
-		hum: '#10b981',
-		press: '#f59e0b',
-		alt: '#8b5cf6',
-		alt_dens: '#ec4899',
+		temp1:    '#a80303',
+		temp2:    '#e53e3e',
+		hum:      '#c53030',
+		press:    '#fc8181',
+		alt:      '#9b130f',
+		alt_dens: '#feb2b2',
 	};
 
 	const graficos = [
