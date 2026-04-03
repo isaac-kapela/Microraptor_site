@@ -15,6 +15,11 @@ export default {
     			xxs: '540px'
     		},
     		colors: {
+    			brand: {
+    				DEFAULT: '#a80303',
+    				dark:    '#980101',
+    				mid:     '#9b130f',
+    			},
     			background: 'hsl(var(--background))',
     			foreground: 'hsl(var(--foreground))',
     			card: {
