@@ -5,15 +5,15 @@
 
 
 :root {
-  --red: #B50103;
-  --spaceMono: 'Space Mono', monospace;
-  --monstserrat: 'Montserrat', sans-serif;
+  --red:        #a80303;
+  --red-dark:   #980101;
+  --red-mid:    #9b130f;
+  --spaceMono:  'Space Mono', monospace;
+  --monstserrat:'Montserrat', sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --red: #B50103;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
