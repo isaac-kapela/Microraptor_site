@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import InfiniteScrollCards from './Components/CardSolo';
+import InstagramFeed from './Components/InstagramFeed';
 
 // ─── Dados ────────────────────────────────────────────────────────────────────
 
@@ -276,6 +277,41 @@ export default function Home() {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           <InfiniteScrollCards />
+        </motion.div>
+      </section>
+
+      {/* ══ INSTAGRAM ════════════════════════════════════════════════════════ */}
+      <section className="relative py-20 px-6 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(152,1,1,0.06),transparent)]" />
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="text-center mb-10"
+        >
+          <span className="inline-block text-xs font-bold tracking-[0.25em] uppercase text-[#a80303] mb-4 px-3 py-1 rounded-full border border-[#980101]/40 bg-[#980101]/10">
+            Instagram
+          </span>
+          <h2 className="text-3xl md:text-4xl font-black text-white mb-2">Últimas do perfil</h2>
+          <a
+            href="https://www.instagram.com/microraptorufjf/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-500 hover:text-[#a80303] transition-colors text-sm font-medium"
+          >
+            @microraptorufjf
+          </a>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+        >
+          <InstagramFeed />
         </motion.div>
       </section>
 

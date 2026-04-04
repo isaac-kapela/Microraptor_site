@@ -7,66 +7,53 @@ import { Icon } from '@iconify/react';
 
 const cardData = [
 	{
-		href: '/event',
-		title: 'What to watch',
-		description: '1',
-		imageSrc: 'https://heroui.com/images/card-example-4.jpeg',
+		href: '/About',
+		title: 'Nossa Equipe',
+		description: 'Equipe Microraptor',
+		src: '/equipe/foto1.jpeg',
+		type: 'image' as const,
 	},
 	{
-		href: '/plant',
-		title: 'Plant a tree',
-		description: '2',
-		imageSrc: 'https://heroui.com/images/card-example-3.jpeg',
+		href: '/About',
+		title: 'Nossa Equipe',
+		description: 'Equipe Microraptor',
+		src: '/equipe/foto2.jpeg',
+		type: 'image' as const,
 	},
 	{
-		href: '/supercharged',
-		title: 'Supercharged',
-		description: '3',
-		imageSrc: 'https://heroui.com/images/card-example-2.jpeg',
-	},
-	{ href: '/supercharged', title: 'Supercharged', description: '4', imageSrc: './imagemTexto2.png' },
-	{
-		href: '/supercharged',
-		title: 'Supercharged',
-		description: '5',
-		imageSrc: 'https://heroui.com/images/card-example-2.jpeg',
+		href: '/About',
+		title: 'Nossa Equipe',
+		description: 'Equipe Microraptor',
+		src: '/equipe/foto3.jpeg',
+		type: 'image' as const,
 	},
 	{
-		href: '/supercharged',
-		title: 'Supercharged',
-		description: '6',
-		imageSrc: 'https://heroui.com/images/card-example-2.jpeg',
+		href: '/About',
+		title: 'Nossa Equipe',
+		description: 'Equipe Microraptor',
+		src: '/equipe/foto4.jpeg',
+		type: 'image' as const,
 	},
 	{
-		href: '/event',
-		title: 'What to watch',
-		description: '7',
-		imageSrc: 'https://heroui.com/images/card-example-4.jpeg',
+		href: '/About',
+		title: 'Nossa Equipe',
+		description: 'Equipe Microraptor',
+		src: '/equipe/foto5.jpeg',
+		type: 'image' as const,
 	},
 	{
-		href: '/plant',
-		title: 'Plant a tree',
-		description: '8',
-		imageSrc: 'https://heroui.com/images/card-example-3.jpeg',
+		href: '/About',
+		title: 'Nossa Equipe',
+		description: 'Equipe Microraptor',
+		src: '/equipe/foto6.jpeg',
+		type: 'image' as const,
 	},
 	{
-		href: '/supercharged',
-		title: 'Supercharged',
-		description: '9',
-		imageSrc: 'https://heroui.com/images/card-example-2.jpeg',
-	},
-	{ href: '/supercharged', title: 'Supercharged', description: '10', imageSrc: './imagemTexto2.png' },
-	{
-		href: '/supercharged',
-		title: 'Supercharged',
-		description: '11',
-		imageSrc: 'https://heroui.com/images/card-example-2.jpeg',
-	},
-	{
-		href: '/supercharged',
-		title: 'Supercharged',
-		description: '12',
-		imageSrc: 'https://heroui.com/images/card-example-2.jpeg',
+		href: '/About',
+		title: 'Nossa Equipe',
+		description: 'Equipe Microraptor',
+		src: '/equipe/video1.mp4',
+		type: 'video' as const,
 	},
 ];
 
@@ -156,19 +143,30 @@ export default function InfiniteScrollCards() {
 							isPressable
 							onPress={() => (window.location.href = card.href)}
 							shadow="lg"
-							className="w-full h-[350px] lg:h-[400px] snap-start cursor-pointer shadow-lg"
+							className="w-full h-[350px] lg:h-[400px] snap-start cursor-pointer shadow-lg overflow-hidden"
 						>
 							<CardHeader className="absolute z-10 top-1 flex-col !items-start">
 								<p className="text-tiny text-white/60 uppercase font-bold">{card.title}</p>
 								<h4 className="text-white font-medium text-sm md:text-base lg:text-lg">{card.description}</h4>
 							</CardHeader>
-							<Image
-								removeWrapper
-								draggable="false"
-								alt="Card background"
-								className="z-0 w-full h-full object-cover"
-								src={card.imageSrc}
-							/>
+							{card.type === 'video' ? (
+								<video
+									src={card.src}
+									autoPlay
+									muted
+									loop
+									playsInline
+									className="z-0 w-full h-full object-cover"
+								/>
+							) : (
+								<Image
+									removeWrapper
+									draggable="false"
+									alt="Card background"
+									className="z-0 w-full h-full object-cover"
+									src={card.src}
+								/>
+							)}
 						</Card>
 					</motion.div>
 				))}
