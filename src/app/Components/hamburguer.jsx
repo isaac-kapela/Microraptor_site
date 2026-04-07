@@ -52,6 +52,32 @@ export default function HamburguerComponent() {
 
 						<Link
 							onClick={() => setOpen(false)}
+							href="/Competicao"
+							className={
+								pathname == '/Competicao'
+									? 'font-bold mr-4 text-white flex items-center gap-2'
+									: 'mr-4 text-red-500 flex items-center gap-2'
+							}
+						>
+							<Icon icon="material-symbols-light:trophy-outline" width="24" height="24" />
+							Competição
+						</Link>
+
+						<Link
+							onClick={() => setOpen(false)}
+							href="/Bastidores"
+							className={
+								pathname == '/Bastidores'
+									? 'font-bold mr-4 text-white flex items-center gap-2'
+									: 'mr-4 text-red-500 flex items-center gap-2'
+							}
+						>
+							<Icon icon="material-symbols-light:flight" width="24" height="24" />
+							Bastidores
+						</Link>
+
+						<Link
+							onClick={() => setOpen(false)}
 							href="/Contact"
 							className={
 								pathname == '/Contact'
