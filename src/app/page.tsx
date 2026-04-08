@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import InfiniteScrollCards from './Components/CardSolo';
 import InstagramFeed from './Components/InstagramFeed';
+import CompetitionCountdown from './Components/CompetitionCountdown';
 
 // ─── Dados ────────────────────────────────────────────────────────────────────
 
@@ -189,6 +190,9 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* ══ COUNTDOWN ════════════════════════════════════════════════════════ */}
+      <CompetitionCountdown />
 
       {/* ══ SOBRE ═════════════════════════════════════════════════════════════ */}
       <section className="relative py-28 px-6 overflow-hidden">

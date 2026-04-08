@@ -50,6 +50,9 @@ export default function HamburguerComponent() {
 							About
 						</Link>
 
+
+
+
 						<Link
 							onClick={() => setOpen(false)}
 							href="/Competicao"

@@ -15,6 +15,7 @@ const links = [
   { href: "/Sensor",         label: "Sensor"        },
 ];
 
+
 export const DesktopNav = () => {
   const pathname = usePathname();
 
