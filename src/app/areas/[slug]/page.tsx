@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { areas, getArea } from '../data';
@@ -199,6 +200,80 @@ export default function AreaPage({ params }: { params: { slug: string } }) {
         </motion.div>
       </section>
 
+      {/* ── MEMBROS ── */}
+      {area.members && area.members.length > 0 && (
+        <section className="max-w-4xl mx-auto px-6 py-16">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-sm font-bold tracking-widest uppercase text-[#a80303] mb-10"
+          >
+            Membros da área
+          </motion.h2>
+
+          <div className="flex flex-wrap gap-6 items-start">
+            {/* Líder em destaque */}
+            {area.members.filter(m => m.leader).map((m, i) => (
+              <motion.div
+                key={m.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="flex flex-col items-center"
+              >
+                <div className="relative">
+                  <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-[#a80303] to-[#980101] blur-sm opacity-70" />
+                  <div className="relative w-36 h-36 rounded-2xl overflow-hidden border-2 border-[#a80303]/60">
+                    <Image
+                      src={m.photo}
+                      alt={m.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#a80303] to-[#980101] text-white text-[10px] font-black tracking-widest uppercase px-3 py-1 rounded-full shadow-lg whitespace-nowrap">
+                    Líder de Área
+                  </span>
+                </div>
+                <p className="mt-4 text-white font-bold text-base">{m.name}</p>
+              </motion.div>
+            ))}
+
+            {/* Divisor vertical */}
+            {area.members.some(m => m.leader) && area.members.some(m => !m.leader) && (
+              <div className="hidden sm:block w-px self-stretch bg-white/10 mx-2" />
+            )}
+
+            {/* Demais membros */}
+            <div className="flex flex-wrap gap-5">
+              {area.members.filter(m => !m.leader).map((m, i) => (
+                <motion.div
+                  key={m.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 + i * 0.08 }}
+                  className="flex flex-col items-center"
+                >
+                  <div className="w-24 h-24 rounded-xl overflow-hidden border border-white/10 hover:border-[#a80303]/50 transition-colors duration-300">
+                    <Image
+                      src={m.photo}
+                      alt={m.name}
+                      width={96}
+                      height={96}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <p className="mt-2 text-gray-300 text-sm font-medium">{m.name}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ── CTA PROCESSO SELETIVO ── */}
       <section className="relative px-6 py-16 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_80%_at_50%_50%,rgba(152,1,1,0.10),transparent)]" />
@@ -221,12 +296,23 @@ export default function AreaPage({ params }: { params: { slug: string } }) {
               <p className="text-gray-400 mb-8 leading-relaxed">
                 Nosso processo seletivo está aberto. Venha fazer parte da equipe tricampeã da UFJF.
               </p>
-              <a
-                href="mailto:microraptor@ufjf.br"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#a80303] to-[#980101] hover:from-[#c00404] hover:to-[#980101] text-white font-bold px-8 py-3.5 rounded-2xl text-base shadow-[0_0_32px_rgba(152,1,1,0.4)] hover:shadow-[0_0_48px_rgba(168,3,3,0.6)] transition-all duration-300"
-              >
-                Quero entrar
-              </a>
+              {area.whatsapp ? (
+                <a
+                  href={`https://wa.me/${area.whatsapp}?text=Ol%C3%A1%21%20Conheci%20a%20equipe%20Microraptor%20atrav%C3%A9s%20do%20site%20e%20tenho%20interesse%20em%20entrar%20na%20%C3%A1rea%20de%20${encodeURIComponent(area.name)}.%20Gostaria%20de%20saber%20mais%21`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-[#a80303] to-[#980101] hover:from-[#c00404] hover:to-[#980101] text-white font-bold px-8 py-3.5 rounded-2xl text-base shadow-[0_0_32px_rgba(152,1,1,0.4)] hover:shadow-[0_0_48px_rgba(168,3,3,0.6)] transition-all duration-300"
+                >
+                  Quero entrar
+                </a>
+              ) : (
+                <a
+                  href="mailto:microraptor@ufjf.br"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-[#a80303] to-[#980101] hover:from-[#c00404] hover:to-[#980101] text-white font-bold px-8 py-3.5 rounded-2xl text-base shadow-[0_0_32px_rgba(152,1,1,0.4)] hover:shadow-[0_0_48px_rgba(168,3,3,0.6)] transition-all duration-300"
+                >
+                  Quero entrar
+                </a>
+              )}
             </div>
           </div>
         </motion.div>

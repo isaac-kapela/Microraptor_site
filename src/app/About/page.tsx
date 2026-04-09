@@ -40,6 +40,12 @@ const areas = [
   { slug: 'gestao',           abbr: 'GST', name: 'Gestão',            description: 'Organização da equipe: planejamento estratégico, financeiro, marketing, divulgação e captação de patrocínios.'           },
 ];
 
+const fabricacaoAreas = [
+  { slug: 'fuselagem-e-laminacao', abbr: 'F&L', name: 'Fuselagem e Laminação', description: 'Fabricação do corpo da aeronave e peças em compósitos — fibra de carbono e fibra de vidro — com técnicas de laminação a vácuo e infusão de resina.' },
+  { slug: 'cauda',                 abbr: 'CAU', name: 'Cauda',                  description: 'Fabricação das empenagens horizontal e vertical, com instalação precisa do profundor e leme.'                                                          },
+  { slug: 'asa',                   abbr: 'ASA', name: 'Asa',                    description: 'Fabricação da asa principal com perfil aerodinâmico preciso, revestimento e instalação dos ailerons.'                                                   },
+];
+
 const reasons = [
   { num: '01', title: 'Experiência real',        description: 'Engenharia aplicada desde o primeiro dia, com desafios do mercado real.'      },
   { num: '02', title: 'Equipe multidisciplinar', description: 'Trabalho colaborativo com estudantes de múltiplos cursos.'                    },
@@ -263,6 +269,41 @@ export default function AboutPage() {
               </motion.div>
             ))}
           </div>
+
+          {/* ── ÁREAS DE FABRICAÇÃO ── */}
+          <FadeIn className="text-center mt-24 mb-12">
+            <SectionLabel>Fabricação</SectionLabel>
+            <h2 className="text-3xl md:text-4xl font-black text-white mt-2 mb-4">Áreas de Fabricação</h2>
+            <p className="text-gray-500 text-lg max-w-2xl mx-auto">
+              Onde o projeto sai do computador e ganha forma física. As equipes de fabricação transformam modelos CAD em componentes reais, trabalhando com materiais compostos, ferramentas de precisão e processos artesanais de alta qualidade.
+            </p>
+          </FadeIn>
+
+          <div className="grid sm:grid-cols-3 gap-4">
+            {fabricacaoAreas.map((area, i) => (
+              <motion.div key={area.slug}
+                initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.6 }}
+                whileHover={{ y: -6 }}>
+                <Link href={`/areas/${area.slug}`}>
+                  <div className="group relative rounded-2xl p-6 bg-white/[0.03] border border-white/[0.07] hover:border-[#a80303]/50 hover:bg-[#980101]/8 transition-all duration-300 cursor-pointer h-full">
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#980101]/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="relative">
+                      <div className="w-11 h-11 rounded-xl bg-[#980101]/15 border border-[#a80303]/25 flex items-center justify-center mb-4 group-hover:bg-[#980101]/30 group-hover:border-[#a80303]/50 transition-all">
+                        <span className="text-[#a80303] font-black text-xs tracking-wider">{area.abbr}</span>
+                      </div>
+                      <h3 className="font-bold text-lg text-white mb-2 group-hover:text-[#a80303] transition-colors duration-300">{area.name}</h3>
+                      <p className="text-gray-500 text-sm leading-relaxed group-hover:text-gray-400 transition-colors duration-300">{area.description}</p>
+                      <div className="mt-4 flex items-center gap-1 text-[#a80303]/60 group-hover:text-[#a80303] transition-colors text-sm font-medium">
+                        <span>Ver mais</span>
+                        <span className="transition-transform group-hover:translate-x-1 duration-200">→</span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -308,11 +349,13 @@ export default function AboutPage() {
                 Estamos em busca de novos talentos para fazer parte da nossa história.
                 Paixão por aviação, engenharia e trabalho em equipe? Esse é o seu lugar.
               </p>
-              <motion.a href="mailto:microraptor@ufjf.br"
+              <motion.a
+                href="https://wa.me/553299310160?text=Ol%C3%A1%21%20Conheci%20a%20equipe%20Microraptor%20atrav%C3%A9s%20do%20site%20e%20estou%20entrando%20em%20contato%20para%20conhecer%20melhor%20e%20saber%20como%20fazer%20parte%20da%20equipe."
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}
                 className="inline-flex items-center gap-3 bg-gradient-to-r from-[#a80303] to-[#980101] hover:from-[#9b130f] hover:to-[#a80303] text-white font-bold px-10 py-4 rounded-2xl text-lg shadow-[0_0_40px_rgba(152,1,1,0.4)] hover:shadow-[0_0_60px_rgba(168,3,3,0.6)] transition-all duration-300">
                 Quero fazer parte
-
               </motion.a>
               <p className="mt-6 text-gray-600 text-sm">microraptor@ufjf.br</p>
             </div>

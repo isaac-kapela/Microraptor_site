@@ -167,7 +167,7 @@ export default function PatrocinadoresPage() {
 
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
             className="flex flex-wrap justify-center gap-4">
-            <a href="https://wa.me/5532993100160?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20Microraptor%20UFJF%20e%20tenho%20interesse%20em%20patrocinar%20a%20equipe.%20Poderia%20me%20enviar%20mais%20informa%C3%A7%C3%B5es%20sobre%20as%20cotas%20de%20patrocínio%3F"
+            <a href="https://wa.me/553299310160?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20Microraptor%20UFJF%20e%20tenho%20interesse%20em%20patrocinar%20a%20equipe.%20Poderia%20me%20enviar%20mais%20informa%C3%A7%C3%B5es%20sobre%20as%20cotas%20de%20patrocínio%3F"
               target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-[#a80303] to-[#980101] hover:from-[#9b130f] hover:to-[#a80303] text-white font-bold px-8 py-4 rounded-2xl text-base shadow-[0_0_32px_rgba(152,1,1,0.4)] hover:shadow-[0_0_52px_rgba(168,3,3,0.6)] transition-all duration-300">
               <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -315,7 +315,7 @@ export default function PatrocinadoresPage() {
                     </li>
                   ))}
                 </ul>
-                <a href="https://wa.me/5532993100160?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20Microraptor%20UFJF%20e%20tenho%20interesse%20em%20patrocinar%20a%20equipe.%20Poderia%20me%20enviar%20mais%20informa%C3%A7%C3%B5es%20sobre%20as%20cotas%20de%20patrocínio%3F"
+                <a href="https://wa.me/553299310160?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20Microraptor%20UFJF%20e%20tenho%20interesse%20em%20patrocinar%20a%20equipe.%20Poderia%20me%20enviar%20mais%20informa%C3%A7%C3%B5es%20sobre%20as%20cotas%20de%20patrocínio%3F"
                   target="_blank" rel="noopener noreferrer"
                   className={`text-center py-2.5 rounded-xl text-xs font-bold tracking-wide transition-all duration-300 ${
                     tier.highlight

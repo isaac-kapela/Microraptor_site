@@ -8,7 +8,6 @@ import InfiniteScrollCards from './Components/CardSolo';
 import InstagramFeed from './Components/InstagramFeed';
 import CompetitionCountdown from './Components/CompetitionCountdown';
 
-// ─── Dados ────────────────────────────────────────────────────────────────────
 
 const stats = [
   { value: '15+',  label: 'Anos'        },
@@ -333,7 +332,11 @@ export default function Home() {
                 Buscamos novos talentos apaixonados por aviação, engenharia e trabalho em equipe.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                <Link href="/About">
+                <a
+                  href="https://wa.me/553299310160?text=Ol%C3%A1%21%20Conheci%20a%20equipe%20Microraptor%20atrav%C3%A9s%20do%20site%20e%20estou%20entrando%20em%20contato%20para%20conhecer%20melhor%20e%20saber%20como%20fazer%20parte%20da%20equipe."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <motion.span
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.97 }}
@@ -341,7 +344,7 @@ export default function Home() {
                   >
                     Quero fazer parte
                   </motion.span>
-                </Link>
+                </a>
               </div>
             </div>
           </div>
