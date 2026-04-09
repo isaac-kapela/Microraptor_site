@@ -61,6 +61,11 @@ export const areas: Area[] = [
     skills: ['Dinâmica de Voo', 'Sistemas de Controle', 'Álgebra Linear', 'Equações Diferenciais'],
     color: 'from-[#9b130f] to-[#980101]',
     whatsapp: '553288374710',
+    members: [
+      { name: 'Enzo Giradi', photo: '/fotosMembrosAtuais/estabilidade/enzoGiradi.jpeg', leader: true },
+      { name: 'Elias',       photo: '/fotosMembrosAtuais/estabilidade/Elias.jpeg'                    },
+      { name: 'Isis',        photo: '/fotosMembrosAtuais/estabilidade/isis.jpeg'                     },
+    ],
   },
   {
     slug: 'desempenho',
