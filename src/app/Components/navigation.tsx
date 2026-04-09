@@ -4,23 +4,26 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
+import { ThemeToggle } from "./ThemeToggle";
+import { useTheme } from "./ThemeProvider";
 
 const links = [
-  { href: "/",               label: "Home"          },
-  { href: "/About",          label: "About"         },
+  { href: "/",               label: "Início"        },
+  { href: "/About",          label: "Sobre"         },
   { href: "/Competicao",     label: "Competição"    },
   { href: "/Patrocinadores", label: "Patrocinadores"},
   { href: "/Bastidores",     label: "Bastidores"    },
-  { href: "/Contact",        label: "Contact"       },
-  { href: "/Sensor",         label: "Sensor"        },
+  { href: "/Contact",        label: "Contato"       },
 ];
 
 
 export const DesktopNav = () => {
   const pathname = usePathname();
+  const { theme } = useTheme();
 
   return (
-    <nav className="fixed flex items-center justify-center font-[family-name:var(--spaceMono)] shadow-bottom bg-black w-full py-8 border-b border-white/5">
+    <nav className={`fixed flex items-center justify-center font-[family-name:var(--spaceMono)] shadow-bottom w-full py-8 border-b transition-colors duration-300
+      ${theme === 'dark' ? 'bg-black border-white/5' : 'bg-white border-black/10'}`}>
       <div className="absolute left-0 pl-4">
         <Link href="/">
           <motion.div whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.95 }} transition={{ duration: 0.2 }}>
@@ -38,12 +41,14 @@ export const DesktopNav = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.96 }}
                 className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 block
-                  ${active ? 'text-white' : 'text-[#a80303] hover:text-[#9b130f]'}`}
+                  ${active
+                    ? theme === 'dark' ? 'text-white' : 'text-black'
+                    : 'text-[#a80303] hover:text-[#9b130f]'}`}
               >
                 {active && (
                   <motion.span
                     layoutId="nav-pill"
-                    className="absolute inset-0 rounded-lg bg-white/8 border border-white/10"
+                    className={`absolute inset-0 rounded-lg border ${theme === 'dark' ? 'bg-white/8 border-white/10' : 'bg-black/5 border-black/10'}`}
                     transition={{ type: 'spring', stiffness: 380, damping: 32 }}
                   />
                 )}
@@ -52,6 +57,10 @@ export const DesktopNav = () => {
             </Link>
           );
         })}
+      </div>
+
+      <div className="absolute right-4">
+        <ThemeToggle />
       </div>
     </nav>
   );

@@ -11,10 +11,10 @@ import CompetitionCountdown from './Components/CompetitionCountdown';
 // ─── Dados ────────────────────────────────────────────────────────────────────
 
 const stats = [
-  { value: '7+',  label: 'Anos'        },
-  { value: '3×',  label: 'Campeões'    },
-  { value: '9',   label: 'Áreas'       },
-  { value: '~50', label: 'Membros'     },
+  { value: '15+',  label: 'Anos'        },
+  { value: '3×',   label: 'Campeões'    },
+  { value: '9',    label: 'Áreas'       },
+  { value: '+100', label: 'Membros'     },
 ];
 
 const highlights = [
@@ -141,15 +141,6 @@ export default function Home() {
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-[#a80303] to-[#980101] hover:from-[#c00404] hover:to-[#a80303] text-white font-bold px-8 py-3.5 rounded-2xl text-base shadow-[0_0_32px_rgba(152,1,1,0.5)] hover:shadow-[0_0_48px_rgba(168,3,3,0.7)] transition-all duration-300 cursor-pointer"
               >
                 Conheça a equipe
-              </motion.span>
-            </Link>
-            <Link href="/Sensor">
-              <motion.span
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.96 }}
-                className="inline-flex items-center gap-2 bg-white/8 hover:bg-white/14 border border-white/20 hover:border-white/35 text-white font-bold px-8 py-3.5 rounded-2xl text-base backdrop-blur-sm transition-all duration-300 cursor-pointer"
-              >
-                Ver Sensores
               </motion.span>
             </Link>
           </motion.div>

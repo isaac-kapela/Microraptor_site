@@ -55,6 +55,62 @@ const cardData = [
 		src: '/equipe/video1.mp4',
 		type: 'video' as const,
 	},
+	{
+		href: '/About',
+		title: 'Nossa Equipe',
+		description: 'Equipe Microraptor',
+		src: '/equipe/foto7.jpeg',
+		type: 'image' as const,
+	},
+	{
+		href: '/About',
+		title: 'Nossa Equipe',
+		description: 'Equipe Microraptor',
+		src: '/equipe/foto8.jpeg',
+		type: 'image' as const,
+	},
+	{
+		href: '/About',
+		title: 'Nossa Equipe',
+		description: 'Equipe Microraptor',
+		src: '/equipe/video2.mp4',
+		type: 'video' as const,
+	},
+	{
+		href: '/About',
+		title: 'Nossa Equipe',
+		description: 'Equipe Microraptor',
+		src: '/equipe/foto9.jpeg',
+		type: 'image' as const,
+	},
+	{
+		href: '/About',
+		title: 'Nossa Equipe',
+		description: 'Equipe Microraptor',
+		src: '/equipe/foto10.jpeg',
+		type: 'image' as const,
+	},
+	{
+		href: '/About',
+		title: 'Nossa Equipe',
+		description: 'Equipe Microraptor',
+		src: '/equipe/foto11.jpeg',
+		type: 'image' as const,
+	},
+	{
+		href: '/About',
+		title: 'Nossa Equipe',
+		description: 'Equipe Microraptor',
+		src: '/equipe/foto12.jpeg',
+		type: 'image' as const,
+	},
+	{
+		href: '/About',
+		title: 'Nossa Equipe',
+		description: 'Equipe Microraptor',
+		src: '/equipe/video3.mp4',
+		type: 'video' as const,
+	},
 ];
 
 export default function InfiniteScrollCards() {
