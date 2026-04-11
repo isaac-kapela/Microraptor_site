@@ -1,7 +1,15 @@
+/**
+ * @file page.tsx
+ * @brief Página "Competição" — informações sobre o SAE Aerodesign Brasil.
+ * @description Descreve as categorias da competição (Regular, Advanced, Micro),
+ *   as regras gerais, o histórico de participação e resultados da equipe.
+ * @module app/Competicao/page
+ */
+
 'use client';
 
-import { motion, useInView, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { motion, useInView, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -100,6 +108,60 @@ const tierColor: Record<number, string> = {
   3: 'from-white/30 to-white/10',
 };
 
+// ─── Álbum de fotos por edição ────────────────────────────────────────────────
+
+/**
+ * Adicione os caminhos das fotos de cada ano abaixo.
+ * As imagens devem ser colocadas em: public/competicao/<ano>/
+ * Exemplo: public/competicao/2024/foto1.jpg
+ */
+type AlbumItem = { src: string; caption?: string; type?: 'image' | 'video' };
+
+const competitionAlbums: Record<string, AlbumItem[]> = {
+  '2026': [],
+  '2025': [
+    { src: '/competicao/2025/img1.JPG' },
+    { src: '/competicao/2025/img2.JPG' },
+    { src: '/competicao/2025/img3.JPG' },
+    { src: '/competicao/2025/img4.JPG' },
+    { src: '/competicao/2025/img5.JPG' },
+    { src: '/competicao/2025/img6.JPG' },
+    { src: '/competicao/2025/CAF118A8-E15D-43A5-B23C-C77A7494758B_Original.JPG' },
+    { src: '/competicao/2025/img1.jpg' },
+    { src: '/competicao/2025/img2.jpg' },
+    { src: '/competicao/2025/img3.jpg' },
+    { src: '/competicao/2025/img4.jpg' },
+    { src: '/competicao/2025/img5.jpg' },
+    { src: '/competicao/2025/img6.jpg' },
+    { src: '/competicao/2025/img7.jpg' },
+    { src: '/competicao/2025/img8.jpg' },
+    { src: '/competicao/2025/img9.jpg' },
+    { src: '/competicao/2025/img10.jpg' },
+    { src: '/competicao/2025/img11.jpg' },
+    { src: '/competicao/2025/img12.jpg' },
+    { src: '/competicao/2025/img13.jpg' },
+    { src: '/competicao/2025/img14.jpg' },
+    { src: '/competicao/2025/img15.jpg' },
+    { src: '/competicao/2025/img16.jpg' },
+    { src: '/competicao/2025/img17.jpg' },
+    { src: '/competicao/2025/img18.jpg' },
+    { src: '/competicao/2025/img19.jpg' },
+    { src: '/competicao/2025/img20.jpg' },
+    { src: '/competicao/2025/img21.jpg' },
+    { src: '/competicao/2025/video1.mp4', type: 'video' },
+    { src: '/competicao/2025/video2.mp4', type: 'video' },
+  ],
+  '2024': [
+    { src: '/competicao/2024/foto_oficial.jpg', caption: 'Foto oficial' },
+    { src: '/competicao/2024/img1.JPG' },
+    { src: '/competicao/2024/img2.JPG' },
+    { src: '/competicao/2024/img3.JPG' },
+    { src: '/competicao/2024/img4.jpg' },
+    { src: '/competicao/2024/vid1.mp4', type: 'video' },
+  ],
+  '2023': [],
+};
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function FadeIn({
@@ -134,6 +196,182 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
+// ─── Lightbox ─────────────────────────────────────────────────────────────────
+
+function Lightbox({
+  photos,
+  index,
+  onClose,
+  onPrev,
+  onNext,
+}: {
+  photos: AlbumItem[];
+  index: number;
+  onClose: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+}) {
+  const photo = photos[index];
+  const isVideo = photo.type === 'video';
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center px-4"
+      onClick={onClose}
+    >
+      {/* Fechar */}
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 text-white/60 hover:text-white text-3xl leading-none transition-colors"
+        aria-label="Fechar"
+      >
+        ×
+      </button>
+
+      {/* Anterior */}
+      {index > 0 && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onPrev(); }}
+          className="absolute left-4 md:left-8 text-white/50 hover:text-white text-4xl leading-none transition-colors select-none"
+          aria-label="Anterior"
+        >
+          ‹
+        </button>
+      )}
+
+      {/* Mídia */}
+      <motion.div
+        key={index}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.25 }}
+        className="relative max-w-5xl w-full max-h-[85vh] flex flex-col items-center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="relative w-full" style={{ maxHeight: '80vh' }}>
+          {isVideo ? (
+            <video
+              src={photo.src}
+              controls
+              autoPlay
+              playsInline
+              className="max-h-[75vh] w-auto mx-auto rounded-xl shadow-2xl"
+            />
+          ) : (
+            <Image
+              src={photo.src}
+              alt={photo.caption ?? `Foto ${index + 1}`}
+              width={1200}
+              height={800}
+              className="object-contain max-h-[75vh] w-auto mx-auto rounded-xl shadow-2xl"
+            />
+          )}
+        </div>
+        {photo.caption && (
+          <p className="mt-3 text-gray-400 text-sm text-center">{photo.caption}</p>
+        )}
+        <p className="mt-1 text-gray-600 text-xs">{index + 1} / {photos.length}</p>
+      </motion.div>
+
+      {/* Próximo */}
+      {index < photos.length - 1 && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onNext(); }}
+          className="absolute right-4 md:right-8 text-white/50 hover:text-white text-4xl leading-none transition-colors select-none"
+          aria-label="Próximo"
+        >
+          ›
+        </button>
+      )}
+    </motion.div>
+  );
+}
+
+// ─── Álbum por ano ────────────────────────────────────────────────────────────
+
+function YearAlbum({ year }: { year: string }) {
+  const photos = competitionAlbums[year] ?? [];
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  if (photos.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-center">
+        <div className="w-16 h-16 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-5">
+          <span className="text-3xl">📷</span>
+        </div>
+        <p className="text-gray-500 text-sm">As fotos de {year} serão publicadas em breve.</p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        {photos.map((photo, i) => {
+          const isVideo = photo.type === 'video';
+          return (
+            <motion.button
+              key={photo.src}
+              initial={{ opacity: 0, scale: 0.92 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.04, duration: 0.35 }}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => setLightboxIndex(i)}
+              className="relative aspect-square rounded-xl overflow-hidden border border-white/[0.07] hover:border-[#a80303]/50 transition-all duration-300 group"
+            >
+              {isVideo ? (
+                <div className="absolute inset-0 bg-black flex items-center justify-center">
+                  <video
+                    src={photo.src}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  {photo.caption && (
+                    <p className="absolute bottom-2 left-2 right-2 text-white text-xs truncate text-center z-10">{photo.caption}</p>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <Image
+                    src={photo.src}
+                    alt={photo.caption ?? `Foto ${i + 1}`}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+                  {photo.caption && (
+                    <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <p className="text-white text-xs truncate">{photo.caption}</p>
+                    </div>
+                  )}
+                </>
+              )}
+            </motion.button>
+          );
+        })}
+      </div>
+
+      <AnimatePresence>
+        {lightboxIndex !== null && (
+          <Lightbox
+            photos={photos}
+            index={lightboxIndex}
+            onClose={() => setLightboxIndex(null)}
+            onPrev={() => setLightboxIndex((p) => Math.max(0, (p ?? 0) - 1))}
+            onNext={() => setLightboxIndex((p) => Math.min(photos.length - 1, (p ?? 0) + 1))}
+          />
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function CompeticaoPage() {
@@ -141,6 +379,9 @@ export default function CompeticaoPage() {
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroY  = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
   const heroOp = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
+  const albumYears = Object.keys(competitionAlbums);
+  const [activeYear, setActiveYear] = useState(albumYears[0]);
 
   return (
     <div className="bg-black min-h-screen text-white overflow-x-hidden">
@@ -470,6 +711,64 @@ export default function CompeticaoPage() {
               e semanas de testes — tudo culminando em minutos de voo que valem troféus e memórias para sempre.
             </p>
           </FadeIn>
+        </div>
+      </section>
+
+      {/* ── ÁLBUM DE FOTOS ── */}
+      <section className="relative py-32 px-6 overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_65%_50%_at_50%_50%,rgba(152,1,1,0.07),transparent)]" />
+
+        <div className="max-w-6xl mx-auto relative z-10">
+          <FadeIn className="text-center mb-12">
+            <SectionLabel>Galeria</SectionLabel>
+            <h2 className="text-4xl md:text-5xl font-black text-white mt-2 mb-4">
+              Álbum das{' '}
+              <span className="bg-gradient-to-r from-[#a80303] to-[#9b130f] bg-clip-text text-transparent">
+                competições
+              </span>
+            </h2>
+            <p className="text-gray-500 text-lg max-w-xl mx-auto">
+              Momentos registrados em cada edição do SAE Aero Design Brasil.
+            </p>
+          </FadeIn>
+
+          {/* Abas de ano */}
+          <div className="flex justify-center mb-10">
+            <div className="flex gap-2 p-1.5 rounded-2xl bg-white/[0.04] border border-white/[0.08]">
+              {albumYears.map((year) => (
+                <button
+                  key={year}
+                  onClick={() => setActiveYear(year)}
+                  className={`relative px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${
+                    activeYear === year
+                      ? 'text-white'
+                      : 'text-gray-500 hover:text-gray-300'
+                  }`}
+                >
+                  {activeYear === year && (
+                    <motion.span
+                      layoutId="album-tab"
+                      className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#a80303] to-[#980101] shadow-[0_0_20px_rgba(152,1,1,0.5)]"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10">{year}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Grid de fotos do ano selecionado */}
+          <motion.div
+            key={activeYear}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: [0.21, 0.47, 0.32, 0.98] }}
+          >
+            <YearAlbum year={activeYear} />
+          </motion.div>
         </div>
       </section>
 

@@ -1,9 +1,20 @@
+/**
+ * @file InstagramFeed.tsx
+ * @brief Feed de posts do Instagram via embed oficial.
+ * @description Carrega o script de embed do Instagram de forma lazy e exibe
+ *   até 4 posts/reels em um grid responsivo com animações de entrada.
+ * @module Components/InstagramFeed
+ */
+
 'use client';
 
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
+/**
+ * @brief URLs dos posts/reels do Instagram a serem exibidos no feed.
+ */
 const posts = [
   'https://www.instagram.com/reel/DWhfJyigQ4v/',
   'https://www.instagram.com/reel/DWm1AdODK9x/',
@@ -11,6 +22,11 @@ const posts = [
   'https://www.instagram.com/p/DVoXvM0AEKZ/',
 ];
 
+/**
+ * @brief Componente de feed do Instagram.
+ * @description Carrega `embed.js` com estratégia `lazyOnload` e chama
+ *   `instgrm.Embeds.process()` após a carga para renderizar os embeds.
+ */
 export default function InstagramFeed() {
   const [loaded, setLoaded] = useState(false);
 

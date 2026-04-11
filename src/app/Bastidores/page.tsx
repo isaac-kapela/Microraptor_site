@@ -1,3 +1,11 @@
+/**
+ * @file page.tsx
+ * @brief Página "Bastidores" — galeria de fotos e vídeos dos bastidores.
+ * @description Exibe uma galeria em grid responsivo com imagens e vídeos das
+ *   atividades internas da equipe, organizados por categorias.
+ * @module app/Bastidores/page
+ */
+
 'use client';
 
 import { motion, useInView } from 'framer-motion';

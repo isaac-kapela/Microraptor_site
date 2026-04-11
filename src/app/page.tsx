@@ -1,3 +1,12 @@
+/**
+ * @file page.tsx
+ * @brief Página inicial (Home) do site da Microraptor.
+ * @description Exibe hero com parallax, barra de estatísticas, contador
+ *   regressivo da competição, seção "Sobre", carrossel de fotos, feed do
+ *   Instagram e CTA de processo seletivo.
+ * @module app/page
+ */
+
 'use client';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
@@ -9,6 +18,9 @@ import InstagramFeed from './Components/InstagramFeed';
 import CompetitionCountdown from './Components/CompetitionCountdown';
 
 
+/**
+ * @brief Estatísticas de destaque da equipe exibidas na stats bar.
+ */
 const stats = [
   { value: '15+',  label: 'Anos'        },
   { value: '3×',   label: 'Campeões'    },
@@ -16,6 +28,9 @@ const stats = [
   { value: '+100', label: 'Membros'     },
 ];
 
+/**
+ * @brief Histórico de colocações e prêmios da equipe.
+ */
 const highlights = [
   { label: '1°', sublabel: 'Lugar', text: '2020, 2022, 2023' },
   { label: '2°', sublabel: 'Lugar', text: '2019'              },
@@ -23,8 +38,12 @@ const highlights = [
   { label: '★',  sublabel: 'Prêmio', text: 'Melhor Apresentação Oral 2025' },
 ];
 
-// ─── Página ───────────────────────────────────────────────────────────────────
-
+/**
+ * @brief Página inicial do site.
+ * @description Utiliza `useScroll` e `useTransform` do Framer Motion para
+ *   efeito parallax no hero. Seções: Hero, Stats, Countdown, Sobre,
+ *   Carrossel, Instagram e CTA final.
+ */
 export default function Home() {
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });

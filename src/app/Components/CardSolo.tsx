@@ -1,3 +1,12 @@
+/**
+ * @file CardSolo.tsx
+ * @brief Carrossel infinito de imagens e vídeos da equipe.
+ * @description Exibe um carrossel horizontal com scroll infinito (triplicando os
+ *   itens internamente) e botões de navegação esquerda/direita. Ajusta o número
+ *   de cards visíveis conforme o breakpoint de largura da tela.
+ * @module Components/CardSolo
+ */
+
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
@@ -5,6 +14,9 @@ import { Card, CardHeader, Image } from '@heroui/react';
 import { motion } from 'framer-motion';
 import { Icon } from '@iconify/react';
 
+/**
+ * @brief Dados de cada card do carrossel.
+ */
 const cardData = [
 	{
 		href: '/About',
@@ -113,16 +125,25 @@ const cardData = [
 	},
 ];
 
+/**
+ * @brief Componente de carrossel com scroll infinito.
+ * @description Triplica os dados internamente para permitir navegação circular.
+ *   Ajusta `cardsPerPage` em breakpoints: 1 (< 600px), 2 (≥ 600px),
+ *   3 (≥ 900px) e 4 (≥ 1200px).
+ */
 export default function InfiniteScrollCards() {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [cardsPerPage, setCardsPerPage] = useState(4);
+	/** @brief Largura fixa de cada card em pixels. */
 	const cardWidth = 340;
+	/** @brief Espaçamento entre cards em pixels. */
 	const gap = 16;
 	const totalCards = cardData.length;
 	const scrollOffset = (cardWidth + gap) * cardsPerPage;
+	/** @brief Flag para evitar múltiplos scrolls simultâneos. */
 	const isTransitioningRef = useRef(false);
 
-	// Duplica os cards para criar o efeito infinito
+	/** @brief Tripla os cards para criar o efeito de scroll infinito. */
 	const cyclicCards = [...cardData, ...cardData, ...cardData];
 
 	// Ajusta o número de cards visíveis conforme a tela
@@ -150,6 +171,12 @@ export default function InfiniteScrollCards() {
 		}
 	}, []);
 
+	/**
+	 * @brief Realiza o scroll do carrossel em uma direção.
+	 * @description Move o scroll horizontalmente e reposiciona silenciosamente
+	 *   para o segmento central quando atinge os limites, criando o loop infinito.
+	 * @param direction Direção do scroll: `'left'` ou `'right'`.
+	 */
 	const handleScroll = (direction: 'left' | 'right') => {
 		if (!containerRef.current || isTransitioningRef.current) return;
 

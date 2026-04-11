@@ -1,16 +1,28 @@
-"use client"; // Adicione isso no topo do arquivo
+/**
+ * @file windowDimension.tsx
+ * @brief Hook customizado para obter as dimensões da janela.
+ * @description Retorna a largura e altura atuais do viewport e as atualiza
+ *   automaticamente ao redimensionar a janela.
+ * @module Components/windowDimension
+ */
+
+"use client";
 
 import { useState, useEffect } from "react";
 
+/**
+ * @brief Hook que rastreia as dimensões da janela do navegador.
+ * @description Inicializa com `{ width: 0, height: 0 }` (SSR-safe) e atualiza
+ *   o estado via listener de `resize` no cliente.
+ * @returns Objeto com `width` e `height` em pixels do viewport atual.
+ */
 const useWindowDimensions = () => {
-  // Inicialize o estado com valores padrão
   const [dimensions, setDimensions] = useState({
     width: 0,
     height: 0,
   });
 
   useEffect(() => {
-    // Função para atualizar as dimensões
     const handleResize = () => {
       setDimensions({
         width: window.innerWidth,
@@ -18,17 +30,14 @@ const useWindowDimensions = () => {
       });
     };
 
-    // Atualize as dimensões assim que o componente for montado
     handleResize();
 
-    // Adicione um listener para o evento de redimensionamento
     window.addEventListener("resize", handleResize);
 
-    // Remova o listener quando o componente for desmontado
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []); // O array vazio garante que o useEffect só seja executado uma vez
+  }, []);
 
   return dimensions;
 };

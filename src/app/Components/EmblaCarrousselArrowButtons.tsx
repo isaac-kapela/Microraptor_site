@@ -1,13 +1,35 @@
+/**
+ * @file EmblaCarrousselArrowButtons.tsx
+ * @brief Botões de navegação e hook para o Embla Carousel.
+ * @description Exporta o hook `usePrevNextButtons` e os componentes
+ *   `PrevButton` / `NextButton` utilizados no carrossel de áreas.
+ * @module Components/EmblaCarrousselArrowButtons
+ */
+
 import React, { ComponentPropsWithRef, useCallback, useEffect, useState } from 'react';
 import { EmblaCarouselType } from 'embla-carousel';
 
+/**
+ * @brief Tipo de retorno do hook `usePrevNextButtons`.
+ */
 type UsePrevNextButtonsType = {
+	/** @brief Indica se o botão "anterior" está desabilitado. */
 	prevBtnDisabled: boolean;
+	/** @brief Indica se o botão "próximo" está desabilitado. */
 	nextBtnDisabled: boolean;
+	/** @brief Callback para rolar para o slide anterior. */
 	onPrevButtonClick: () => void;
+	/** @brief Callback para rolar para o próximo slide. */
 	onNextButtonClick: () => void;
 };
 
+/**
+ * @brief Hook para gerenciar os botões de navegação do Embla Carousel.
+ * @description Sincroniza o estado desabilitado dos botões com a posição
+ *   atual do carrossel via eventos `select` e `reInit`.
+ * @param emblaApi Instância da API do Embla Carousel.
+ * @returns Estados e callbacks dos botões de navegação.
+ */
 export const usePrevNextButtons = (emblaApi: EmblaCarouselType | undefined): UsePrevNextButtonsType => {
 	const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
 	const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
@@ -42,8 +64,13 @@ export const usePrevNextButtons = (emblaApi: EmblaCarouselType | undefined): Use
 	};
 };
 
+/** @brief Props padrão de um elemento `<button>` HTML. */
 type PropType = ComponentPropsWithRef<'button'>;
 
+/**
+ * @brief Botão "anterior" do carrossel Embla.
+ * @description Renderiza um botão com ícone SVG de seta para a esquerda.
+ */
 export const PrevButton: React.FC<PropType> = props => {
 	const { children, ...restProps } = props;
 
@@ -60,6 +87,10 @@ export const PrevButton: React.FC<PropType> = props => {
 	);
 };
 
+/**
+ * @brief Botão "próximo" do carrossel Embla.
+ * @description Renderiza um botão com ícone SVG de seta para a direita.
+ */
 export const NextButton: React.FC<PropType> = props => {
 	const { children, ...restProps } = props;
 

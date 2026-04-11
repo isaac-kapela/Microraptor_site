@@ -1,3 +1,11 @@
+/**
+ * @file page.tsx
+ * @brief Página "Contato" — canais de comunicação da equipe.
+ * @description Apresenta formulário de contato, links para redes sociais e
+ *   informações de contato direto via WhatsApp e e-mail.
+ * @module app/Contact/page
+ */
+
 'use client';
 
 import { motion, useInView, useScroll, useTransform } from 'framer-motion';

@@ -1,3 +1,12 @@
+/**
+ * @file page.tsx
+ * @brief Página dinâmica de detalhe de área (`/areas/[slug]`).
+ * @description Renderiza a página de uma área específica com base no slug da
+ *   URL. Exibe responsabilidades, ferramentas, habilidades e membros da área.
+ *   Redireciona para 404 se o slug não corresponder a nenhuma área.
+ * @module app/areas/[slug]/page
+ */
+
 'use client';
 
 import { motion } from 'framer-motion';
@@ -6,6 +15,12 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { areas, getArea } from '../data';
 
+/**
+ * @brief Página de detalhe de uma área da equipe.
+ * @description Busca a área pelo `slug` nos dados estáticos. Caso não
+ *   encontrada, chama `notFound()` do Next.js para exibir a página 404.
+ * @param params Parâmetros da rota dinâmica contendo o `slug` da área.
+ */
 export default function AreaPage({ params }: { params: { slug: string } }) {
   const area = getArea(params.slug);
   if (!area) notFound();

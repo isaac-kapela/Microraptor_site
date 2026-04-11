@@ -1,3 +1,12 @@
+/**
+ * @file navigation.tsx
+ * @brief Navegação principal para desktop.
+ * @description Barra de navegação fixa utilizada em telas com largura > 640 px.
+ *   Exibe o logo da equipe, os links de rota e o botão de alternância de tema.
+ *   O link ativo é destacado com uma pílula animada via Framer Motion.
+ * @module Components/navigation
+ */
+
 "use client";
 
 import Image from "next/image";
@@ -7,6 +16,9 @@ import { motion } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
 import { useTheme } from "./ThemeProvider";
 
+/**
+ * @brief Lista de rotas exibidas na barra de navegação.
+ */
 const links = [
   { href: "/",               label: "Início"        },
   { href: "/About",          label: "Sobre"         },
@@ -17,6 +29,11 @@ const links = [
 ];
 
 
+/**
+ * @brief Componente de navegação para desktop.
+ * @description Renderiza uma `<nav>` fixa com logo, links animados e toggle de
+ *   tema. Adapta as cores conforme o tema ativo (claro/escuro).
+ */
 export const DesktopNav = () => {
   const pathname = usePathname();
   const { theme } = useTheme();

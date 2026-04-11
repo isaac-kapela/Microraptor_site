@@ -1,3 +1,12 @@
+/**
+ * @file layout.tsx
+ * @brief Layout raiz da aplicação Next.js.
+ * @description Define a estrutura HTML base (head, body, header e main) que
+ *   envolve todas as páginas. Configura as fontes Google, injeta o script de
+ *   tema bloqueante para evitar flash de tema e renderiza a navbar responsiva.
+ * @module app/layout
+ */
+
 'use client';
 
 import { Geist, Geist_Mono, Space_Mono, Montserrat } from 'next/font/google';
@@ -30,11 +39,22 @@ const montserrat = Montserrat({
 	subsets: ['latin'],
 });
 
+/**
+ * @brief Componente responsivo que escolhe entre a navbar desktop e mobile.
+ * @description Utiliza `useWindowDimensions` para selecionar `DesktopNav`
+ *   (largura > 640 px) ou `HamburguerComponent` (mobile).
+ */
 const ResponsiveComponent = () => {
 	const { width } = useWindowDimensions() || { width: 0 };
 	return width > 640 ? <DesktopNav />  : <HamburguerComponent />;
 };
 
+/**
+ * @brief Layout raiz compartilhado por todas as rotas da aplicação.
+ * @description Envolve o conteúdo com `ThemeProvider`, injeta o script de
+ *   inicialização de tema e renderiza o header fixo de 80 px de altura.
+ * @param children Conteúdo da página corrente.
+ */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en" suppressHydrationWarning>
