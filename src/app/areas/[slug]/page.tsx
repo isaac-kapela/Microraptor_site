@@ -9,6 +9,7 @@
 
 'use client';
 
+import { use } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -21,11 +22,12 @@ import { areas, getArea } from '../data';
  *   encontrada, chama `notFound()` do Next.js para exibir a página 404.
  * @param params Parâmetros da rota dinâmica contendo o `slug` da área.
  */
-export default function AreaPage({ params }: { params: { slug: string } }) {
-  const area = getArea(params.slug);
+export default function AreaPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = use(params);
+  const area = getArea(slug);
   if (!area) notFound();
 
-  const currentIndex = areas.findIndex((a) => a.slug === params.slug);
+  const currentIndex = areas.findIndex((a) => a.slug === slug);
   const prev = areas[currentIndex - 1];
   const next = areas[currentIndex + 1];
 
