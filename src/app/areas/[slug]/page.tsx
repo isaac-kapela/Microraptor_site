@@ -324,7 +324,7 @@ export default function AreaPage({ params }: { params: Promise<{ slug: string }>
                 </a>
               ) : (
                 <a
-                  href="mailto:microraptor@ufjf.br"
+                  href="mailto:microraptorufjf@gmail.com"
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-[#a80303] to-[#980101] hover:from-[#c00404] hover:to-[#980101] text-white font-bold px-8 py-3.5 rounded-2xl text-base shadow-[0_0_32px_rgba(152,1,1,0.4)] hover:shadow-[0_0_48px_rgba(168,3,3,0.6)] transition-all duration-300"
                 >
                   Quero entrar

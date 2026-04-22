@@ -357,7 +357,7 @@ export default function AboutPage() {
                 className="inline-flex items-center gap-3 bg-gradient-to-r from-[#a80303] to-[#980101] hover:from-[#9b130f] hover:to-[#a80303] text-white font-bold px-10 py-4 rounded-2xl text-lg shadow-[0_0_40px_rgba(152,1,1,0.4)] hover:shadow-[0_0_60px_rgba(168,3,3,0.6)] transition-all duration-300">
                 Quero fazer parte
               </motion.a>
-              <p className="mt-6 text-gray-600 text-sm">microraptor@ufjf.br</p>
+              <p className="mt-6 text-gray-600 text-sm">microraptorufjf@gmail.com</p>
             </div>
             
           </div>
