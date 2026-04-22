@@ -1,11 +1,3 @@
-/**
- * @file page.tsx
- * @brief Página "Patrocinadores" — parceiros e apoiadores da equipe.
- * @description Lista os patrocinadores por categoria (Material, Institucional,
- *   Financeiro) com logos, links para os sites e animações de entrada.
- * @module app/Patrocinadores/page
- */
-
 'use client';
 
 import { motion, useInView } from 'framer-motion';
