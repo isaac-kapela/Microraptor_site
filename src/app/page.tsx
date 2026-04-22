@@ -103,14 +103,9 @@ export default function Home() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 1, ease: [0.21, 0.47, 0.32, 0.98] }}
-            className="text-[clamp(3.5rem,12vw,9rem)] font-black tracking-tighter leading-[0.9]"
+            className="text-[clamp(3.5rem,12vw,9rem)] font-black tracking-tighter leading-[0.9] whitespace-nowrap bg-gradient-to-br from-white via-white/90 to-[#a80303] bg-clip-text text-transparent"
           >
-            <span className="block bg-gradient-to-br from-white via-white/90 to-[#a80303] bg-clip-text text-transparent">
-              Micro
-            </span>
-            <span className="block bg-gradient-to-br from-[#a80303] via-[#9b130f] to-white bg-clip-text text-transparent">
-              raptor
-            </span>
+            Microraptor
           </motion.h1>
 
           {/* Subtítulo */}
@@ -307,47 +302,6 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ══ CTA FINAL ════════════════════════════════════════════════════════ */}
-      <section className="relative py-32 px-6">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_60%_at_50%_50%,rgba(152,1,1,0.12),transparent)]" />
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="max-w-3xl mx-auto text-center relative z-10"
-        >
-          <div className="rounded-3xl p-px bg-gradient-to-br from-[#a80303]/60 via-[#9b130f]/30 to-[#980101]/60">
-            <div className="rounded-3xl bg-[#0a0000] px-10 py-16">
-              <div className="w-16 h-1 bg-gradient-to-r from-[#a80303] to-[#980101] rounded-full mx-auto mb-8" />
-              <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
-                Processo Seletivo{' '}
-                <span className="bg-gradient-to-r from-[#a80303] to-[#9b130f] bg-clip-text text-transparent">
-                  Aberto
-                </span>
-              </h2>
-              <p className="text-gray-400 text-lg mb-10 max-w-md mx-auto leading-relaxed">
-                Buscamos novos talentos apaixonados por aviação, engenharia e trabalho em equipe.
-              </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <a
-                  href="https://wa.me/553299310160?text=Ol%C3%A1%21%20Conheci%20a%20equipe%20Microraptor%20atrav%C3%A9s%20do%20site%20e%20estou%20entrando%20em%20contato%20para%20conhecer%20melhor%20e%20saber%20como%20fazer%20parte%20da%20equipe."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <motion.span
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.97 }}
-                    className="inline-flex items-center gap-2 bg-gradient-to-r from-[#a80303] to-[#980101] hover:from-[#c00404] hover:to-[#a80303] text-white font-bold px-8 py-4 rounded-2xl text-base shadow-[0_0_36px_rgba(152,1,1,0.45)] hover:shadow-[0_0_56px_rgba(168,3,3,0.65)] transition-all duration-300 cursor-pointer"
-                  >
-                    Quero fazer parte
-                  </motion.span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </section>
 
     </div>
   );
