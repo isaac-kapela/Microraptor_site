@@ -18,8 +18,8 @@ const contactChannels = [
   {
     abbr: 'ML',
     label: 'E-mail',
-    value: 'microraptor@ufjf.br',
-    href: 'mailto:microraptor@ufjf.br',
+    value: 'microraptorufjf@gmail.com',
+    href: 'mailto:microraptorufjf@gmail.com',
     description: 'Para parcerias, patrocínios ou qualquer assunto institucional, fale direto conosco.',
   },
   {
@@ -69,20 +69,17 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 function ContactForm() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus('sending');
+    const fd = new FormData(e.currentTarget);
+    const data = Object.fromEntries(fd.entries());
     try {
-      const res = await fetch('https://formspree.io/f/placeholder', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(form),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
       });
       setStatus(res.ok ? 'sent' : 'error');
     } catch {
@@ -108,7 +105,7 @@ function ContactForm() {
           Recebemos seu contato e retornaremos em breve.
         </p>
         <button
-          onClick={() => { setStatus('idle'); setForm({ name: '', email: '', subject: '', message: '' }); }}
+          onClick={() => setStatus('idle')}
           className="mt-2 text-[#a80303] text-sm font-semibold hover:text-white transition-colors"
         >
           Enviar outra mensagem
@@ -124,8 +121,6 @@ function ContactForm() {
           <label className="text-xs text-gray-500 tracking-wide uppercase font-medium">Nome</label>
           <input
             name="name"
-            value={form.name}
-            onChange={handleChange}
             required
             placeholder="Seu nome"
             className={inputClass}
@@ -136,8 +131,6 @@ function ContactForm() {
           <input
             name="email"
             type="email"
-            value={form.email}
-            onChange={handleChange}
             required
             placeholder="seu@email.com"
             className={inputClass}
@@ -149,17 +142,15 @@ function ContactForm() {
         <label className="text-xs text-gray-500 tracking-wide uppercase font-medium">Assunto</label>
         <select
           name="subject"
-          value={form.subject}
-          onChange={handleChange}
           required
           className={inputClass}
         >
-          <option value="" disabled>Selecione um assunto</option>
-          <option value="Patrocínio">Patrocínio</option>
-          <option value="Parceria">Parceria</option>
-          <option value="Processo Seletivo">Processo Seletivo</option>
-          <option value="Imprensa">Imprensa</option>
-          <option value="Outro">Outro</option>
+          <option value="" disabled className="bg-[#111] text-gray-400">Selecione um assunto</option>
+          <option value="Patrocínio" className="bg-[#111] text-white">Patrocínio</option>
+          <option value="Parceria" className="bg-[#111] text-white">Parceria</option>
+          <option value="Processo Seletivo" className="bg-[#111] text-white">Processo Seletivo</option>
+          <option value="Imprensa" className="bg-[#111] text-white">Imprensa</option>
+          <option value="Outro" className="bg-[#111] text-white">Outro</option>
         </select>
       </div>
 
@@ -167,8 +158,6 @@ function ContactForm() {
         <label className="text-xs text-gray-500 tracking-wide uppercase font-medium">Mensagem</label>
         <textarea
           name="message"
-          value={form.message}
-          onChange={handleChange}
           required
           rows={5}
           placeholder="Escreva sua mensagem..."
@@ -209,10 +198,10 @@ export default function ContactPage() {
         <motion.div style={{ y: heroY }} className="absolute inset-0">
           <Image src="/imagemTexto2.png" alt="Contato Microraptor" fill className="object-cover object-center opacity-15" priority />
         </motion.div>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_55%,rgba(152,1,1,0.18),transparent)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_55%,rgba(152,1,1,0.18),transparent)] pointer-events-none" />
         <div
-          className="absolute inset-0 opacity-[0.03]"
+          className="absolute inset-0 opacity-[0.03] pointer-events-none"
           style={{
             backgroundImage:
               'linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px)',
@@ -267,7 +256,7 @@ export default function ContactPage() {
 
       {/* ── CANAIS + FORMULÁRIO ── */}
       <section className="relative py-32 px-6">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_20%_50%,rgba(152,1,1,0.07),transparent)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_20%_50%,rgba(152,1,1,0.07),transparent)] pointer-events-none" />
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 items-start">
 
           {/* Canais */}
@@ -318,7 +307,7 @@ export default function ContactPage() {
           </FadeIn>
 
           {/* Formulário */}
-          <FadeIn delay={0.2}>
+          <div className="relative z-10">
             <SectionLabel>Mensagem</SectionLabel>
             <h2 className="text-4xl md:text-5xl font-black text-white leading-tight mb-4">
               Envie uma<br />
@@ -335,14 +324,14 @@ export default function ContactPage() {
                 <ContactForm />
               </div>
             </div>
-          </FadeIn>
+          </div>
         </div>
       </section>
 
       {/* ── PROCESSO SELETIVO ── */}
       <section className="relative py-32 px-6">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,rgba(152,1,1,0.08),transparent)]" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,rgba(152,1,1,0.08),transparent)] pointer-events-none" />
         <FadeIn className="max-w-3xl mx-auto text-center relative z-10">
           <div className="rounded-3xl p-px bg-gradient-to-br from-[#a80303]/60 via-[#9b130f]/30 to-[#980101]/60">
             <div className="rounded-3xl bg-[#050000] px-10 py-16">

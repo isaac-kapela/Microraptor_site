@@ -812,7 +812,7 @@ export default function CompeticaoPage() {
                   </motion.span>
                 </Link>
                 <motion.a
-                  href="mailto:microraptor@ufjf.br"
+                  href="mailto:microraptorufjf@gmail.com"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.97 }}
                   className="inline-flex items-center gap-2 bg-white/8 hover:bg-white/14 border border-white/20 hover:border-white/35 text-white font-bold px-8 py-4 rounded-2xl text-base backdrop-blur-sm transition-all duration-300 cursor-pointer"
