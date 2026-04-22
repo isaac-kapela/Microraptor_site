@@ -20,38 +20,9 @@ body {
   font-family: var(--spaceMono), var(--monstserrat), sans-serif;
 }
 
-html.dark body {
+body {
   background: black;
   color: white;
-}
-
-html:not(.dark) body {
-  background: #f0f0f0;
-  color: #1a1a1a;
-}
-
-/* ─── Modo Claro ─────────────────────────────────────────────────────────────
-   Inverte as cores do conteúdo principal: preto→branco, branco→preto, mantendo
-   os tons (vermelho continua vermelho graças ao hue-rotate(180deg)).
-   saturate(1.6) e contrast(1.08) deixam o vermelho da marca mais forte e vívido.
-   O filtro é aplicado apenas em <main>, deixando o header/nav independente.
-   ────────────────────────────────────────────────────────────────────────── */
-html:not(.dark) main {
-  filter: invert(1) hue-rotate(180deg) saturate(1.6) contrast(1.08);
-}
-
-/* Restaura mídias com dupla inversão para preservar cores originais */
-html:not(.dark) main img,
-html:not(.dark) main video,
-html:not(.dark) main iframe,
-html:not(.dark) main canvas,
-html:not(.dark) main svg image {
-  filter: invert(1) hue-rotate(180deg);
-}
-
-/* Transição suave do background do body */
-body {
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .shadow-bottom {

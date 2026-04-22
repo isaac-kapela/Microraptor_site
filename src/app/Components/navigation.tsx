@@ -4,8 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { ThemeToggle } from "./ThemeToggle";
-import { useTheme } from "./ThemeProvider";
 import { Icon } from "@iconify/react";
 
 const links = [
@@ -21,11 +19,9 @@ const links = [
 
 export const DesktopNav = () => {
   const pathname = usePathname();
-  const { theme } = useTheme();
 
   return (
-    <nav className={`fixed flex items-center justify-center font-[family-name:var(--spaceMono)] shadow-bottom w-full py-8 border-b transition-colors duration-300
-      ${theme === 'dark' ? 'bg-black border-white/5' : 'bg-white border-black/10'}`}>
+    <nav className="fixed flex items-center justify-center font-[family-name:var(--spaceMono)] shadow-bottom w-full py-8 border-b transition-colors duration-300 bg-black border-white/5">
       <div className="absolute left-0 pl-4">
         <Link href="/">
           <motion.div whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.95 }} transition={{ duration: 0.2 }}>
@@ -43,14 +39,12 @@ export const DesktopNav = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.96 }}
                 className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 block
-                  ${active
-                    ? theme === 'dark' ? 'text-white' : 'text-black'
-                    : 'text-[#a80303] hover:text-[#9b130f]'}`}
+                  ${active ? 'text-white' : 'text-[#a80303] hover:text-[#9b130f]'}`}
               >
                 {active && (
                   <motion.span
                     layoutId="nav-pill"
-                    className={`absolute inset-0 rounded-lg border ${theme === 'dark' ? 'bg-white/8 border-white/10' : 'bg-black/5 border-black/10'}`}
+                    className="absolute inset-0 rounded-lg border bg-white/8 border-white/10"
                     transition={{ type: 'spring', stiffness: 380, damping: 32 }}
                   />
                 )}
@@ -66,13 +60,11 @@ export const DesktopNav = () => {
           <motion.div
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.93 }}
-            className={`p-2 rounded-lg transition-colors duration-200 opacity-30 hover:opacity-100
-              ${theme === 'dark' ? 'hover:bg-white/8 text-white' : 'hover:bg-black/5 text-black'}`}
+            className="p-2 rounded-lg transition-colors duration-200 opacity-30 hover:opacity-100 hover:bg-white/8 text-white"
           >
             <Icon icon="mdi:lock-outline" width={18} height={18} />
           </motion.div>
         </Link>
-        <ThemeToggle />
       </div>
     </nav>
   );
