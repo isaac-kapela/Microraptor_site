@@ -68,8 +68,6 @@ export default {
     		}
     	}
     },
-	darkMode: ['class', 'class'],
-
 	plugins: [
 		scrollbarHide,
 		heroui(),
