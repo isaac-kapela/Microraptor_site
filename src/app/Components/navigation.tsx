@@ -1,12 +1,3 @@
-/**
- * @file navigation.tsx
- * @brief Navegação principal para desktop.
- * @description Barra de navegação fixa utilizada em telas com largura > 640 px.
- *   Exibe o logo da equipe, os links de rota e o botão de alternância de tema.
- *   O link ativo é destacado com uma pílula animada via Framer Motion.
- * @module Components/navigation
- */
-
 "use client";
 
 import Image from "next/image";
@@ -15,25 +6,19 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
 import { useTheme } from "./ThemeProvider";
+import { Icon } from "@iconify/react";
 
-/**
- * @brief Lista de rotas exibidas na barra de navegação.
- */
 const links = [
-  { href: "/",               label: "Início"        },
-  { href: "/About",          label: "Sobre"         },
-  { href: "/Competicao",     label: "Competição"    },
-  { href: "/Patrocinadores", label: "Patrocinadores"},
-  { href: "/Bastidores",     label: "Bastidores"    },
-  { href: "/Contact",        label: "Contato"       },
+  { href: "/",                  label: "Início"           },
+  { href: "/About",             label: "Sobre"            },
+  { href: "/Competicao",        label: "Competição"       },
+  { href: "/Patrocinadores",    label: "Patrocinadores"   },
+  { href: "/Bastidores",        label: "Bastidores"       },
+  { href: "/ProcessoSeletivo",  label: "Processo Seletivo"},
+  { href: "/Contact",           label: "Contato"          },
 ];
 
 
-/**
- * @brief Componente de navegação para desktop.
- * @description Renderiza uma `<nav>` fixa com logo, links animados e toggle de
- *   tema. Adapta as cores conforme o tema ativo (claro/escuro).
- */
 export const DesktopNav = () => {
   const pathname = usePathname();
   const { theme } = useTheme();
@@ -76,7 +61,17 @@ export const DesktopNav = () => {
         })}
       </div>
 
-      <div className="absolute right-4">
+      <div className="absolute right-4 flex items-center gap-2">
+        <Link href="/admin" title="Painel Admin">
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.93 }}
+            className={`p-2 rounded-lg transition-colors duration-200 opacity-30 hover:opacity-100
+              ${theme === 'dark' ? 'hover:bg-white/8 text-white' : 'hover:bg-black/5 text-black'}`}
+          >
+            <Icon icon="mdi:lock-outline" width={18} height={18} />
+          </motion.div>
+        </Link>
         <ThemeToggle />
       </div>
     </nav>

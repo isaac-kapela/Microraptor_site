@@ -1,12 +1,3 @@
-/**
- * @file EmblaCarousel.tsx
- * @brief Carrossel de cards baseado na biblioteca Embla Carousel.
- * @description Recebe uma lista de `CardInfo` e opções do Embla, renderiza os
- *   slides e expõe botões de navegação (anterior/próximo) com controle de
- *   estado desabilitado nos extremos.
- * @module Components/EmblaCarousel
- */
-
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
@@ -14,26 +5,13 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { CardSlide, CardInfo } from './CardOriginal';
 import { PrevButton, NextButton } from './EmblaCarrousselArrowButtons';
 
-/** @brief Tipo das opções aceitas pelo hook `useEmblaCarousel`. */
 type EmblaOptions = Parameters<typeof useEmblaCarousel>[0];
 
-/**
- * @brief Props do componente EmblaCarousel.
- */
 type PropType = {
-  /** @brief Lista de cards a serem renderizados como slides. */
   slides: CardInfo[];
-  /** @brief Opções de configuração do Embla Carousel. */
   options?: EmblaOptions;
 };
 
-/**
- * @brief Carrossel de cards com navegação por botões.
- * @description Gerencia os estados `prevBtnDisabled` e `nextBtnDisabled`
- *   sincronizados com os eventos `select` e `reInit` do Embla.
- * @param slides Lista de dados dos slides.
- * @param options Opções opcionais para o Embla Carousel.
- */
 const EmblaCarousel: React.FC<PropType> = ({ slides, options }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
