@@ -1,41 +1,19 @@
-/**
- * @file CompetitionCountdown.tsx
- * @brief Contador regressivo até a próxima competição.
- * @description Exibe dias, horas, minutos e segundos restantes até a data
- *   configurada da competição SAE Aerodesign Brasil. O componente se oculta
- *   automaticamente após a data ter passado.
- * @module Components/CompetitionCountdown
- */
-
 'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
-/** @brief Data e hora da próxima edição da competição (UTC-3). */
 const COMPETITION_DATE = new Date('2025-10-28T08:00:00-03:00');
 
-/** @brief Nome da competição exibido no cabeçalho do contador. */
 const COMPETITION_LABEL = 'SAE Aero Design Brasil 2025';
 
-/** @brief Localização e período da competição. */
 const COMPETITION_LOCATION = '28 de outubro — 2 de novembro · São José dos Campos, SP';
 
-/**
- * @brief Formata um número com zero à esquerda para dois dígitos.
- * @param n Número inteiro a ser formatado.
- * @returns String de dois caracteres com zero à esquerda se necessário.
- */
 function pad(n: number) {
   return String(n).padStart(2, '0');
 }
 
-/**
- * @brief Calcula o tempo restante até a data da competição.
- * @returns Objeto com `dias`, `horas`, `minutos` e `segundos` restantes,
- *   ou `null` se a data já passou.
- */
 function calcTimeLeft() {
   const diff = COMPETITION_DATE.getTime() - Date.now();
   if (diff <= 0) return null;
@@ -47,11 +25,6 @@ function calcTimeLeft() {
   };
 }
 
-/**
- * @brief Componente de contagem regressiva para a competição.
- * @description Atualiza o contador a cada segundo via `setInterval`.
- *   Retorna `null` (não renderiza nada) após a data da competição.
- */
 export default function CompetitionCountdown() {
   const [time, setTime] = useState(calcTimeLeft());
 

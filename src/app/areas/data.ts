@@ -1,49 +1,20 @@
-/**
- * @file data.ts
- * @brief Dados estáticos das áreas da equipe Microraptor.
- * @description Define os tipos `Member` e `Area`, e exporta o array `areas`
- *   com as 9 áreas da equipe: Aerodinâmica, Estabilidade e Controle,
- *   Estruturas, Desempenho, Eletrônica, Software, Manufatura, CAD e Gestão.
- * @module app/areas/data
- */
-
-/**
- * @brief Representa um membro de uma área da equipe.
- */
 export type Member = {
-  /** @brief Nome completo do membro. */
   name: string;
-  /** @brief Caminho da foto do membro (relativo à pasta `public`). */
   photo: string;
-  /** @brief Indica se o membro é o líder da área. */
   leader?: boolean;
 };
 
-/**
- * @brief Representa uma área técnica ou de gestão da equipe.
- */
 export type Area = {
-  /** @brief Identificador URL-friendly da área. */
   slug: string;
-  /** @brief Emoji ou ícone representativo. */
   icon: string;
-  /** @brief Nome da área. */
   name: string;
-  /** @brief Frase de destaque resumindo a área. */
   tagline: string;
-  /** @brief Descrição detalhada das atividades da área. */
   description: string;
-  /** @brief Lista de responsabilidades principais. */
   responsibilities: string[];
-  /** @brief Ferramentas e softwares utilizados. */
   tools: string[];
-  /** @brief Competências desejadas para novos membros. */
   skills: string[];
-  /** @brief Classes Tailwind para o gradiente de cor da área. */
   color: string;
-  /** @brief Número do WhatsApp do líder da área (opcional). */
   whatsapp?: string;
-  /** @brief Lista de membros da área (opcional). */
   members?: Member[];
 };
 

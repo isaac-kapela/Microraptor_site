@@ -1,27 +1,19 @@
-/**
- * @file page.tsx
- * @brief Página dinâmica de detalhe de área (`/areas/[slug]`).
- * @description Renderiza a página de uma área específica com base no slug da
- *   URL. Exibe responsabilidades, ferramentas, habilidades e membros da área.
- *   Redireciona para 404 se o slug não corresponder a nenhuma área.
- * @module app/areas/[slug]/page
- */
-
 'use client';
 
-import { use } from 'react';
+import { use, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { areas, getArea } from '../data';
 
-/**
- * @brief Página de detalhe de uma área da equipe.
- * @description Busca a área pelo `slug` nos dados estáticos. Caso não
- *   encontrada, chama `notFound()` do Next.js para exibir a página 404.
- * @param params Parâmetros da rota dinâmica contendo o `slug` da área.
- */
+interface MemberDoc {
+  _id: string;
+  name: string;
+  photo: string;
+  isLeader: boolean;
+}
+
 export default function AreaPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
   const area = getArea(slug);
@@ -30,6 +22,14 @@ export default function AreaPage({ params }: { params: Promise<{ slug: string }>
   const currentIndex = areas.findIndex((a) => a.slug === slug);
   const prev = areas[currentIndex - 1];
   const next = areas[currentIndex + 1];
+
+  const [members, setMembers] = useState<MemberDoc[]>([]);
+  useEffect(() => {
+    fetch(`/api/members?area=${slug}`)
+      .then((r) => r.json())
+      .then((data: MemberDoc[]) => setMembers(data))
+      .catch(() => setMembers([]));
+  }, [slug]);
 
   return (
     <div className="bg-black min-h-screen text-white overflow-x-hidden">
@@ -218,7 +218,7 @@ export default function AreaPage({ params }: { params: Promise<{ slug: string }>
       </section>
 
       {/* ── MEMBROS ── */}
-      {area.members && area.members.length > 0 && (
+      {members.length > 0 && (
         <section className="max-w-4xl mx-auto px-6 py-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -231,9 +231,9 @@ export default function AreaPage({ params }: { params: Promise<{ slug: string }>
 
           <div className="flex flex-wrap gap-6 items-start">
             {/* Líder em destaque */}
-            {area.members.filter(m => m.leader).map((m, i) => (
+            {members.filter(m => m.isLeader).map((m, i) => (
               <motion.div
-                key={m.name}
+                key={m._id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -259,15 +259,15 @@ export default function AreaPage({ params }: { params: Promise<{ slug: string }>
             ))}
 
             {/* Divisor vertical */}
-            {area.members.some(m => m.leader) && area.members.some(m => !m.leader) && (
+            {members.some(m => m.isLeader) && members.some(m => !m.isLeader) && (
               <div className="hidden sm:block w-px self-stretch bg-white/10 mx-2" />
             )}
 
             {/* Demais membros */}
             <div className="flex flex-wrap gap-5">
-              {area.members.filter(m => !m.leader).map((m, i) => (
+              {members.filter(m => !m.isLeader).map((m, i) => (
                 <motion.div
-                  key={m.name}
+                  key={m._id}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}

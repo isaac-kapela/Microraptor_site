@@ -1,11 +1,3 @@
-/**
- * @file page.tsx
- * @brief Página "Competição" — informações sobre o SAE Aerodesign Brasil.
- * @description Descreve as categorias da competição (Regular, Advanced, Micro),
- *   as regras gerais, o histórico de participação e resultados da equipe.
- * @module app/Competicao/page
- */
-
 'use client';
 
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from 'framer-motion';
