@@ -1,11 +1,3 @@
-/**
- * @file page.tsx
- * @brief Página "Sobre" — apresentação da equipe Microraptor.
- * @description Exibe a história, timeline de conquistas e os membros de cada
- *   área da equipe com animações de scroll usando Framer Motion.
- * @module app/About/page
- */
-
 'use client';
 
 import { motion, useInView, useScroll, useTransform } from 'framer-motion';
