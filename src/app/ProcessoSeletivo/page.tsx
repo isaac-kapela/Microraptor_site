@@ -77,15 +77,18 @@ const perfilIdeal = [
 ];
 
 const AREAS = [
-  { slug: 'aerodinamica',     label: 'Aerodinâmica' },
-  { slug: 'estabilidade',     label: 'Estabilidade e Controle' },
-  { slug: 'desempenho',       label: 'Desempenho' },
-  { slug: 'eletrica',         label: 'Elétrica' },
-  { slug: 'cargas',           label: 'Cargas' },
-  { slug: 'estruturas',       label: 'Estruturas' },
-  { slug: 'plantas',          label: 'Plantas' },
-  { slug: 'gestao',           label: 'Gestão' },
-  { slug: 'aeroelasticidade', label: 'Aeroelasticidade' },
+  { slug: 'aerodinamica',        label: 'Aerodinâmica' },
+  { slug: 'estabilidade',        label: 'Estabilidade e Controle' },
+  { slug: 'desempenho',          label: 'Desempenho' },
+  { slug: 'eletrica',            label: 'Elétrica' },
+  { slug: 'cargas',              label: 'Cargas' },
+  { slug: 'estruturas',          label: 'Estruturas' },
+  { slug: 'plantas',             label: 'Plantas' },
+  { slug: 'gestao',              label: 'Gestão' },
+  { slug: 'aeroelasticidade',    label: 'Aeroelasticidade' },
+  { slug: 'fuselagem-e-laminacao', label: 'Fuselagem e Laminação' },
+  { slug: 'cauda',               label: 'Cauda' },
+  { slug: 'asa',                 label: 'Asa' },
 ];
 
 const PERIODOS = ['1º', '2º', '3º', '4º', '5º', '6º', '7º', '8º', '9º', '10º', '11º', '12º'];

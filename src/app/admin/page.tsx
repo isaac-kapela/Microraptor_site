@@ -34,10 +34,11 @@ const AREAS = [
   { slug: 'estruturas',         label: 'Estruturas' },
   { slug: 'plantas',            label: 'Plantas' },
   { slug: 'gestao',             label: 'Gestão' },
-  { slug: 'fuseco-laminacao',   label: 'Fuselagem e Laminação' },
-  { slug: 'cauda',              label: 'Cauda' },
-  { slug: 'aerolasticidade',    label: 'Aerolasticidade' },
-  { slug: 'capitania',          label: 'Capitania' },
+  { slug: 'fuselagem-e-laminacao', label: 'Fuselagem e Laminação' },
+  { slug: 'cauda',                 label: 'Cauda' },
+  { slug: 'asa',                   label: 'Asa' },
+  { slug: 'aeroelasticidade',      label: 'Aeroelasticidade' },
+  { slug: 'capitania',             label: 'Capitania' },
 ];
 
 const YEARS = [2023, 2024, 2025, 2026];

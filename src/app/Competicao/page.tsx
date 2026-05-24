@@ -26,8 +26,8 @@ const categories = [
     abbr: 'MIC',
     name: 'Micro',
     description:
-      'A aeronave inteira deve caber em uma caixa de tamanho reduzido, mas ainda assim carregar o máximo de carga possível. Um desafio de miniaturização e eficiência estrutural.',
-    highlight: 'Miniaturização extrema',
+      'A categoria mais leve e compacta da competição. A aeronave deve transportar a maior carga útil possível. Muitas equipes utilizam estruturas desmontáveis para garantir montagem rápida antes do voo — um desafio de eficiência, inovação e otimização.',
+    highlight: 'Leveza + eficiência',
   },
 ];
 
@@ -36,7 +36,7 @@ const phases = [
     num: '01',
     title: 'Relatório Técnico',
     description:
-      'Meses antes do evento, a equipe entrega um relatório detalhado com todo o projeto da aeronave: aerodinâmica, estruturas, sistema propulsivo, planta construtiva e análises. É avaliado por engenheiros especialistas.',
+      'Meses antes do evento, a equipe entrega um relatório detalhado com todo o projeto da aeronave: aerodinâmica, estruturas, elétrica e planta. É avaliado por engenheiros especialistas.',
   },
   {
     num: '02',
@@ -233,15 +233,6 @@ function Lightbox({
       className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center px-4"
       onClick={onClose}
     >
-      {/* Fechar */}
-      <button
-        onClick={onClose}
-        className="absolute top-4 right-4 text-white/60 hover:text-white text-3xl leading-none transition-colors"
-        aria-label="Fechar"
-      >
-        ×
-      </button>
-
       {/* Anterior */}
       {index > 0 && (
         <button
@@ -263,6 +254,14 @@ function Lightbox({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative w-full" style={{ maxHeight: '80vh' }}>
+          {/* Fechar */}
+          <button
+            onClick={onClose}
+            className="absolute top-2 right-2 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-black/50 hover:bg-[#a80303] border border-white/20 hover:border-[#a80303] text-white text-xl leading-none transition-all duration-200"
+            aria-label="Fechar"
+          >
+            ×
+          </button>
           {isVideo ? (
             <video
               src={photo.src}

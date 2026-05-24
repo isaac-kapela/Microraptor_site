@@ -105,8 +105,8 @@ const reasons = [
 const stats = [
   { value: '22',     label: 'Membros ativos'           },
   { value: '2011',   label: 'Ano de fundação'           },
-  { value: '80+',    label: 'Universidades competidoras'},
-  { value: 'R$50k',  label: 'Custo por ciclo'          },
+  { value: 'R$25k',  label: 'Custo por projeto'         },
+  { value: '~15',    label: 'Novos membros por ano em média' },
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

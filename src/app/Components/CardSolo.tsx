@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Card, CardHeader, Image } from '@heroui/react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '@iconify/react';
 
 interface CardItem {
@@ -13,6 +13,7 @@ interface CardItem {
 export default function InfiniteScrollCards() {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [cardData, setCardData] = useState<CardItem[]>([]);
+	const [lightbox, setLightbox] = useState<CardItem | null>(null);
 	const [cardsPerPage, setCardsPerPage] = useState(4);
 	const cardWidth = 340;
 	const gap = 16;
@@ -79,6 +80,48 @@ export default function InfiniteScrollCards() {
 	if (cardData.length === 0) return null;
 
 	return (
+		<>
+		<AnimatePresence>
+			{lightbox && (
+				<motion.div
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					exit={{ opacity: 0 }}
+					className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+					onClick={() => setLightbox(null)}
+				>
+					<button
+						onClick={() => setLightbox(null)}
+						className="absolute top-4 right-4 text-white/70 hover:text-white bg-black/40 rounded-full w-10 h-10 flex items-center justify-center text-2xl leading-none"
+					>
+						×
+					</button>
+					<motion.div
+						initial={{ scale: 0.9, opacity: 0 }}
+						animate={{ scale: 1, opacity: 1 }}
+						exit={{ scale: 0.9, opacity: 0 }}
+						className="max-w-5xl max-h-[90vh] w-full"
+						onClick={(e) => e.stopPropagation()}
+					>
+						{lightbox.type === 'video' ? (
+							<video
+								src={lightbox.src}
+								controls
+								autoPlay
+								className="w-full max-h-[90vh] rounded-2xl object-contain"
+							/>
+						) : (
+							<img
+								src={lightbox.src}
+								alt=""
+								className="w-full max-h-[90vh] rounded-2xl object-contain"
+							/>
+						)}
+					</motion.div>
+				</motion.div>
+			)}
+		</AnimatePresence>
+
 		<div className="relative overflow-hidden w-full">
 			<div
 				ref={containerRef}
@@ -95,7 +138,7 @@ export default function InfiniteScrollCards() {
 						<Card
 							isBlurred
 							isPressable
-							onPress={() => (window.location.href = '/About')}
+							onPress={() => setLightbox(card)}
 							shadow="lg"
 							className="w-full h-[350px] lg:h-[400px] snap-start cursor-pointer shadow-lg overflow-hidden"
 						>
@@ -140,5 +183,6 @@ export default function InfiniteScrollCards() {
 				<Icon icon="mdi:chevron-right" className="text-white" width={24} height={24} />
 			</button>
 		</div>
+		</>
 	);
 }
