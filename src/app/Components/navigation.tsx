@@ -11,7 +11,6 @@ const links = [
   { href: "/About",             label: "Sobre"            },
   { href: "/Competicao",        label: "Competição"       },
   { href: "/Patrocinadores",    label: "Patrocinadores"   },
-  { href: "/Bastidores",        label: "Bastidores"       },
   { href: "/ProcessoSeletivo",  label: "Processo Seletivo"},
   { href: "/Contact",           label: "Contato"          },
 ];
