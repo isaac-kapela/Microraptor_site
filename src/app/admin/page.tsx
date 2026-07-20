@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type Tab = 'carousel' | 'bastidores' | 'membros' | 'albuns' | 'inscricoes' | 'patrocinadores';
+type Tab = 'carousel' | 'bastidores' | 'membros' | 'albuns' | 'inscricoes' | 'patrocinadores' | 'contatos';
 
 interface PhotoDoc {
   _id: string;
@@ -611,6 +611,134 @@ function PatrocinadoresTab() {
   );
 }
 
+// ─── Contatos Tab ─────────────────────────────────────────────────────────────
+
+interface ContactDoc { _id: string; label: string; href: string; type: string; }
+
+const CONTACT_TYPES = [
+  { value: 'email',    label: 'E-mail',    icon: '✉️', prefix: 'mailto:' },
+  { value: 'phone',    label: 'Telefone',  icon: '📞', prefix: 'tel:+'   },
+  { value: 'whatsapp', label: 'WhatsApp',  icon: '💬', prefix: 'https://wa.me/' },
+];
+
+function ContatosTab() {
+  const [items, setItems]     = useState<ContactDoc[]>([]);
+  const [modal, setModal]     = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [type, setType]       = useState('phone');
+  const [label, setLabel]     = useState('');
+  const [value, setValue]     = useState('');
+
+  const load = async () => {
+    const res = await fetch('/api/contacts');
+    setItems(await res.json());
+  };
+
+  useEffect(() => { load(); }, []);
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Remover este contato?')) return;
+    await fetch(`/api/contacts/${id}`, { method: 'DELETE' });
+    setItems((prev) => prev.filter((c) => c._id !== id));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    const prefix = CONTACT_TYPES.find((t) => t.value === type)?.prefix ?? '';
+    const href = type === 'phone'
+      ? `tel:+${value.replace(/\D/g, '')}`
+      : type === 'email'
+      ? `mailto:${value}`
+      : `https://wa.me/${value.replace(/\D/g, '')}`;
+
+    await fetch('/api/contacts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ label, href, type }),
+    });
+    setLoading(false);
+    setModal(false);
+    setLabel(''); setValue(''); setType('phone');
+    load();
+  };
+
+  const iconFor = (t: string) => CONTACT_TYPES.find((x) => x.value === t)?.icon ?? '📌';
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-6">
+        <p className="text-gray-400 text-sm">{items.length} contatos</p>
+        <button
+          onClick={() => setModal(true)}
+          className="flex items-center gap-2 bg-[#a80303] hover:bg-[#9b130f] text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
+        >
+          + Adicionar
+        </button>
+      </div>
+
+      <div className="flex flex-col gap-3 max-w-lg">
+        {items.map((item) => (
+          <div key={item._id} className="group flex items-center justify-between px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 hover:border-white/20 transition-all">
+            <div className="flex items-center gap-3">
+              <span className="text-xl">{iconFor(item.type)}</span>
+              <div>
+                <p className="text-white text-sm font-medium">{item.label}</p>
+                <p className="text-gray-600 text-xs">{item.href}</p>
+              </div>
+            </div>
+            <button
+              onClick={() => handleDelete(item._id)}
+              className="opacity-0 group-hover:opacity-100 transition-opacity bg-red-600 hover:bg-red-700 text-white rounded-full w-7 h-7 flex items-center justify-center text-lg leading-none"
+            >
+              ×
+            </button>
+          </div>
+        ))}
+      </div>
+
+      <AnimatePresence>
+        {modal && (
+          <UploadModal
+            title="Adicionar contato"
+            onClose={() => { setModal(false); setLabel(''); setValue(''); setType('phone'); }}
+            onSubmit={handleSubmit}
+            loading={loading}
+            fields={
+              <>
+                <select value={type} onChange={(e) => setType(e.target.value)} className={inputCls()}>
+                  {CONTACT_TYPES.map((t) => (
+                    <option key={t.value} value={t.value}>{t.icon} {t.label}</option>
+                  ))}
+                </select>
+                <input
+                  value={label}
+                  onChange={(e) => setLabel(e.target.value)}
+                  placeholder={type === 'email' ? 'ex: microraptor@gmail.com' : 'ex: +55 32 9999-0000'}
+                  required
+                  className={inputCls()}
+                />
+                <p className="text-gray-600 text-xs -mt-2">
+                  {type === 'phone' && 'Digite o número com DDD (ex: 5532999990000)'}
+                  {type === 'email' && 'Digite o endereço de e-mail'}
+                  {type === 'whatsapp' && 'Digite o número com DDD sem + (ex: 5532999990000)'}
+                </p>
+                <input
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                  placeholder="Valor para o link (número ou email)"
+                  required
+                  className={inputCls()}
+                />
+              </>
+            }
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 // ─── Página principal ─────────────────────────────────────────────────────────
 
 export default function AdminPage() {
@@ -727,6 +855,7 @@ export default function AdminPage() {
     { id: 'albuns',          label: 'Álbuns' },
     { id: 'inscricoes',      label: 'Inscrições PS' },
     { id: 'patrocinadores',  label: 'Patrocinadores' },
+    { id: 'contatos',        label: 'Contatos' },
   ];
 
   return (
@@ -800,6 +929,7 @@ export default function AdminPage() {
           {tab === 'albuns'         && <AlbunsTab />}
           {tab === 'inscricoes'     && <InscricoesTab />}
           {tab === 'patrocinadores' && <PatrocinadoresTab />}
+          {tab === 'contatos'       && <ContatosTab />}
         </div>
       </div>
     </div>

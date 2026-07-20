@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Icon } from '@iconify/react';
+import { useEffect, useState } from 'react';
 
 const navLinks = [
   { href: '/',                 label: 'Início'           },
@@ -13,23 +14,16 @@ const navLinks = [
   { href: '/Contact',          label: 'Contato'          },
 ];
 
-const contacts = [
-  {
-    icon: 'mdi:email-outline',
-    label: 'microraptorufjf@gmail.com',
-    href: 'mailto:microraptorufjf@gmail.com',
-  },
-  {
-    icon: 'mdi:phone-outline',
-    label: '+55 32 9112-6624',
-    href: 'tel:+553291126624',
-  },
-  {
-    icon: 'mdi:phone-outline',
-    label: '+55 32 9931-0160',
-    href: 'tel:+5532993101060',
-  },
+const staticContacts = [
+  { icon: 'mdi:email-outline', label: 'microraptorufjf@gmail.com', href: 'mailto:microraptorufjf@gmail.com', type: 'email'   },
+  { icon: 'mdi:phone-outline', label: '+55 32 9112-6624',          href: 'tel:+553291126624',                type: 'phone'   },
+  { icon: 'mdi:phone-outline', label: '+55 32 9931-0160',          href: 'tel:+5532993101060',               type: 'phone'   },
 ];
+
+const iconFor = (type: string) =>
+  type === 'email'    ? 'mdi:email-outline'    :
+  type === 'whatsapp' ? 'mdi:whatsapp'         :
+  'mdi:phone-outline';
 
 const socials = [
   { icon: 'mdi:instagram',  href: 'https://www.instagram.com/microraptorufjf/', label: 'Instagram' },
@@ -37,6 +31,20 @@ const socials = [
 ];
 
 export default function Footer() {
+  const [dbContacts, setDbContacts] = useState<{ label: string; href: string; type: string }[]>([]);
+
+  useEffect(() => {
+    fetch('/api/contacts')
+      .then((r) => r.json())
+      .then((data) => setDbContacts(data))
+      .catch(() => {});
+  }, []);
+
+  const contacts = [
+    ...staticContacts,
+    ...dbContacts.map((c) => ({ ...c, icon: iconFor(c.type) })),
+  ];
+
   return (
     <footer className="relative mt-auto border-t border-white/[0.06] bg-black">
       {/* Linha decorativa vermelha */}
