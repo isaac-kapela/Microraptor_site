@@ -3,12 +3,15 @@
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { Icon } from '@iconify/react';
 
 const posts = [
   'https://www.instagram.com/reel/DWhfJyigQ4v/',
   'https://www.instagram.com/reel/DWm1AdODK9x/',
   'https://www.instagram.com/reel/DWHt9xtAV5U/',
   'https://www.instagram.com/p/DVoXvM0AEKZ/',
+  'https://www.instagram.com/p/DYPx2e-Ecv6/',
+  'https://www.instagram.com/p/DaiVjgMgODE/',
 ];
 
 export default function InstagramFeed() {
@@ -31,34 +34,33 @@ export default function InstagramFeed() {
         }}
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-6xl mx-auto px-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-5xl mx-auto px-6">
         {posts.map((url, i) => (
           <motion.div
             key={url}
-            initial={{ opacity: 0, y: 32 }}
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: i * 0.1, duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
-            whileHover={{ y: -6, scale: 1.02 }}
-            className="group relative rounded-2xl p-px bg-gradient-to-br from-[#a80303]/40 via-white/5 to-transparent hover:from-[#a80303]/70 hover:via-white/10 transition-all duration-300"
+            transition={{ delay: i * 0.07, duration: 0.5 }}
+            className="group relative rounded-2xl overflow-hidden border border-white/[0.06] hover:border-[#a80303]/60 transition-all duration-300"
+            style={{ height: '320px' }}
           >
-            {/* Glow de fundo no hover */}
-            <div className="absolute inset-0 rounded-2xl bg-[#a80303]/10 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-300 -z-10" />
-
-            <div className="rounded-2xl overflow-hidden bg-[#0a0000]">
-              {/* Esqueleto enquanto carrega */}
+            {/* Embed clippado — mostra só a imagem */}
+            <div
+              className="absolute inset-0 overflow-hidden"
+              style={{ marginBottom: '-120px' }}
+            >
               {!loaded && (
-                <div className="w-full aspect-[9/16] bg-white/[0.04] animate-pulse flex items-center justify-center">
-                  <span className="text-gray-700 text-xs tracking-widest uppercase font-medium">Carregando...</span>
+                <div className="w-full h-full bg-white/[0.04] animate-pulse flex items-center justify-center">
+                  <Icon icon="mdi:instagram" className="text-white/10" width={40} />
                 </div>
               )}
-
               <blockquote
                 className="instagram-media !w-full !min-w-0 !m-0"
                 data-instgrm-permalink={url}
                 data-instgrm-version="14"
                 style={{
-                  background: '#000',
+                  background: '#111',
                   border: 'none',
                   borderRadius: '0',
                   boxShadow: 'none',
@@ -69,6 +71,22 @@ export default function InstagramFeed() {
                 }}
               />
             </div>
+
+            {/* Gradiente inferior para esconder corte */}
+            <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black to-transparent z-10 pointer-events-none" />
+
+            {/* Hover overlay com link */}
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/50 backdrop-blur-[2px]"
+            >
+              <div className="flex flex-col items-center gap-2 text-white">
+                <Icon icon="mdi:instagram" width={32} height={32} />
+                <span className="text-sm font-medium">Ver no Instagram</span>
+              </div>
+            </a>
           </motion.div>
         ))}
       </div>
@@ -78,8 +96,8 @@ export default function InstagramFeed() {
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ delay: 0.5 }}
-        className="flex justify-center mt-8"
+        transition={{ delay: 0.4 }}
+        className="flex justify-center mt-8 relative z-10"
       >
         <a
           href="https://www.instagram.com/microraptorufjf/"
@@ -87,6 +105,7 @@ export default function InstagramFeed() {
           rel="noopener noreferrer"
           className="group inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-white/10 bg-white/[0.04] hover:border-[#a80303]/50 hover:bg-[#980101]/10 text-gray-400 hover:text-white text-sm font-medium transition-all duration-300"
         >
+          <Icon icon="mdi:instagram" width={16} height={16} className="text-[#a80303]" />
           Ver todos no Instagram
           <span className="text-[#a80303] group-hover:translate-x-1 transition-transform duration-200">→</span>
         </a>

@@ -244,6 +244,7 @@ export const areas: Area[] = [
     tools: ['Lorem ipsum', 'Dolor sit amet', 'Consectetur adipiscing', 'Sed do eiusmod', 'Tempor incididunt'],
     skills: ['Lorem ipsum', 'Dolor sit amet', 'Consectetur adipiscing', 'Sed do eiusmod'],
     color: 'from-[#7a0101] to-[#5a0101]',
+    whatsapp: '553288706174',
     members: [
       { name: 'Vitão',       photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510419/microraptor/fotosMembrosAtuais/estruturas/tbs3bxhgu6dpvxqvsrsm.jpg',                        leader: true },
       { name: 'Enzo Giradi', photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510420/microraptor/fotosMembrosAtuais/fusecoLamina%C3%A7%C3%A3o/tl3yxl88aqwsdczgt50g.jpg'               },

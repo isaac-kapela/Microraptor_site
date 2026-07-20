@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type Tab = 'carousel' | 'bastidores' | 'membros' | 'albuns' | 'inscricoes';
+type Tab = 'carousel' | 'bastidores' | 'membros' | 'albuns' | 'inscricoes' | 'patrocinadores';
 
 interface PhotoDoc {
   _id: string;
@@ -522,6 +522,95 @@ function InscricoesTab() {
   );
 }
 
+// ─── Patrocinadores Tab ───────────────────────────────────────────────────────
+
+interface SponsorDoc { _id: string; name: string; src: string; site: string; category: string; }
+
+const SPONSOR_CATEGORIES = ['Patrocinador', 'Parceiro', 'Institucional', 'Software', 'Material'];
+
+function PatrocinadoresTab() {
+  const [items, setItems]   = useState<SponsorDoc[]>([]);
+  const [modal, setModal]   = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const load = async () => {
+    const res = await fetch('/api/sponsors');
+    setItems(await res.json());
+  };
+
+  useEffect(() => { load(); }, []);
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Remover este patrocinador?')) return;
+    await fetch(`/api/sponsors/${id}`, { method: 'DELETE' });
+    setItems((prev) => prev.filter((s) => s._id !== id));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    const fd = new FormData(e.currentTarget);
+    await fetch('/api/sponsors', { method: 'POST', body: fd });
+    setLoading(false);
+    setModal(false);
+    load();
+  };
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-6">
+        <p className="text-gray-400 text-sm">{items.length} patrocinadores</p>
+        <button
+          onClick={() => setModal(true)}
+          className="flex items-center gap-2 bg-[#a80303] hover:bg-[#9b130f] text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
+        >
+          + Adicionar
+        </button>
+      </div>
+
+      <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+        {items.map((item) => (
+          <div key={item._id} className="relative group rounded-xl overflow-hidden bg-white/5 border border-white/10 p-3 flex flex-col items-center gap-2">
+            <Image src={item.src} alt={item.name} width={100} height={60} className="object-contain max-h-14 w-full" />
+            <p className="text-gray-400 text-xs text-center truncate w-full">{item.name}</p>
+            <span className="text-[10px] text-gray-600 border border-white/10 px-2 py-0.5 rounded-full">{item.category}</span>
+            <button
+              onClick={() => handleDelete(item._id)}
+              className="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity bg-red-600 hover:bg-red-700 text-white rounded-full w-7 h-7 flex items-center justify-center text-lg leading-none"
+              title="Remover"
+            >
+              ×
+            </button>
+          </div>
+        ))}
+      </div>
+
+      <AnimatePresence>
+        {modal && (
+          <UploadModal
+            title="Adicionar patrocinador"
+            onClose={() => setModal(false)}
+            onSubmit={handleSubmit}
+            loading={loading}
+            fields={
+              <>
+                <input name="name" type="text" placeholder="Nome do patrocinador" required className={inputCls()} />
+                <input name="site" type="url" placeholder="Site (https://...)" className={inputCls()} />
+                <select name="category" className={inputCls()}>
+                  {SPONSOR_CATEGORIES.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
+                <input name="file" type="file" accept="image/*" required className={inputCls()} />
+              </>
+            }
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 // ─── Página principal ─────────────────────────────────────────────────────────
 
 export default function AdminPage() {
@@ -632,11 +721,12 @@ export default function AdminPage() {
 
   // ── Dashboard ──────────────────────────────────────────────────────────────
   const TABS: { id: Tab; label: string }[] = [
-    { id: 'carousel',    label: 'Carousel' },
-    { id: 'bastidores',  label: 'Bastidores' },
-    { id: 'membros',     label: 'Membros' },
-    { id: 'albuns',      label: 'Álbuns' },
-    { id: 'inscricoes',  label: 'Inscrições PS' },
+    { id: 'carousel',        label: 'Carousel' },
+    { id: 'bastidores',      label: 'Bastidores' },
+    { id: 'membros',         label: 'Membros' },
+    { id: 'albuns',          label: 'Álbuns' },
+    { id: 'inscricoes',      label: 'Inscrições PS' },
+    { id: 'patrocinadores',  label: 'Patrocinadores' },
   ];
 
   return (
@@ -704,11 +794,12 @@ export default function AdminPage() {
 
         {/* Conteúdo da aba */}
         <div className="py-10">
-          {tab === 'carousel'   && <PhotoTab category="carousel" />}
-          {tab === 'bastidores' && <PhotoTab category="bastidores" />}
-          {tab === 'membros'    && <MembrosTab />}
-          {tab === 'albuns'     && <AlbunsTab />}
-          {tab === 'inscricoes' && <InscricoesTab />}
+          {tab === 'carousel'       && <PhotoTab category="carousel" />}
+          {tab === 'bastidores'     && <PhotoTab category="bastidores" />}
+          {tab === 'membros'        && <MembrosTab />}
+          {tab === 'albuns'         && <AlbunsTab />}
+          {tab === 'inscricoes'     && <InscricoesTab />}
+          {tab === 'patrocinadores' && <PatrocinadoresTab />}
         </div>
       </div>
     </div>

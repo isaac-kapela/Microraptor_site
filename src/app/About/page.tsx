@@ -275,7 +275,7 @@ export default function AboutPage() {
             <SectionLabel>Fabricação</SectionLabel>
             <h2 className="text-3xl md:text-4xl font-black text-white mt-2 mb-4">Áreas de Fabricação</h2>
             <p className="text-gray-500 text-lg max-w-2xl mx-auto">
-              Onde o projeto sai do computador e ganha forma física. As equipes de fabricação transformam modelos CAD em componentes reais, trabalhando com materiais compostos, ferramentas de precisão e processos artesanais de alta qualidade.
+              Onde o projeto sai do computador e ganha forma física. As áreas de fabricação transformam os estudos em componentes reais, trabalhando com materiais compostos, ferramentas de precisão e processos artesanais de alta qualidade.
             </p>
           </FadeIn>
 

@@ -115,7 +115,7 @@ export default function Home() {
             transition={{ delay: 0.75, duration: 0.8 }}
             className="mt-6 text-lg md:text-2xl text-gray-300 font-light tracking-wide max-w-2xl mx-auto"
           >
-            Projetamos, desenvolvemos e construímos<br className="hidden md:block" />
+            Projetamos, desenvolvemos e construímos <br className="hidden md:block" />
             aeronaves rádio controladas de alto desempenho.
           </motion.p>
 

@@ -6,6 +6,7 @@ import './globals.css';
 import HamburguerComponent from './Components/hamburguer';
 import useWindowDimensions from './Components/windowDimension';
 import { DesktopNav } from './Components/navigation';
+import Footer from './Components/Footer';
 
 
 const geistSans = Geist({
@@ -43,7 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 					<ResponsiveComponent />
 				</header>
 				<main className="pt-[80px] font-[family-name:var(--monstserrat)]">{children}</main>
-				<footer></footer>
+				<Footer />
 			</body>
 		</html>
 	);

@@ -1,12 +1,12 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
-const sponsors = [
+const staticSponsors = [
   { name: 'TekBond',         src: '/sponsors/TekBond.png',      site: 'https://tekbond.com.br',   category: 'Material'      },
   { name: 'SAE Aerodesign',  src: '/sponsors/saeBrasil.jpg',    site: 'https://saebrasil.org.br', category: 'Institucional' },
   { name: 'UFJF',            src: '/sponsors/ufjf.jpg',          site: 'https://ufjf.br',          category: 'Institucional' },
@@ -19,6 +19,7 @@ const sponsors = [
   { name: 'Xraptor',         src: '/sponsors/Xraptor.jpg',       site: '#',                        category: 'Material'      },
   { name: 'APC Propellers',  src: '/sponsors/apc.jpg',           site: 'https://apcprop.com',      category: 'Material'      },
   { name: 'GRIN',            src: '/sponsors/grin.jpg',          site: '#',                        category: 'Parceiro'      },
+  { name: 'Vitalis Spa',     src: '/patrocinadores/vitalis.png', site: '#',                        category: 'Parceiro'      },
 ];
 
 const tiers = [
@@ -103,7 +104,7 @@ const reasons = [
 ];
 
 const stats = [
-  { value: '22',     label: 'Membros ativos'           },
+  { value: '25+',    label: 'Membros ativos'           },
   { value: '2011',   label: 'Ano de fundação'           },
   { value: 'R$25k',  label: 'Custo por projeto'         },
   { value: '~15',    label: 'Novos membros por ano em média' },
@@ -135,6 +136,17 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function PatrocinadoresPage() {
+  const [dbSponsors, setDbSponsors] = useState<{ name: string; src: string; site: string; category: string }[]>([]);
+
+  useEffect(() => {
+    fetch('/api/sponsors')
+      .then((r) => r.json())
+      .then((data) => setDbSponsors(data))
+      .catch(() => {});
+  }, []);
+
+  const sponsors = [...staticSponsors, ...dbSponsors];
+
   return (
     <div className="bg-black min-h-screen text-white overflow-x-hidden">
 
@@ -217,7 +229,7 @@ export default function PatrocinadoresPage() {
               SAE Brasil Aero Design, competição que reúne mais de <strong className="text-white">80 universidades</strong> de todo o Brasil.
             </p>
             <p className="text-gray-300 text-lg leading-relaxed mb-6">
-              Nossa equipe conta com <strong className="text-white">22 membros ativos</strong> de cursos como Engenharia Mecânica,
+              Nossa equipe conta com <strong className="text-white">mais de 25 membros ativos</strong> de cursos como Engenharia Mecânica,
               Elétrica, Civil, Sistemas de Informação e Ciência da Computação. Ex-membros hoje atuam na
               <strong className="text-white"> Embraer, Boeing, Siemens e Stellantis</strong>.
             </p>
