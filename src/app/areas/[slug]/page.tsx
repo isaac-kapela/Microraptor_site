@@ -24,6 +24,18 @@ export default function AreaPage({ params }: { params: Promise<{ slug: string }>
   const next = areas[currentIndex + 1];
 
   const [members, setMembers] = useState<MemberDoc[]>([]);
+  const [whatsapp, setWhatsapp] = useState<string | undefined>(area.whatsapp);
+
+  useEffect(() => {
+    fetch('/api/area-contacts')
+      .then((r) => r.json())
+      .then((data: { slug: string; whatsapp: string }[]) => {
+        const found = data.find((d) => d.slug === slug);
+        if (found) setWhatsapp(found.whatsapp);
+      })
+      .catch(() => {});
+  }, [slug]);
+
   useEffect(() => {
     fetch(`/api/members?area=${slug}`)
       .then((r) => r.json())
@@ -313,9 +325,9 @@ export default function AreaPage({ params }: { params: Promise<{ slug: string }>
               <p className="text-gray-400 mb-8 leading-relaxed">
                 Nosso processo seletivo está aberto. Venha fazer parte da equipe tricampeã da UFJF.
               </p>
-              {area.whatsapp ? (
+              {whatsapp ? (
                 <a
-                  href={`https://wa.me/${area.whatsapp}?text=Ol%C3%A1%21%20Conheci%20a%20equipe%20Microraptor%20atrav%C3%A9s%20do%20site%20e%20tenho%20interesse%20em%20entrar%20na%20%C3%A1rea%20de%20${encodeURIComponent(area.name)}.%20Gostaria%20de%20saber%20mais%21`}
+                  href={`https://wa.me/${whatsapp}?text=Ol%C3%A1%21%20Conheci%20a%20equipe%20Microraptor%20atrav%C3%A9s%20do%20site%20e%20tenho%20interesse%20em%20entrar%20na%20%C3%A1rea%20de%20${encodeURIComponent(area.name)}.%20Gostaria%20de%20saber%20mais%21`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-[#a80303] to-[#980101] hover:from-[#c00404] hover:to-[#980101] text-white font-bold px-8 py-3.5 rounded-2xl text-base shadow-[0_0_32px_rgba(152,1,1,0.4)] hover:shadow-[0_0_48px_rgba(168,3,3,0.6)] transition-all duration-300"

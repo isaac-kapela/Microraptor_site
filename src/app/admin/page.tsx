@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type Tab = 'carousel' | 'bastidores' | 'membros' | 'albuns' | 'inscricoes' | 'patrocinadores' | 'contatos';
+type Tab = 'carousel' | 'bastidores' | 'membros' | 'albuns' | 'inscricoes' | 'patrocinadores' | 'contatos' | 'areas';
 
 interface PhotoDoc {
   _id: string;
@@ -739,6 +739,111 @@ function ContatosTab() {
   );
 }
 
+// ─── Áreas Tab ────────────────────────────────────────────────────────────────
+
+const AREAS_LIST = [
+  { slug: 'aerodinamica',          label: 'Aerodinâmica'           },
+  { slug: 'estabilidade',          label: 'Estabilidade e Controle'},
+  { slug: 'desempenho',            label: 'Desempenho'             },
+  { slug: 'eletrica',              label: 'Elétrica'               },
+  { slug: 'cargas',                label: 'Cargas'                 },
+  { slug: 'estruturas',            label: 'Estruturas'             },
+  { slug: 'plantas',               label: 'Plantas'                },
+  { slug: 'gestao',                label: 'Gestão'                 },
+  { slug: 'fuselagem-e-laminacao', label: 'Fuselagem e Laminação'  },
+  { slug: 'cauda',                 label: 'Cauda'                  },
+  { slug: 'asa',                   label: 'Asa'                    },
+  { slug: 'aeroelasticidade',      label: 'Aeroelasticidade'       },
+  { slug: 'capitania',             label: 'Capitania'              },
+];
+
+function AreasTab() {
+  const [overrides, setOverrides] = useState<Record<string, string>>({});
+  const [editing, setEditing]     = useState<string | null>(null);
+  const [value, setValue]         = useState('');
+  const [saving, setSaving]       = useState(false);
+
+  useEffect(() => {
+    fetch('/api/area-contacts')
+      .then((r) => r.json())
+      .then((data: { slug: string; whatsapp: string }[]) => {
+        const map: Record<string, string> = {};
+        data.forEach((d) => { map[d.slug] = d.whatsapp; });
+        setOverrides(map);
+      });
+  }, []);
+
+  const startEdit = (slug: string, current: string) => {
+    setEditing(slug);
+    setValue(current);
+  };
+
+  const handleSave = async (slug: string) => {
+    setSaving(true);
+    await fetch(`/api/area-contacts/${slug}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ whatsapp: value }),
+    });
+    setOverrides((prev) => ({ ...prev, [slug]: value }));
+    setSaving(false);
+    setEditing(null);
+  };
+
+  return (
+    <div className="max-w-xl flex flex-col gap-3">
+      {AREAS_LIST.map((area) => {
+        const current = overrides[area.slug] ?? '—';
+        const isEditing = editing === area.slug;
+        return (
+          <div key={area.slug} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10">
+            <div className="flex-1">
+              <p className="text-white text-sm font-medium">{area.label}</p>
+              {isEditing ? (
+                <input
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                  placeholder="ex: 5532999990000"
+                  className="mt-1 w-full bg-white/[0.08] border border-white/20 rounded-lg px-3 py-1.5 text-white text-xs focus:outline-none focus:border-[#a80303]/60"
+                  autoFocus
+                />
+              ) : (
+                <p className="text-gray-500 text-xs mt-0.5">
+                  {current !== '—' ? `+${current}` : 'Sem WhatsApp cadastrado'}
+                </p>
+              )}
+            </div>
+            {isEditing ? (
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setEditing(null)}
+                  className="text-xs text-gray-500 hover:text-white border border-white/10 px-3 py-1.5 rounded-lg transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={() => handleSave(area.slug)}
+                  disabled={saving}
+                  className="text-xs bg-[#a80303] hover:bg-[#9b130f] text-white px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  {saving ? 'Salvando…' : 'Salvar'}
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => startEdit(area.slug, overrides[area.slug] ?? '')}
+                className="text-xs text-gray-500 hover:text-[#a80303] border border-white/10 hover:border-[#a80303]/50 px-3 py-1.5 rounded-lg transition-all"
+              >
+                Editar
+              </button>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 // ─── Página principal ─────────────────────────────────────────────────────────
 
 export default function AdminPage() {
@@ -856,6 +961,7 @@ export default function AdminPage() {
     { id: 'inscricoes',      label: 'Inscrições PS' },
     { id: 'patrocinadores',  label: 'Patrocinadores' },
     { id: 'contatos',        label: 'Contatos' },
+    { id: 'areas',           label: 'Áreas (WhatsApp)' },
   ];
 
   return (
@@ -930,6 +1036,7 @@ export default function AdminPage() {
           {tab === 'inscricoes'     && <InscricoesTab />}
           {tab === 'patrocinadores' && <PatrocinadoresTab />}
           {tab === 'contatos'       && <ContatosTab />}
+          {tab === 'areas'          && <AreasTab />}
         </div>
       </div>
     </div>
