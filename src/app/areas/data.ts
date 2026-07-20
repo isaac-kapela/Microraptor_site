@@ -39,7 +39,7 @@ export const areas: Area[] = [
     color: 'from-[#a80303] to-[#980101]',
     whatsapp: '5524988467983',
     members: [
-      { name: 'Daniel', photo: '/fotosMembrosAtuais/aerodinamica/daniel.jpeg', leader: true },
+      { name: 'Daniel', photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510360/microraptor/fotosMembrosAtuais/aerodinamica/plpshfnq57dswpltr6bj.jpg', leader: true },
     ],
   },
   {
@@ -62,9 +62,9 @@ export const areas: Area[] = [
     color: 'from-[#9b130f] to-[#980101]',
     whatsapp: '553288374710',
     members: [
-      { name: 'Enzo Giradi', photo: '/fotosMembrosAtuais/estabilidade/enzoGiradi.jpeg', leader: true },
-      { name: 'Elias',       photo: '/fotosMembrosAtuais/estabilidade/Elias.jpeg'                    },
-      { name: 'Isis',        photo: '/fotosMembrosAtuais/estabilidade/isis.jpeg'                     },
+      { name: 'Enzo Giradi', photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510412/microraptor/fotosMembrosAtuais/estabilidade/rcgi921dsg5vxnthzn8p.jpg', leader: true },
+      { name: 'Elias',       photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510411/microraptor/fotosMembrosAtuais/estabilidade/mlcahlx2tevmfmdsiuh9.jpg'                    },
+      { name: 'Isis',        photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510415/microraptor/fotosMembrosAtuais/estabilidade/xns837hunhqkfli22l5t.jpg'                     },
     ],
   },
   {
@@ -87,8 +87,8 @@ export const areas: Area[] = [
     color: 'from-[#a80303] to-[#7a0101]',
     whatsapp: '5521969741778',
     members: [
-      { name: 'Pedro Breder', photo: '/fotosMembrosAtuais/desempenho/pedro_breder.jpg', leader: true },
-      { name: 'Luis',         photo: '/fotosMembrosAtuais/desempenho/luis.jpeg' },
+      { name: 'Pedro Breder', photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510407/microraptor/fotosMembrosAtuais/desempenho/k6za6rpixoujx22q9ibl.jpg', leader: true },
+      { name: 'Luis',         photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510400/microraptor/fotosMembrosAtuais/desempenho/lqjib8kpaycmho1bmeyo.jpg' },
     ],
   },
   {
@@ -111,8 +111,8 @@ export const areas: Area[] = [
     color: 'from-[#980101] to-[#6b0101]',
     whatsapp: '553291858659',
     members: [
-      { name: 'Arthur Padilha', photo: '/fotosMembrosAtuais/eletrica/arthur_padilha.jpeg', leader: true },
-      { name: 'Mariana',        photo: '/fotosMembrosAtuais/eletrica/mariana.jpeg' },
+      { name: 'Arthur Padilha', photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510408/microraptor/fotosMembrosAtuais/eletrica/lqxnmllgxhkpjzml1l5j.jpg', leader: true },
+      { name: 'Mariana',        photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510410/microraptor/fotosMembrosAtuais/eletrica/eilxdrk61cnmj0vi83wy.jpg' },
     ],
   },
   {
@@ -154,9 +154,9 @@ export const areas: Area[] = [
     color: 'from-[#9b130f] to-[#7a0101]',
     whatsapp: '553299677341',
     members: [
-      { name: 'Lorena',  photo: '/fotosMembrosAtuais/cargas/lorena.jpeg', leader: true },
-      { name: 'Breno',   photo: '/fotosMembrosAtuais/cargas/breno.jpeg'                },
-      { name: 'Mauler',  photo: '/fotosMembrosAtuais/cargas/mauler.jpeg'               },
+      { name: 'Lorena',  photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510382/microraptor/fotosMembrosAtuais/cargas/n6ofcjmesagjhop01v4r.jpg', leader: true },
+      { name: 'Breno',   photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510381/microraptor/fotosMembrosAtuais/cargas/pxs9jed0b8yjpjygjrdl.jpg'                },
+      { name: 'Mauler',  photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510383/microraptor/fotosMembrosAtuais/cargas/wwcmyejky1uk0dcsguw5.jpg'               },
     ],
   },
   {
@@ -179,9 +179,9 @@ export const areas: Area[] = [
     color: 'from-[#a80303] to-[#980101]',
     whatsapp: '553299997408',
     members: [
-      { name: 'Maria Clara', photo: '/fotosMembrosAtuais/estruturas/mariaClara.jpeg', leader: true },
-      { name: 'Mima',        photo: '/fotosMembrosAtuais/estruturas/mima.jpeg'                    },
-      { name: 'Vitão',       photo: '/fotosMembrosAtuais/estruturas/vitao.jpeg'                   },
+      { name: 'Maria Clara', photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510416/microraptor/fotosMembrosAtuais/estruturas/kzpgy6lh19iquoyiawg2.jpg', leader: true },
+      { name: 'Mima',        photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510417/microraptor/fotosMembrosAtuais/estruturas/sqjkxyxcgldibwvsrcmm.jpg'                    },
+      { name: 'Vitão',       photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510419/microraptor/fotosMembrosAtuais/estruturas/tbs3bxhgu6dpvxqvsrsm.jpg'                   },
     ],
   },
   {
@@ -203,8 +203,8 @@ export const areas: Area[] = [
     skills: ['Lorem ipsum', 'Dolor sit amet', 'Consectetur adipiscing', 'Sed do eiusmod'],
     color: 'from-[#980101] to-[#6b0101]',
     members: [
-      { name: 'Enzo',     photo: '/fotosMembrosAtuais/plantas/enzoFre.jpeg',   leader: true },
-      { name: 'Leonardo', photo: '/fotosMembrosAtuais/plantas/leonardo.jpeg'               },
+      { name: 'Enzo',     photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510427/microraptor/fotosMembrosAtuais/plantas/ycusjcyoqkjtudm6tbcf.jpg',   leader: true },
+      { name: 'Leonardo', photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510429/microraptor/fotosMembrosAtuais/plantas/vhz1kwkbzmjrc16or1sq.jpg'               },
     ],
   },
   {
@@ -245,13 +245,13 @@ export const areas: Area[] = [
     skills: ['Lorem ipsum', 'Dolor sit amet', 'Consectetur adipiscing', 'Sed do eiusmod'],
     color: 'from-[#7a0101] to-[#5a0101]',
     members: [
-      { name: 'Vitão',       photo: '/fotosMembrosAtuais/estruturas/vitao.jpeg',                        leader: true },
-      { name: 'Enzo Giradi', photo: '/fotosMembrosAtuais/fusecoLaminação/enzoGiradi.jpeg'               },
-      { name: 'João Kleber', photo: '/fotosMembrosAtuais/fusecoLaminação/joao_kleber.jpeg'              },
-      { name: 'Lorena',      photo: '/fotosMembrosAtuais/fusecoLaminação/lorena.jpeg'                   },
-      { name: 'Maria Clara', photo: '/fotosMembrosAtuais/fusecoLaminação/mariaClara.jpeg'               },
-      { name: 'Mima',        photo: '/fotosMembrosAtuais/fusecoLaminação/mima.jpeg'                     },
-      { name: 'Rodolfo',     photo: '/fotosMembrosAtuais/fusecoLaminação/rodolfo.jpeg'                  },
+      { name: 'Vitão',       photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510419/microraptor/fotosMembrosAtuais/estruturas/tbs3bxhgu6dpvxqvsrsm.jpg',                        leader: true },
+      { name: 'Enzo Giradi', photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510420/microraptor/fotosMembrosAtuais/fusecoLamina%C3%A7%C3%A3o/tl3yxl88aqwsdczgt50g.jpg'               },
+      { name: 'João Kleber', photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510421/microraptor/fotosMembrosAtuais/fusecoLamina%C3%A7%C3%A3o/ccz8zgqrswfd8geyblxk.jpg'              },
+      { name: 'Lorena',      photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510422/microraptor/fotosMembrosAtuais/fusecoLamina%C3%A7%C3%A3o/wekkigyvv08qaul77er8.jpg'                   },
+      { name: 'Maria Clara', photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510423/microraptor/fotosMembrosAtuais/fusecoLamina%C3%A7%C3%A3o/mcbrmd2zraeb4ykch9ta.jpg'               },
+      { name: 'Mima',        photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510424/microraptor/fotosMembrosAtuais/fusecoLamina%C3%A7%C3%A3o/wzmzewphfxhlpndzpbwl.jpg'                     },
+      { name: 'Rodolfo',     photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510425/microraptor/fotosMembrosAtuais/fusecoLamina%C3%A7%C3%A3o/t6inka9mnr723ipfl7ls.jpg'                  },
     ],
   },
   {
@@ -272,11 +272,11 @@ export const areas: Area[] = [
     color: 'from-[#7a0101] to-[#5a0101]',
     whatsapp: '5524998474461',
     members: [
-      { name: 'Mauler',        photo: '/fotosMembrosAtuais/cauda/mauler.jpeg',        leader: true },
-      { name: 'Arthur Padilha',photo: '/fotosMembrosAtuais/cauda/arthur_padilha.jpeg'              },
-      { name: 'Bernadu',       photo: '/fotosMembrosAtuais/cauda/bernadu.jpeg'                     },
-      { name: 'Elias',         photo: '/fotosMembrosAtuais/cauda/Elias.jpeg'                       },
-      { name: 'Luis',          photo: '/fotosMembrosAtuais/cauda/luis.jpeg'                        },
+      { name: 'Mauler',        photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510398/microraptor/fotosMembrosAtuais/cauda/ol8jargaxfy9shez4e4x.jpg',        leader: true },
+      { name: 'Arthur Padilha',photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510389/microraptor/fotosMembrosAtuais/cauda/r6oqhzg8u8msbhnykpmq.jpg'              },
+      { name: 'Bernadu',       photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510389/microraptor/fotosMembrosAtuais/cauda/f40wp6whumca9dxhcqq5.jpg'                     },
+      { name: 'Elias',         photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510388/microraptor/fotosMembrosAtuais/cauda/udf0yxnqkmuoxdlpr5ar.jpg'                       },
+      { name: 'Luis',          photo: 'https://res.cloudinary.com/eufumarc/image/upload/v1784510396/microraptor/fotosMembrosAtuais/cauda/ptb4zwe875k9iuuhiijt.jpg'                        },
     ],
   },
   {
