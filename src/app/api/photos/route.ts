@@ -2,9 +2,7 @@ import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import Photo from '@/lib/models/Photo';
 import { isAdminRequest } from '@/lib/auth';
-import { writeFile, mkdir } from 'fs/promises';
-import { randomUUID } from 'crypto';
-import path from 'path';
+import { uploadToCloudinary } from '@/lib/cloudinary';
 
 // GET /api/photos?category=carousel
 // GET /api/photos?category=album&year=2025
@@ -39,18 +37,13 @@ export async function POST(request: Request) {
   }
 
   const ext = file.name.split('.').pop()?.toLowerCase() ?? 'jpg';
-  const type: 'image' | 'video' = ['mp4', 'mov', 'webm'].includes(ext) ? 'video' : 'image';
-  const filename = `${randomUUID()}.${ext}`;
-  const uploadDir = path.join(process.cwd(), 'public', 'uploads', category);
-
-  await mkdir(uploadDir, { recursive: true });
+  const resourceType: 'image' | 'video' = ['mp4', 'mov', 'webm'].includes(ext) ? 'video' : 'image';
 
   const bytes = await file.arrayBuffer();
-  await writeFile(path.join(uploadDir, filename), Buffer.from(bytes));
+  const src = await uploadToCloudinary(bytes, category, resourceType);
 
-  const src = `/uploads/${category}/${filename}`;
   const count = await Photo.countDocuments({ category });
+  const photo = await Photo.create({ category, src, type: resourceType, year, order: count });
 
-  const photo = await Photo.create({ category, src, type, year, order: count });
   return NextResponse.json(photo, { status: 201 });
 }

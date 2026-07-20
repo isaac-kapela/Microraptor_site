@@ -2,9 +2,7 @@ import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import Member from '@/lib/models/Member';
 import { isAdminRequest } from '@/lib/auth';
-import { writeFile, mkdir } from 'fs/promises';
-import { randomUUID } from 'crypto';
-import path from 'path';
+import { uploadToCloudinary } from '@/lib/cloudinary';
 
 // GET /api/members?area=aerodinamica
 export async function GET(request: Request) {
@@ -36,18 +34,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Arquivo, nome e área são obrigatórios' }, { status: 400 });
   }
 
-  const ext = file.name.split('.').pop()?.toLowerCase() ?? 'jpg';
-  const filename = `${randomUUID()}.${ext}`;
-  const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'members', area);
-
-  await mkdir(uploadDir, { recursive: true });
-
   const bytes = await file.arrayBuffer();
-  await writeFile(path.join(uploadDir, filename), Buffer.from(bytes));
+  const photo = await uploadToCloudinary(bytes, `members/${area}`);
 
-  const photo = `/uploads/members/${area}/${filename}`;
   const count = await Member.countDocuments({ area });
-
   const member = await Member.create({ name, area, photo, isLeader, order: count });
+
   return NextResponse.json(member, { status: 201 });
 }

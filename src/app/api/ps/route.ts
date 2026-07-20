@@ -2,18 +2,24 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import PSApplication from '@/lib/models/PSApplication';
 import { isAdminRequest } from '@/lib/auth';
-import { writeFile, mkdir } from 'fs/promises';
-import { join, extname } from 'path';
+import { uploadToCloudinary } from '@/lib/cloudinary';
+import { extname } from 'path';
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
 async function saveFile(file: File, subfolder: string): Promise<string> {
-  const ext = extname(file.name);
-  const filename = `${crypto.randomUUID()}${ext}`;
-  const dir = join(process.cwd(), 'public', 'uploads', 'ps', subfolder);
-  await mkdir(dir, { recursive: true });
-  await writeFile(join(dir, filename), Buffer.from(await file.arrayBuffer()));
-  return `/uploads/ps/${subfolder}/${filename}`;
+  const ext = extname(file.name).toLowerCase();
+  const imageExts = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+  const videoExts = ['.mp4', '.mov', '.webm'];
+
+  const resourceType = imageExts.includes(ext)
+    ? 'image'
+    : videoExts.includes(ext)
+    ? 'video'
+    : 'raw';
+
+  const bytes = await file.arrayBuffer();
+  return uploadToCloudinary(bytes, `ps/${subfolder}`, resourceType);
 }
 
 // ─── POST — submeter inscrição ────────────────────────────────────────────────
