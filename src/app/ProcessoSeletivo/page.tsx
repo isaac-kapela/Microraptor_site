@@ -539,6 +539,9 @@ export default function ProcessoSeletivoPage() {
 
   const inlineEdital = editalUrl.startsWith('http') ? '/api/areas-pdf/view?type=edital' : editalUrl;
 
+  const deadlinePassed = psDeadline ? new Date(psDeadline).getTime() < Date.now() : false;
+  const formVisible = psOpen && !deadlinePassed;
+
   return (
     <div className="bg-black min-h-screen text-white overflow-x-hidden">
 
@@ -569,10 +572,10 @@ export default function ProcessoSeletivoPage() {
           </motion.div>
 
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex flex-col items-center gap-2 mb-6">
-            <span className={`flex items-center gap-2 text-xs font-bold tracking-[0.25em] uppercase px-4 py-1.5 rounded-full border ${psOpen ? 'text-[#a80303] border-[#980101]/40 bg-[#980101]/10' : 'text-gray-400 border-white/15 bg-white/[0.05]'}`}>
-              {psOpen ? 'Inscrições abertas' : 'Inscrições encerradas'}
+            <span className={`flex items-center gap-2 text-xs font-bold tracking-[0.25em] uppercase px-4 py-1.5 rounded-full border ${formVisible ? 'text-[#a80303] border-[#980101]/40 bg-[#980101]/10' : 'text-gray-400 border-white/15 bg-white/[0.05]'}`}>
+              {formVisible ? 'Inscrições abertas' : 'Inscrições encerradas'}
             </span>
-            {psOpen && psDeadline && (
+            {formVisible && psDeadline && (
               <p className="text-gray-400 text-xs">
                 Prazo: <Countdown deadline={psDeadline} />
               </p>
@@ -595,7 +598,7 @@ export default function ProcessoSeletivoPage() {
             para projetar, construir e voar aeronaves de competição.
           </motion.p>
 
-          {psOpen && (
+          {formVisible && (
             <motion.a
               href="#formulario"
               initial={{ opacity: 0, y: 16 }}
@@ -683,7 +686,7 @@ export default function ProcessoSeletivoPage() {
           </div>
 
           {/* CTA após etapas */}
-          {psOpen && (
+          {formVisible && (
             <FadeIn delay={0.3} className="flex justify-center mt-14">
               <a
                 href="#formulario"
@@ -745,7 +748,7 @@ export default function ProcessoSeletivoPage() {
             <h2 className="text-4xl md:text-5xl font-black text-white leading-tight mb-4">
               Formulário de inscrição
             </h2>
-            {psOpen ? (
+            {formVisible ? (
               <>
                 <p className="text-gray-400 mb-6">
                   Preencha todos os campos. Entraremos em contato em até 5 dias úteis.
@@ -784,7 +787,7 @@ export default function ProcessoSeletivoPage() {
             )}
           </div>
 
-          {psOpen ? (
+          {formVisible ? (
             <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8 md:p-12">
               <InscricaoForm />
             </div>

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import PSApplication from '@/lib/models/PSApplication';
+import PSConfig from '@/lib/models/PSConfig';
 import { isAdminRequest } from '@/lib/auth';
 import { uploadToCloudinary } from '@/lib/cloudinary';
 import { extname } from 'path';
@@ -26,6 +27,16 @@ async function saveFile(file: File, subfolder: string): Promise<string> {
 
 export async function POST(req: NextRequest) {
   try {
+    await connectDB();
+    const config = await PSConfig.findOne().lean();
+    const isOpen = config ? config.isOpen : true;
+    const deadline = config?.deadline ? new Date(config.deadline) : null;
+    const deadlinePassed = deadline ? deadline.getTime() < Date.now() : false;
+
+    if (!isOpen || deadlinePassed) {
+      return NextResponse.json({ error: 'As inscrições estão encerradas.' }, { status: 403 });
+    }
+
     const fd = await req.formData();
     const get = (key: string) => (fd.get(key) as string | null) ?? '';
 
