@@ -344,10 +344,6 @@ function InscricaoForm() {
             <label className="block text-sm text-gray-300 font-medium mb-1.5">
               Currículo
             </label>
-            <p className="text-gray-500 text-xs mb-2">
-              Candidatos do 1º período podem enviar o comprovante de matrícula novamente neste
-              campo.
-            </p>
             <input
               type="file"
               accept=".pdf,.doc,.docx"
