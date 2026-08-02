@@ -371,6 +371,7 @@ interface PSDoc {
   comoConheceu: string;
   periodo: string;
   previsaoConclusao: string;
+  horasDisponiveis?: string;
   areas: string[];
   curriculo: string;
   comprovanteMatricula: string;
@@ -482,6 +483,7 @@ function InscricoesTab() {
                   ['Como conheceu', selected.comoConheceu],
                   ['Período', selected.periodo],
                   ['Previsão de conclusão', selected.previsaoConclusao],
+                  ['Disponibilidade', selected.horasDisponiveis ?? '—'],
                   ['Áreas', selected.areas.join(', ')],
                   ['Data', new Date(selected.createdAt).toLocaleString('pt-BR')],
                 ].map(([label, value]) => (

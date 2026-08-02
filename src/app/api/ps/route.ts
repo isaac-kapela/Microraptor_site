@@ -64,6 +64,7 @@ export async function POST(req: NextRequest) {
       comoConheceu:         get('comoConheceu'),
       periodo:              get('periodo'),
       previsaoConclusao:    get('previsaoConclusao'),
+      horasDisponiveis:     get('horasDisponiveis'),
       areas:                fd.getAll('areas') as string[],
       texto:                textoPath,
       curriculo:            curriculoPath,

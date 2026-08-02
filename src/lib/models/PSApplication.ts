@@ -9,6 +9,7 @@ const PSApplicationSchema = new Schema(
     comoConheceu:         { type: String, required: true },
     periodo:              { type: String, required: true },
     previsaoConclusao:    { type: String, required: true },
+    horasDisponiveis:     { type: String, default: '' },
     areas:                { type: [String], required: true },
     texto:                { type: String, required: true }, // caminho do arquivo enviado
     curriculo:            { type: String, required: true },
