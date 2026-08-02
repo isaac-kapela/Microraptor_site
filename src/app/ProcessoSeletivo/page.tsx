@@ -58,12 +58,12 @@ const etapas = [
   {
     num: '03',
     title: 'Entrevista / Dinâmica',
-    desc: 'Bate-papo com os líderes da área de interesse. Não exigimos experiência prévia — buscamos curiosidade e comprometimento.',
+    desc: 'Bate-papo com alguns membros da equipe. Não exigimos experiência prévia — buscamos curiosidade e comprometimento.',
   },
   {
     num: '04',
     title: 'Resultado',
-    desc: 'Os aprovados recebem o contato para integração à equipe e participação nas primeiras reuniões.',
+    desc: 'Os aprovados recebem o contato para iniciar o trainee, começar a capacitação e acompanhar as reuniões.',
   },
 ];
 
