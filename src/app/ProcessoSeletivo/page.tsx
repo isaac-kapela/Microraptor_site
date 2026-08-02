@@ -108,12 +108,20 @@ const fieldCls =
 function InscricaoForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const [areas, setAreas] = useState<string[]>([]);
+  const [pdfUrl, setPdfUrl] = useState<string>('/areas.pdf');
   const [curriculo, setCurriculo] = useState<File | null>(null);
   const [comprovante, setComprovante] = useState<File | null>(null);
   const [historico, setHistorico] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [successEmail, setSuccessEmail] = useState('');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    fetch('/api/areas-pdf')
+      .then((r) => r.json())
+      .then((data) => { if (data?.url) setPdfUrl(data.url); })
+      .catch(() => {});
+  }, []);
 
   const toggleArea = (slug: string) => {
     setAreas((prev) => {
@@ -278,7 +286,7 @@ function InscricaoForm() {
           <p className="text-gray-500 text-xs">Selecione de 1 a 3 áreas de preferência</p>
           <div className="flex gap-2">
             <a
-              href="/areas.pdf"
+              href={pdfUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#a80303] border border-[#a80303]/40 bg-[#a80303]/10 hover:bg-[#a80303]/20 px-3 py-1.5 rounded-full transition-all"
@@ -287,7 +295,7 @@ function InscricaoForm() {
               Ver áreas
             </a>
             <a
-              href="/areas.pdf"
+              href={pdfUrl}
               download="Áreas Microraptor.pdf"
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-400 border border-white/15 hover:text-white hover:border-white/30 px-3 py-1.5 rounded-full transition-all"
             >

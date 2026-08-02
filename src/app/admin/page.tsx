@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type Tab = 'carousel' | 'bastidores' | 'membros' | 'albuns' | 'inscricoes' | 'patrocinadores' | 'contatos' | 'areas';
+type Tab = 'carousel' | 'bastidores' | 'membros' | 'albuns' | 'inscricoes' | 'patrocinadores' | 'contatos' | 'areas' | 'documentos';
 
 interface PhotoDoc {
   _id: string;
@@ -844,6 +844,102 @@ function AreasTab() {
   );
 }
 
+// ─── Documentos PS Tab ────────────────────────────────────────────────────────
+
+function DocumentosPSTab() {
+  const [current, setCurrent] = useState<{ url: string; filename: string } | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const load = () => {
+    setLoading(true);
+    fetch('/api/areas-pdf')
+      .then((r) => r.json())
+      .then((data) => setCurrent(data))
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => { load(); }, []);
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    const fd = new FormData();
+    fd.append('file', file);
+    await fetch('/api/areas-pdf', { method: 'POST', body: fd });
+    setUploading(false);
+    load();
+    if (fileRef.current) fileRef.current.value = '';
+  };
+
+  const handleDelete = async () => {
+    if (!confirm('Remover o PDF atual?')) return;
+    setDeleting(true);
+    await fetch('/api/areas-pdf', { method: 'DELETE' });
+    setCurrent(null);
+    setDeleting(false);
+  };
+
+  if (loading) return <div className="flex justify-center py-20"><div className="w-6 h-6 border-2 border-[#a80303] border-t-transparent rounded-full animate-spin" /></div>;
+
+  return (
+    <div className="max-w-xl flex flex-col gap-6">
+      <p className="text-gray-400 text-sm">PDF exibido na página de Processo Seletivo para os candidatos visualizarem e baixarem as áreas disponíveis.</p>
+
+      {current ? (
+        <div className="flex items-center gap-4 px-5 py-4 rounded-2xl bg-white/[0.04] border border-white/10">
+          <div className="w-10 h-10 rounded-xl bg-[#a80303]/20 border border-[#a80303]/30 flex items-center justify-center flex-shrink-0">
+            <span className="text-[#a80303] text-xs font-black">PDF</span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-white text-sm font-medium truncate">{current.filename}</p>
+            <a
+              href={current.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-[#a80303] hover:underline mt-0.5 inline-block"
+            >
+              Visualizar PDF ↗
+            </a>
+          </div>
+          <button
+            onClick={handleDelete}
+            disabled={deleting}
+            className="text-xs text-red-500/70 hover:text-red-400 border border-red-500/20 hover:border-red-400/40 px-3 py-1.5 rounded-xl transition-all disabled:opacity-50"
+          >
+            {deleting ? 'Removendo…' : 'Remover'}
+          </button>
+        </div>
+      ) : (
+        <div className="px-5 py-8 rounded-2xl bg-white/[0.02] border border-dashed border-white/10 text-center">
+          <p className="text-gray-600 text-sm mb-1">Nenhum PDF cadastrado</p>
+          <p className="text-gray-700 text-xs">Faça o upload abaixo para exibir no site</p>
+        </div>
+      )}
+
+      <div>
+        <p className="text-gray-500 text-xs mb-3">{current ? 'Substituir PDF atual:' : 'Enviar PDF:'}</p>
+        <label className="flex items-center gap-3 px-5 py-3 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#a80303]/40 transition-colors cursor-pointer group">
+          <span className="text-[#a80303] text-sm font-semibold group-hover:text-white transition-colors">
+            {uploading ? 'Enviando…' : '↑ Escolher arquivo PDF'}
+          </span>
+          <input
+            ref={fileRef}
+            type="file"
+            accept=".pdf"
+            onChange={handleUpload}
+            disabled={uploading}
+            className="hidden"
+          />
+        </label>
+      </div>
+    </div>
+  );
+}
+
 // ─── Página principal ─────────────────────────────────────────────────────────
 
 export default function AdminPage() {
@@ -962,6 +1058,7 @@ export default function AdminPage() {
     { id: 'patrocinadores',  label: 'Patrocinadores' },
     { id: 'contatos',        label: 'Contatos' },
     { id: 'areas',           label: 'Áreas (WhatsApp)' },
+    { id: 'documentos',      label: 'PDF Áreas (PS)' },
   ];
 
   return (
@@ -1037,6 +1134,7 @@ export default function AdminPage() {
           {tab === 'patrocinadores' && <PatrocinadoresTab />}
           {tab === 'contatos'       && <ContatosTab />}
           {tab === 'areas'          && <AreasTab />}
+          {tab === 'documentos'     && <DocumentosPSTab />}
         </div>
       </div>
     </div>
