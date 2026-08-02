@@ -1066,7 +1066,7 @@ export default function AdminPage() {
     { id: 'patrocinadores',  label: 'Patrocinadores' },
     { id: 'contatos',        label: 'Contatos' },
     { id: 'areas',           label: 'Áreas (WhatsApp)' },
-    { id: 'documentos',      label: 'PDF Áreas (PS)' },
+    { id: 'documentos',      label: 'Áreas / Edital' },
   ];
 
   return (
