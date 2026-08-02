@@ -277,20 +277,27 @@ function InscricaoForm() {
         <p className="text-gray-500 text-xs mb-4">Selecione de 1 a 3 áreas de preferência</p>
         <div className="flex flex-wrap gap-2">
           {AREAS.map((a) => {
-            const selected = areas.includes(a.slug);
+            const orderIndex = areas.indexOf(a.slug);
+            const selected = orderIndex !== -1;
             const disabled = !selected && areas.length >= 3;
+            const ordinals = ['1ª opção', '2ª opção', '3ª opção'];
             return (
               <button
                 key={a.slug}
                 type="button"
                 onClick={() => toggleArea(a.slug)}
                 disabled={disabled}
-                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all border flex items-center gap-1.5 ${
                   selected
                     ? 'bg-[#a80303] border-[#a80303] text-white'
                     : 'bg-transparent border-white/15 text-gray-400 hover:text-white hover:border-white/30'
                 } disabled:opacity-30 disabled:cursor-not-allowed`}
               >
+                {selected && (
+                  <span className="text-[10px] font-bold opacity-70 bg-white/20 px-1.5 py-0.5 rounded-full">
+                    {ordinals[orderIndex]}
+                  </span>
+                )}
                 {a.label}
               </button>
             );
