@@ -169,7 +169,7 @@ function InscricaoForm() {
     `${fieldCls} ${filled[name] ? 'border-emerald-500/40 focus:border-emerald-500/60' : 'focus:border-[#a80303]/60'}`;
 
   const s1Done = !!(filled.nomeCompleto && filled.curso && filled.email && filled.telefone && filled.periodo && filled.previsaoConclusao && filled.horasDisponiveis && filled.comoConheceu);
-  const s2Done = areas.length > 0;
+  const s2Done = areas.length === 3;
   const s3Done = !!(curriculo && comprovante && historico);
 
   const toggleArea = (slug: string) => {
@@ -184,8 +184,8 @@ function InscricaoForm() {
     e.preventDefault();
     setError('');
 
-    if (areas.length === 0) {
-      setError('Selecione pelo menos uma área de interesse.');
+    if (areas.length < 3) {
+      setError('Selecione exatamente 3 áreas de interesse.');
       return;
     }
     if (!curriculo) {
@@ -345,7 +345,7 @@ function InscricaoForm() {
         <SectionLabel>Áreas de interesse</SectionLabel>
         <div className="flex items-start justify-between flex-wrap gap-3 mb-4">
           <div>
-            <p className="text-gray-500 text-xs">Selecione de 1 a 3 áreas de preferência</p>
+            <p className="text-gray-500 text-xs">Selecione exatamente 3 áreas de preferência</p>
             <p className="text-gray-600 text-xs mt-0.5">Não conhece as áreas? Veja o documento antes de escolher.</p>
           </div>
           <div className="flex gap-2">
@@ -396,9 +396,9 @@ function InscricaoForm() {
             );
           })}
         </div>
-        {areas.length > 0 && (
-          <p className="text-gray-500 text-xs mt-3">{areas.length}/3 selecionadas</p>
-        )}
+        <p className={`text-xs mt-3 ${areas.length === 3 ? 'text-emerald-400' : 'text-gray-500'}`}>
+          {areas.length}/3 selecionadas{areas.length === 3 ? ' ✓' : ''}
+        </p>
       </section>
 
       {/* Documentos */}
