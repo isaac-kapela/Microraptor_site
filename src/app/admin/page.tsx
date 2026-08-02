@@ -848,16 +848,16 @@ function AreasTab() {
 
 // ─── Documentos PS Tab ────────────────────────────────────────────────────────
 
-function DocumentosPSTab() {
+function DocSection({ type, title, description }: { type: 'areas' | 'edital'; title: string; description: string }) {
   const [current, setCurrent] = useState<{ url: string; filename: string } | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading]   = useState(true);
   const [uploading, setUploading] = useState(false);
-  const [deleting, setDeleting] = useState(false);
+  const [deleting, setDeleting]   = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const load = () => {
     setLoading(true);
-    fetch('/api/areas-pdf')
+    fetch(`/api/areas-pdf?type=${type}`)
       .then((r) => r.json())
       .then((data) => setCurrent(data))
       .finally(() => setLoading(false));
@@ -871,6 +871,7 @@ function DocumentosPSTab() {
     setUploading(true);
     const fd = new FormData();
     fd.append('file', file);
+    fd.append('type', type);
     await fetch('/api/areas-pdf', { method: 'POST', body: fd });
     setUploading(false);
     load();
@@ -880,31 +881,29 @@ function DocumentosPSTab() {
   const handleDelete = async () => {
     if (!confirm('Remover o PDF atual?')) return;
     setDeleting(true);
-    await fetch('/api/areas-pdf', { method: 'DELETE' });
+    await fetch(`/api/areas-pdf?type=${type}`, { method: 'DELETE' });
     setCurrent(null);
     setDeleting(false);
   };
 
-  if (loading) return <div className="flex justify-center py-20"><div className="w-6 h-6 border-2 border-[#a80303] border-t-transparent rounded-full animate-spin" /></div>;
-
   return (
-    <div className="max-w-xl flex flex-col gap-6">
-      <p className="text-gray-400 text-sm">PDF exibido na página de Processo Seletivo para os candidatos visualizarem e baixarem as áreas disponíveis.</p>
+    <div className="flex flex-col gap-4 p-5 rounded-2xl border border-white/[0.08] bg-white/[0.02]">
+      <div>
+        <p className="text-white font-bold text-sm mb-1">{title}</p>
+        <p className="text-gray-500 text-xs">{description}</p>
+      </div>
 
-      {current ? (
-        <div className="flex items-center gap-4 px-5 py-4 rounded-2xl bg-white/[0.04] border border-white/10">
-          <div className="w-10 h-10 rounded-xl bg-[#a80303]/20 border border-[#a80303]/30 flex items-center justify-center flex-shrink-0">
-            <span className="text-[#a80303] text-xs font-black">PDF</span>
+      {loading ? (
+        <div className="flex justify-center py-4"><div className="w-5 h-5 border-2 border-[#a80303] border-t-transparent rounded-full animate-spin" /></div>
+      ) : current ? (
+        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10">
+          <div className="w-9 h-9 rounded-lg bg-[#a80303]/20 border border-[#a80303]/30 flex items-center justify-center flex-shrink-0">
+            <span className="text-[#a80303] text-[10px] font-black">PDF</span>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-white text-sm font-medium truncate">{current.filename}</p>
-            <a
-              href={current.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs text-[#a80303] hover:underline mt-0.5 inline-block"
-            >
-              Visualizar PDF ↗
+            <p className="text-white text-xs font-medium truncate">{current.filename}</p>
+            <a href={`/api/areas-pdf/view?type=${type}`} target="_blank" rel="noopener noreferrer" className="text-[10px] text-[#a80303] hover:underline">
+              Visualizar ↗
             </a>
           </div>
           <button
@@ -916,28 +915,35 @@ function DocumentosPSTab() {
           </button>
         </div>
       ) : (
-        <div className="px-5 py-8 rounded-2xl bg-white/[0.02] border border-dashed border-white/10 text-center">
-          <p className="text-gray-600 text-sm mb-1">Nenhum PDF cadastrado</p>
-          <p className="text-gray-700 text-xs">Faça o upload abaixo para exibir no site</p>
+        <div className="px-4 py-6 rounded-xl bg-white/[0.02] border border-dashed border-white/10 text-center">
+          <p className="text-gray-600 text-xs">Nenhum PDF cadastrado</p>
         </div>
       )}
 
-      <div>
-        <p className="text-gray-500 text-xs mb-3">{current ? 'Substituir PDF atual:' : 'Enviar PDF:'}</p>
-        <label className="flex items-center gap-3 px-5 py-3 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#a80303]/40 transition-colors cursor-pointer group">
-          <span className="text-[#a80303] text-sm font-semibold group-hover:text-white transition-colors">
-            {uploading ? 'Enviando…' : '↑ Escolher arquivo PDF'}
-          </span>
-          <input
-            ref={fileRef}
-            type="file"
-            accept=".pdf"
-            onChange={handleUpload}
-            disabled={uploading}
-            className="hidden"
-          />
-        </label>
-      </div>
+      <label className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#a80303]/40 transition-colors cursor-pointer group">
+        <span className="text-[#a80303] text-xs font-semibold group-hover:text-white transition-colors">
+          {uploading ? 'Enviando…' : `↑ ${current ? 'Substituir' : 'Enviar'} PDF`}
+        </span>
+        <input ref={fileRef} type="file" accept=".pdf" onChange={handleUpload} disabled={uploading} className="hidden" />
+      </label>
+    </div>
+  );
+}
+
+function DocumentosPSTab() {
+  return (
+    <div className="max-w-xl flex flex-col gap-6">
+      <p className="text-gray-400 text-sm">Gerencie os documentos exibidos na página de Processo Seletivo.</p>
+      <DocSection
+        type="areas"
+        title="PDF das Áreas"
+        description="Documento com a descrição de cada área disponível para inscrição."
+      />
+      <DocSection
+        type="edital"
+        title="Edital do PS"
+        description="Edital oficial do processo seletivo com regras, prazos e requisitos."
+      />
     </div>
   );
 }

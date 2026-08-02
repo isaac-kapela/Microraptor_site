@@ -156,13 +156,13 @@ function InscricaoForm() {
   const [filled, setFilled]           = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    fetch('/api/areas-pdf')
+    fetch('/api/areas-pdf?type=areas')
       .then((r) => r.json())
       .then((data) => { if (data?.url) setPdfUrl(data.url); })
       .catch(() => {});
   }, []);
 
-  const inlineUrl = pdfUrl.startsWith('http') ? '/api/areas-pdf/view' : pdfUrl;
+  const inlineUrl = pdfUrl.startsWith('http') ? '/api/areas-pdf/view?type=areas' : pdfUrl;
 
   const mark = (name: string, val: string | boolean) =>
     setFilled((prev) => ({ ...prev, [name]: typeof val === 'boolean' ? val : val.trim().length > 0 }));
@@ -500,6 +500,17 @@ function InscricaoForm() {
 // ─── Página ───────────────────────────────────────────────────────────────────
 
 export default function ProcessoSeletivoPage() {
+  const [editalUrl, setEditalUrl]   = useState<string>('/edital.pdf');
+
+  useEffect(() => {
+    fetch('/api/areas-pdf?type=edital')
+      .then((r) => r.json())
+      .then((data) => { if (data?.url) setEditalUrl(data.url); })
+      .catch(() => {});
+  }, []);
+
+  const inlineEdital = editalUrl.startsWith('http') ? '/api/areas-pdf/view?type=edital' : editalUrl;
+
   return (
     <div className="bg-black min-h-screen text-white overflow-x-hidden">
 
@@ -697,9 +708,28 @@ export default function ProcessoSeletivoPage() {
             <h2 className="text-4xl md:text-5xl font-black text-white leading-tight mb-4">
               Formulário de inscrição
             </h2>
-            <p className="text-gray-400">
+            <p className="text-gray-400 mb-6">
               Preencha todos os campos. Entraremos em contato em até 5 dias úteis.
             </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              <a
+                href={inlineEdital}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#a80303] border border-[#a80303]/40 bg-[#a80303]/10 hover:bg-[#a80303]/20 px-4 py-2 rounded-full transition-all"
+              >
+                <Icon icon="mdi:file-document-outline" width={14} />
+                Ver edital
+              </a>
+              <a
+                href={editalUrl}
+                download
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-400 border border-white/15 hover:text-white hover:border-white/30 px-4 py-2 rounded-full transition-all"
+              >
+                <Icon icon="mdi:download-outline" width={14} />
+                Baixar edital
+              </a>
+            </div>
           </div>
 
           <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8 md:p-12">
