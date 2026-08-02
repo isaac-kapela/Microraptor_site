@@ -53,11 +53,20 @@ export default function HamburguerComponent() {
 
 						<Link
 							onClick={() => setOpen(false)}
-							href="/Bastidores"
-							className={pathname === '/Bastidores' ? 'font-bold mr-4 flex items-center gap-2 text-white' : 'mr-4 text-red-500 flex items-center gap-2'}
+							href="/Patrocinadores"
+							className={pathname === '/Patrocinadores' ? 'font-bold mr-4 flex items-center gap-2 text-white' : 'mr-4 text-red-500 flex items-center gap-2'}
 						>
-							<Icon icon="material-symbols-light:flight" width="24" height="24" />
-							Bastidores
+							<Icon icon="material-symbols-light:handshake-outline" width="24" height="24" />
+							Patrocinadores
+						</Link>
+
+						<Link
+							onClick={() => setOpen(false)}
+							href="/ProcessoSeletivo"
+							className={pathname === '/ProcessoSeletivo' ? 'font-bold mr-4 flex items-center gap-2 text-white' : 'mr-4 text-red-500 flex items-center gap-2'}
+						>
+							<Icon icon="material-symbols-light:person-add-outline" width="24" height="24" />
+							Processo Seletivo
 						</Link>
 
 						<Link
