@@ -162,6 +162,10 @@ function InscricaoForm() {
       .catch(() => {});
   }, []);
 
+  const inlineUrl = pdfUrl.includes('/raw/upload/')
+    ? pdfUrl.replace('/raw/upload/', '/raw/upload/fl_inline/')
+    : pdfUrl;
+
   const mark = (name: string, val: string | boolean) =>
     setFilled((prev) => ({ ...prev, [name]: typeof val === 'boolean' ? val : val.trim().length > 0 }));
 
@@ -350,7 +354,7 @@ function InscricaoForm() {
           </div>
           <div className="flex gap-2">
             <a
-              href={pdfUrl}
+              href={inlineUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#a80303] border border-[#a80303]/40 bg-[#a80303]/10 hover:bg-[#a80303]/20 px-3 py-1.5 rounded-full transition-all"
