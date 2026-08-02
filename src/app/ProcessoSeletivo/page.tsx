@@ -162,9 +162,7 @@ function InscricaoForm() {
       .catch(() => {});
   }, []);
 
-  const inlineUrl = pdfUrl.includes('/raw/upload/')
-    ? pdfUrl.replace('/raw/upload/', '/raw/upload/fl_inline/')
-    : pdfUrl;
+  const inlineUrl = pdfUrl.startsWith('http') ? '/api/areas-pdf/view' : pdfUrl;
 
   const mark = (name: string, val: string | boolean) =>
     setFilled((prev) => ({ ...prev, [name]: typeof val === 'boolean' ? val : val.trim().length > 0 }));
