@@ -233,10 +233,7 @@ export default function PatrocinadoresPage() {
               Elétrica, Civil, Sistemas de Informação e Ciência da Computação. Ex-membros hoje atuam na
               <strong className="text-white"> Embraer, Boeing, Siemens e Stellantis</strong>.
             </p>
-            <p className="text-gray-300 text-lg leading-relaxed">
-              Em 2025, nosso desafio é desenvolver uma aeronave capaz de realizar decolagens
-              extremamente curtas ou verticais, com execução da manobra <strong className="text-white">LAPES</strong> e transporte de carga líquida.
-            </p>
+
           </FadeIn>
 
           <FadeIn delay={0.2} className="space-y-4">
