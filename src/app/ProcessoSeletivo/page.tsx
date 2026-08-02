@@ -119,23 +119,23 @@ function StepIndicator({ s1, s2, s3 }: { s1: boolean; s2: boolean; s3: boolean }
     { label: 'Documentos',     done: s3 },
   ];
   return (
-    <div className="flex items-start mb-10">
+    <div className="flex items-start mb-8 sm:mb-10">
       {steps.map((s, i) => (
         <div key={s.label} className="flex items-start flex-1">
           <div className="flex flex-col items-center gap-1.5 flex-shrink-0">
-            <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-black transition-all duration-300 ${
+            <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 flex items-center justify-center text-xs font-black transition-all duration-300 ${
               s.done
                 ? 'border-emerald-500 bg-emerald-500/20 text-emerald-400'
                 : 'border-white/20 bg-white/[0.04] text-gray-500'
             }`}>
-              {s.done ? <Icon icon="mdi:check" width={14} /> : i + 1}
+              {s.done ? <Icon icon="mdi:check" width={13} /> : i + 1}
             </div>
-            <span className={`text-[9px] font-semibold text-center leading-tight transition-colors duration-300 ${s.done ? 'text-emerald-400' : 'text-gray-600'}`}>
+            <span className={`text-[8px] sm:text-[9px] font-semibold text-center leading-tight transition-colors duration-300 ${s.done ? 'text-emerald-400' : 'text-gray-600'}`}>
               {s.label}
             </span>
           </div>
           {i < steps.length - 1 && (
-            <div className={`flex-1 h-px mt-4 mx-2 transition-colors duration-500 ${s.done ? 'bg-emerald-500/40' : 'bg-white/[0.08]'}`} />
+            <div className={`flex-1 h-px mt-3.5 mx-1.5 sm:mx-2 transition-colors duration-500 ${s.done ? 'bg-emerald-500/40' : 'bg-white/[0.08]'}`} />
           )}
         </div>
       ))}
@@ -226,12 +226,12 @@ function InscricaoForm() {
 
   if (successEmail) {
     return (
-      <div className="text-center py-20">
-        <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto mb-6">
-          <Icon icon="mdi:check-circle" width={32} className="text-emerald-400" />
+      <div className="text-center py-14 sm:py-20">
+        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto mb-5 sm:mb-6">
+          <Icon icon="mdi:check-circle" width={28} className="text-emerald-400" />
         </div>
-        <h3 className="text-white text-2xl font-black mb-3">Inscrição enviada com sucesso!</h3>
-        <p className="text-gray-400 max-w-sm mx-auto">
+        <h3 className="text-white text-xl sm:text-2xl font-black mb-3">Inscrição enviada com sucesso!</h3>
+        <p className="text-gray-400 max-w-sm mx-auto text-sm sm:text-base">
           Entraremos em contato pelo e-mail{' '}
           <span className="text-white">{successEmail}</span> em até 5 dias úteis.
         </p>
@@ -240,14 +240,14 @@ function InscricaoForm() {
   }
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-8">
+    <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-7 sm:gap-8">
 
       <StepIndicator s1={s1Done} s2={s2Done} s3={s3Done} />
 
       {/* Dados pessoais */}
       <section>
         <SectionLabel>Dados pessoais</SectionLabel>
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
           <input
             name="nomeCompleto"
             placeholder="Nome completo"
@@ -345,17 +345,17 @@ function InscricaoForm() {
       {/* Áreas */}
       <section>
         <SectionLabel>Áreas de interesse</SectionLabel>
-        <div className="flex items-start justify-between flex-wrap gap-3 mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
           <div>
             <p className="text-gray-500 text-xs">Selecione exatamente 3 áreas de preferência</p>
             <p className="text-gray-600 text-xs mt-0.5">Não conhece as áreas? Veja o documento antes de escolher.</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-shrink-0">
             <a
               href={inlineUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#a80303] border border-[#a80303]/40 bg-[#a80303]/10 hover:bg-[#a80303]/20 px-3 py-1.5 rounded-full transition-all"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#a80303] border border-[#a80303]/40 bg-[#a80303]/10 hover:bg-[#a80303]/20 px-3 py-1.5 rounded-full transition-all whitespace-nowrap"
             >
               <Icon icon="mdi:eye-outline" width={14} />
               Ver áreas
@@ -363,7 +363,7 @@ function InscricaoForm() {
             <a
               href={pdfUrl}
               download="Áreas Microraptor.pdf"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-400 border border-white/15 hover:text-white hover:border-white/30 px-3 py-1.5 rounded-full transition-all"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-400 border border-white/15 hover:text-white hover:border-white/30 px-3 py-1.5 rounded-full transition-all whitespace-nowrap"
             >
               <Icon icon="mdi:download-outline" width={14} />
               Baixar PDF
@@ -546,7 +546,7 @@ export default function ProcessoSeletivoPage() {
     <div className="bg-black min-h-screen text-white overflow-x-hidden">
 
       {/* ══ HERO ══════════════════════════════════════════════════════════════ */}
-      <section className="relative w-full min-h-[70vh] flex items-center justify-center overflow-hidden">
+      <section className="relative w-full min-h-[65vh] sm:min-h-[70vh] flex items-center justify-center overflow-hidden">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_50%,rgba(152,1,1,0.20),transparent)]" />
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.03]"
@@ -558,21 +558,21 @@ export default function ProcessoSeletivoPage() {
         />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black" />
 
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+        <div className="relative z-10 text-center px-5 sm:px-6 max-w-4xl mx-auto py-16 sm:py-0">
           <motion.div
             initial={{ opacity: 0, scale: 0.6, rotate: -10 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
             transition={{ duration: 1, ease: [0.21, 0.47, 0.32, 0.98] }}
-            className="flex justify-center mb-8"
+            className="flex justify-center mb-6 sm:mb-8"
           >
             <div className="relative">
               <div className="pointer-events-none absolute inset-0 rounded-full bg-[#a80303]/25 blur-2xl scale-150" />
-              <Image src="/microraptor.png" alt="Microraptor" width={90} height={90} className="relative drop-shadow-[0_0_40px_rgba(168,3,3,0.9)]" />
+              <Image src="/microraptor.png" alt="Microraptor" width={75} height={75} className="relative sm:w-[90px] sm:h-[90px] drop-shadow-[0_0_40px_rgba(168,3,3,0.9)]" />
             </div>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex flex-col items-center gap-2 mb-6">
-            <span className={`flex items-center gap-2 text-xs font-bold tracking-[0.25em] uppercase px-4 py-1.5 rounded-full border ${formVisible ? 'text-[#a80303] border-[#980101]/40 bg-[#980101]/10' : 'text-gray-400 border-white/15 bg-white/[0.05]'}`}>
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex flex-col items-center gap-2 mb-5 sm:mb-6">
+            <span className={`flex items-center gap-2 text-[10px] sm:text-xs font-bold tracking-[0.2em] sm:tracking-[0.25em] uppercase px-3 sm:px-4 py-1.5 rounded-full border ${formVisible ? 'text-[#a80303] border-[#980101]/40 bg-[#980101]/10' : 'text-gray-400 border-white/15 bg-white/[0.05]'}`}>
               {formVisible ? 'Inscrições abertas' : 'Inscrições encerradas'}
             </span>
             {formVisible && psDeadline && (
@@ -586,14 +586,14 @@ export default function ProcessoSeletivoPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.45, duration: 0.9 }}
-            className="text-[clamp(2.8rem,10vw,6.5rem)] font-black tracking-tighter leading-none mb-6"
+            className="text-[clamp(2.4rem,9vw,6.5rem)] font-black tracking-tighter leading-none mb-5 sm:mb-6"
           >
             <span className="bg-gradient-to-br from-white via-white/90 to-[#a80303] bg-clip-text text-transparent">Processo</span>
             <br />
             <span className="bg-gradient-to-br from-white via-white/90 to-[#a80303] bg-clip-text text-transparent">Seletivo</span>
           </motion.h1>
 
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.65 }} className="text-lg md:text-xl text-gray-400 font-light leading-relaxed max-w-2xl mx-auto mb-10">
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.65 }} className="text-base sm:text-lg md:text-xl text-gray-400 font-light leading-relaxed max-w-2xl mx-auto mb-8 sm:mb-10">
             Faça parte da equipe de Aerodesign da UFJF. Unimos estudantes de todos os cursos
             para projetar, construir e voar aeronaves de competição.
           </motion.p>
@@ -606,7 +606,7 @@ export default function ProcessoSeletivoPage() {
               transition={{ delay: 0.85 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.97 }}
-              className="inline-flex items-center gap-3 bg-gradient-to-r from-[#a80303] to-[#980101] hover:from-[#9b130f] hover:to-[#a80303] text-white font-bold px-10 py-4 rounded-2xl text-base shadow-[0_0_40px_rgba(152,1,1,0.4)] hover:shadow-[0_0_60px_rgba(168,3,3,0.6)] transition-all duration-300"
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-[#a80303] to-[#980101] hover:from-[#9b130f] hover:to-[#a80303] text-white font-bold px-8 sm:px-10 py-3.5 sm:py-4 rounded-2xl text-sm sm:text-base shadow-[0_0_40px_rgba(152,1,1,0.4)] hover:shadow-[0_0_60px_rgba(168,3,3,0.6)] transition-all duration-300"
             >
               Quero me inscrever
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -618,14 +618,14 @@ export default function ProcessoSeletivoPage() {
       </section>
 
       {/* ══ ETAPAS — TIMELINE ═════════════════════════════════════════════════ */}
-      <section className="relative py-24 px-6 overflow-hidden">
+      <section className="relative py-14 sm:py-20 md:py-24 px-5 sm:px-6 overflow-hidden">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_20%_50%,rgba(152,1,1,0.07),transparent)]" />
         <div className="max-w-5xl mx-auto">
-          <FadeIn className="mb-16 text-center">
-            <span className="inline-block text-xs font-bold tracking-[0.25em] uppercase text-[#a80303] mb-4 px-3 py-1 rounded-full border border-[#980101]/40 bg-[#980101]/10">
+          <FadeIn className="mb-10 sm:mb-16 text-center">
+            <span className="inline-block text-xs font-bold tracking-[0.25em] uppercase text-[#a80303] mb-3 sm:mb-4 px-3 py-1 rounded-full border border-[#980101]/40 bg-[#980101]/10">
               Como funciona
             </span>
-            <h2 className="text-4xl md:text-5xl font-black text-white leading-tight">Etapas do PS</h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight">Etapas do PS</h2>
           </FadeIn>
 
           {/* Desktop timeline */}
@@ -667,18 +667,18 @@ export default function ProcessoSeletivoPage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="flex gap-5"
+                className="flex gap-4"
               >
                 <div className="flex flex-col items-center flex-shrink-0">
-                  <div className="w-9 h-9 rounded-full border-2 border-[#a80303]/60 bg-[#a80303]/10 flex items-center justify-center font-black text-xs text-[#a80303] shadow-[0_0_16px_rgba(152,1,1,0.15)]">
+                  <div className="w-8 h-8 rounded-full border-2 border-[#a80303]/60 bg-[#a80303]/10 flex items-center justify-center font-black text-xs text-[#a80303] shadow-[0_0_16px_rgba(152,1,1,0.15)]">
                     {e.num}
                   </div>
                   {i < etapas.length - 1 && (
                     <div className="w-px flex-1 bg-gradient-to-b from-[#a80303]/40 to-transparent mt-2 mb-2 min-h-[2rem]" />
                   )}
                 </div>
-                <div className={i < etapas.length - 1 ? 'pb-8' : ''}>
-                  <h3 className="text-white font-black text-base mb-1 mt-1">{e.title}</h3>
+                <div className={i < etapas.length - 1 ? 'pb-7' : ''}>
+                  <h3 className="text-white font-black text-sm sm:text-base mb-1 mt-0.5">{e.title}</h3>
                   <p className="text-gray-400 text-sm leading-relaxed">{e.desc}</p>
                 </div>
               </motion.div>
@@ -687,10 +687,10 @@ export default function ProcessoSeletivoPage() {
 
           {/* CTA após etapas */}
           {formVisible && (
-            <FadeIn delay={0.3} className="flex justify-center mt-14">
+            <FadeIn delay={0.3} className="flex justify-center mt-10 sm:mt-14">
               <a
                 href="#formulario"
-                className="inline-flex items-center gap-2 border border-[#a80303]/50 text-[#a80303] hover:bg-[#a80303]/10 font-bold px-8 py-3 rounded-2xl text-sm transition-all duration-300"
+                className="inline-flex items-center gap-2 border border-[#a80303]/50 text-[#a80303] hover:bg-[#a80303]/10 font-bold px-6 sm:px-8 py-3 rounded-2xl text-sm transition-all duration-300"
               >
                 Já entendi — quero me inscrever
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -703,23 +703,23 @@ export default function ProcessoSeletivoPage() {
       </section>
 
       {/* ══ PERFIL IDEAL ══════════════════════════════════════════════════════ */}
-      <section className="relative py-24 px-6">
+      <section className="relative py-14 sm:py-20 md:py-24 px-5 sm:px-6">
         <div className="pointer-events-none absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
         <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_80%_50%,rgba(152,1,1,0.07),transparent)]" />
 
         <div className="max-w-5xl mx-auto">
-          <FadeIn className="mb-16 text-center">
-            <span className="inline-block text-xs font-bold tracking-[0.25em] uppercase text-[#a80303] mb-4 px-3 py-1 rounded-full border border-[#980101]/40 bg-[#980101]/10">
+          <FadeIn className="mb-10 sm:mb-16 text-center">
+            <span className="inline-block text-xs font-bold tracking-[0.25em] uppercase text-[#a80303] mb-3 sm:mb-4 px-3 py-1 rounded-full border border-[#980101]/40 bg-[#980101]/10">
               O que buscamos
             </span>
-            <h2 className="text-4xl md:text-5xl font-black text-white leading-tight">Perfil ideal</h2>
-            <p className="text-gray-400 mt-4 max-w-xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight">Perfil ideal</h2>
+            <p className="text-gray-400 mt-3 sm:mt-4 max-w-xl mx-auto text-sm sm:text-base">
               Não exigimos experiência prévia em nenhuma área. O que importa é a vontade de aprender e contribuir.
             </p>
           </FadeIn>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
             {perfilIdeal.map((item, i) => (
               <motion.div
                 key={i}
@@ -727,9 +727,9 @@ export default function ProcessoSeletivoPage() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08 }}
-                className="flex items-center gap-4 rounded-2xl border border-white/[0.08] bg-white/[0.03] px-5 py-4"
+                className="flex items-center gap-3 sm:gap-4 rounded-2xl border border-white/[0.08] bg-white/[0.03] px-4 sm:px-5 py-3.5 sm:py-4"
               >
-                <Icon icon={item.icon} width={22} className="text-[#a80303] flex-shrink-0" />
+                <Icon icon={item.icon} width={20} className="text-[#a80303] flex-shrink-0" />
                 <p className="text-gray-300 text-sm font-medium leading-snug">{item.text}</p>
               </motion.div>
             ))}
@@ -738,33 +738,33 @@ export default function ProcessoSeletivoPage() {
       </section>
 
       {/* ══ FORMULARIO ════════════════════════════════════════════════════════ */}
-      <section id="formulario" className="relative py-24 px-6">
+      <section id="formulario" className="relative py-14 sm:py-20 md:py-24 px-5 sm:px-6">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_30%,rgba(152,1,1,0.08),transparent)]" />
         <div className="relative z-10 max-w-3xl mx-auto">
-          <div className="mb-12 text-center">
-            <span className="inline-block text-xs font-bold tracking-[0.25em] uppercase text-[#a80303] mb-4 px-3 py-1 rounded-full border border-[#980101]/40 bg-[#980101]/10">
+          <div className="mb-8 sm:mb-12 text-center">
+            <span className="inline-block text-xs font-bold tracking-[0.25em] uppercase text-[#a80303] mb-3 sm:mb-4 px-3 py-1 rounded-full border border-[#980101]/40 bg-[#980101]/10">
               Inscrição
             </span>
-            <h2 className="text-4xl md:text-5xl font-black text-white leading-tight mb-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-3 sm:mb-4">
               Formulário de inscrição
             </h2>
             {formVisible ? (
               <>
-                <p className="text-gray-400 mb-6">
+                <p className="text-gray-400 mb-5 sm:mb-6 text-sm sm:text-base">
                   Preencha todos os campos. Entraremos em contato em até 5 dias úteis.
                 </p>
                 {psDeadline && (
-                  <p className="text-gray-400 text-sm mb-6">
+                  <p className="text-gray-400 text-sm mb-5 sm:mb-6">
                     Inscrições até: <Countdown deadline={psDeadline} />
                   </p>
                 )}
                 <p className="text-gray-600 text-xs mb-3">Leia o edital antes de preencher o formulário.</p>
-                <div className="flex flex-wrap justify-center gap-3">
+                <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
                   <a
                     href={inlineEdital}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#a80303] border border-[#a80303]/40 bg-[#a80303]/10 hover:bg-[#a80303]/20 px-4 py-2 rounded-full transition-all"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#a80303] border border-[#a80303]/40 bg-[#a80303]/10 hover:bg-[#a80303]/20 px-3 sm:px-4 py-2 rounded-full transition-all"
                   >
                     <Icon icon="mdi:file-document-outline" width={14} />
                     Ver edital
@@ -772,7 +772,7 @@ export default function ProcessoSeletivoPage() {
                   <a
                     href={editalUrl}
                     download
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-400 border border-white/15 hover:text-white hover:border-white/30 px-4 py-2 rounded-full transition-all"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-400 border border-white/15 hover:text-white hover:border-white/30 px-3 sm:px-4 py-2 rounded-full transition-all"
                   >
                     <Icon icon="mdi:download-outline" width={14} />
                     Baixar edital
@@ -780,7 +780,7 @@ export default function ProcessoSeletivoPage() {
                 </div>
               </>
             ) : (
-              <p className="text-gray-400">
+              <p className="text-gray-400 text-sm sm:text-base">
                 As inscrições para este processo seletivo foram encerradas.
                 Fique de olho nas nossas redes sociais para o próximo PS.
               </p>
@@ -788,15 +788,15 @@ export default function ProcessoSeletivoPage() {
           </div>
 
           {formVisible ? (
-            <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8 md:p-12">
+            <div className="rounded-2xl sm:rounded-3xl border border-white/[0.08] bg-white/[0.02] p-5 sm:p-8 md:p-12">
               <InscricaoForm />
             </div>
           ) : (
-            <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-12 flex flex-col items-center text-center gap-4">
-              <div className="w-16 h-16 rounded-full border border-white/15 bg-white/[0.04] flex items-center justify-center">
-                <Icon icon="mdi:lock-outline" width={28} className="text-gray-500" />
+            <div className="rounded-2xl sm:rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8 sm:p-12 flex flex-col items-center text-center gap-4">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border border-white/15 bg-white/[0.04] flex items-center justify-center">
+                <Icon icon="mdi:lock-outline" width={26} className="text-gray-500" />
               </div>
-              <h3 className="text-white font-black text-xl">Inscrições encerradas</h3>
+              <h3 className="text-white font-black text-lg sm:text-xl">Inscrições encerradas</h3>
               <p className="text-gray-500 text-sm max-w-sm">
                 No momento não há processo seletivo aberto. Acompanhe nossas redes sociais para saber quando as inscrições forem abertas novamente.
               </p>
@@ -805,7 +805,7 @@ export default function ProcessoSeletivoPage() {
                   href="https://www.instagram.com/microraptorufjf/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 border border-white/15 text-gray-400 hover:text-white hover:border-white/30 font-semibold px-6 py-2.5 rounded-2xl text-sm transition-all"
+                  className="inline-flex items-center gap-2 border border-white/15 text-gray-400 hover:text-white hover:border-white/30 font-semibold px-5 sm:px-6 py-2.5 rounded-2xl text-sm transition-all"
                 >
                   <Icon icon="mdi:instagram" width={16} />
                   Instagram
@@ -814,7 +814,7 @@ export default function ProcessoSeletivoPage() {
                   href="https://wa.me/553299310160"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 border border-[#a80303]/40 text-[#a80303] hover:bg-[#a80303]/10 font-semibold px-6 py-2.5 rounded-2xl text-sm transition-all"
+                  className="inline-flex items-center gap-2 border border-[#a80303]/40 text-[#a80303] hover:bg-[#a80303]/10 font-semibold px-5 sm:px-6 py-2.5 rounded-2xl text-sm transition-all"
                 >
                   <Icon icon="mdi:whatsapp" width={16} />
                   WhatsApp
@@ -826,23 +826,23 @@ export default function ProcessoSeletivoPage() {
       </section>
 
       {/* ══ CTA DÚVIDAS ═══════════════════════════════════════════════════════ */}
-      <section className="relative py-24 px-6">
+      <section className="relative py-14 sm:py-20 md:py-24 px-5 sm:px-6">
         <FadeIn className="max-w-3xl mx-auto text-center relative z-10">
-          <div className="rounded-3xl p-px bg-gradient-to-br from-[#a80303]/60 via-[#9b130f]/30 to-[#980101]/60">
-            <div className="rounded-3xl bg-[#050000] px-10 py-14">
-              <div className="w-12 h-1 bg-gradient-to-r from-[#a80303] to-[#980101] rounded-full mx-auto mb-8" />
-              <h2 className="text-3xl font-black text-white mb-4">Ficou com alguma dúvida?</h2>
-              <p className="text-gray-400 mb-8 max-w-sm mx-auto">
+          <div className="rounded-2xl sm:rounded-3xl p-px bg-gradient-to-br from-[#a80303]/60 via-[#9b130f]/30 to-[#980101]/60">
+            <div className="rounded-2xl sm:rounded-3xl bg-[#050000] px-6 py-10 sm:px-10 sm:py-14">
+              <div className="w-10 sm:w-12 h-1 bg-gradient-to-r from-[#a80303] to-[#980101] rounded-full mx-auto mb-6 sm:mb-8" />
+              <h2 className="text-2xl sm:text-3xl font-black text-white mb-3 sm:mb-4">Ficou com alguma dúvida?</h2>
+              <p className="text-gray-400 mb-6 sm:mb-8 max-w-sm mx-auto text-sm sm:text-base">
                 Fale com a gente pelo WhatsApp ou Instagram. Respondemos rapidinho.
               </p>
-              <div className="flex flex-wrap justify-center gap-4">
+              <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
                 <motion.a
                   href="https://wa.me/553299310160?text=Ol%C3%A1%21%20Tenho%20d%C3%BAvidas%20sobre%20o%20processo%20seletivo%20da%20Microraptor."
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.97 }}
-                  className="inline-flex items-center gap-2 bg-gradient-to-r from-[#a80303] to-[#980101] text-white font-bold px-8 py-3 rounded-2xl transition-all"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-[#a80303] to-[#980101] text-white font-bold px-7 sm:px-8 py-3 rounded-2xl transition-all text-sm sm:text-base"
                 >
                   WhatsApp
                 </motion.a>
@@ -852,7 +852,7 @@ export default function ProcessoSeletivoPage() {
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.97 }}
-                  className="inline-flex items-center gap-2 border border-white/15 text-gray-300 hover:text-white font-bold px-8 py-3 rounded-2xl transition-all hover:border-white/30"
+                  className="inline-flex items-center gap-2 border border-white/15 text-gray-300 hover:text-white font-bold px-7 sm:px-8 py-3 rounded-2xl transition-all hover:border-white/30 text-sm sm:text-base"
                 >
                   Instagram
                 </motion.a>
