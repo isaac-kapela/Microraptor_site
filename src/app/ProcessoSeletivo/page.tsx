@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Icon } from '@iconify/react';
 
@@ -282,26 +282,31 @@ function InscricaoForm() {
       {/* Áreas */}
       <section>
         <SectionLabel>Áreas de interesse</SectionLabel>
-        <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
-          <p className="text-gray-500 text-xs">Selecione de 1 a 3 áreas de preferência</p>
-          <div className="flex gap-2">
-            <a
-              href={pdfUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#a80303] border border-[#a80303]/40 bg-[#a80303]/10 hover:bg-[#a80303]/20 px-3 py-1.5 rounded-full transition-all"
-            >
-              <Icon icon="mdi:eye-outline" width={14} />
-              Ver áreas
-            </a>
-            <a
-              href={pdfUrl}
-              download="Áreas Microraptor.pdf"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-400 border border-white/15 hover:text-white hover:border-white/30 px-3 py-1.5 rounded-full transition-all"
-            >
-              <Icon icon="mdi:download-outline" width={14} />
-              Baixar PDF
-            </a>
+        <div className="flex items-start justify-between flex-wrap gap-3 mb-4">
+          <div>
+            <p className="text-gray-500 text-xs">Selecione de 1 a 3 áreas de preferência</p>
+            <p className="text-gray-600 text-xs mt-0.5">Não conhece as áreas? Veja o documento antes de escolher.</p>
+          </div>
+          <div className="flex flex-col items-end gap-1.5">
+            <div className="flex gap-2">
+              <a
+                href={pdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#a80303] border border-[#a80303]/40 bg-[#a80303]/10 hover:bg-[#a80303]/20 px-3 py-1.5 rounded-full transition-all"
+              >
+                <Icon icon="mdi:eye-outline" width={14} />
+                Ver áreas
+              </a>
+              <a
+                href={pdfUrl}
+                download="Áreas Microraptor.pdf"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-400 border border-white/15 hover:text-white hover:border-white/30 px-3 py-1.5 rounded-full transition-all"
+              >
+                <Icon icon="mdi:download-outline" width={14} />
+                Baixar PDF
+              </a>
+            </div>
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
