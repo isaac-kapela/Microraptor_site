@@ -711,6 +711,7 @@ export default function ProcessoSeletivoPage() {
             <p className="text-gray-400 mb-6">
               Preencha todos os campos. Entraremos em contato em até 5 dias úteis.
             </p>
+            <p className="text-gray-600 text-xs mb-3">Leia o edital antes de preencher o formulário.</p>
             <div className="flex flex-wrap justify-center gap-3">
               <a
                 href={inlineEdital}
