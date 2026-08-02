@@ -86,9 +86,6 @@ const AREAS = [
   { slug: 'plantas',             label: 'Plantas' },
   { slug: 'gestao',              label: 'Gestão' },
   { slug: 'aeroelasticidade',    label: 'Aeroelasticidade' },
-  { slug: 'fuselagem-e-laminacao', label: 'Fuselagem e Laminação' },
-  { slug: 'cauda',               label: 'Cauda' },
-  { slug: 'asa',                 label: 'Asa' },
 ];
 
 const PERIODOS = ['1º', '2º', '3º', '4º', '5º', '6º', '7º', '8º', '9º', '10º', '11º', '12º'];
@@ -541,7 +538,7 @@ export default function ProcessoSeletivoPage() {
               Perfil ideal
             </h2>
             <p className="text-gray-400 mt-4 max-w-xl mx-auto">
-              Nao exigimos experiencia previa em nenhuma area. O que importa e a vontade de
+              Não exigimos experiência prévia em nenhuma área. O que importa é a vontade de
               aprender e contribuir.
             </p>
           </FadeIn>
@@ -574,13 +571,13 @@ export default function ProcessoSeletivoPage() {
         <div className="relative z-10 max-w-3xl mx-auto">
           <div className="mb-12 text-center">
             <span className="inline-block text-xs font-bold tracking-[0.25em] uppercase text-[#a80303] mb-4 px-3 py-1 rounded-full border border-[#980101]/40 bg-[#980101]/10">
-              Inscricao
+              Inscrição
             </span>
             <h2 className="text-4xl md:text-5xl font-black text-white leading-tight mb-4">
-              Formulario de inscricao
+              Formulário de inscrição
             </h2>
             <p className="text-gray-400">
-              Preencha todos os campos. Entraremos em contato em ate 5 dias uteis.
+              Preencha todos os campos. Entraremos em contato em até 5 dias úteis.
             </p>
           </div>
 
@@ -596,7 +593,7 @@ export default function ProcessoSeletivoPage() {
           <div className="rounded-3xl p-px bg-gradient-to-br from-[#a80303]/60 via-[#9b130f]/30 to-[#980101]/60">
             <div className="rounded-3xl bg-[#050000] px-10 py-14">
               <div className="w-12 h-1 bg-gradient-to-r from-[#a80303] to-[#980101] rounded-full mx-auto mb-8" />
-              <h2 className="text-3xl font-black text-white mb-4">Ficou com alguma duvida?</h2>
+              <h2 className="text-3xl font-black text-white mb-4">Ficou com alguma dúvida?</h2>
               <p className="text-gray-400 mb-8 max-w-sm mx-auto">
                 Fale com a gente pelo WhatsApp ou Instagram. Respondemos rapidinho.
               </p>
