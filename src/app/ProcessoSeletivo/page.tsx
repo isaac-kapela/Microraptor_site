@@ -499,13 +499,41 @@ function InscricaoForm() {
 
 // ─── Página ───────────────────────────────────────────────────────────────────
 
+function Countdown({ deadline }: { deadline: string }) {
+  const [timeLeft, setTimeLeft] = useState('');
+
+  useEffect(() => {
+    const calc = () => {
+      const diff = new Date(deadline).getTime() - Date.now();
+      if (diff <= 0) { setTimeLeft('Prazo encerrado'); return; }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      setTimeLeft(`${d}d ${h}h ${m}min`);
+    };
+    calc();
+    const id = setInterval(calc, 60000);
+    return () => clearInterval(id);
+  }, [deadline]);
+
+  return (
+    <span className="text-[#a80303] font-bold">{timeLeft}</span>
+  );
+}
+
 export default function ProcessoSeletivoPage() {
   const [editalUrl, setEditalUrl]   = useState<string>('/edital.pdf');
+  const [psOpen, setPsOpen]         = useState(true);
+  const [psDeadline, setPsDeadline] = useState<string | null>(null);
 
   useEffect(() => {
     fetch('/api/areas-pdf?type=edital')
       .then((r) => r.json())
       .then((data) => { if (data?.url) setEditalUrl(data.url); })
+      .catch(() => {});
+    fetch('/api/ps-config')
+      .then((r) => r.json())
+      .then((d) => { setPsOpen(d.isOpen); setPsDeadline(d.deadline ?? null); })
       .catch(() => {});
   }, []);
 
@@ -540,10 +568,15 @@ export default function ProcessoSeletivoPage() {
             </div>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex justify-center mb-6">
-            <span className="flex items-center gap-2 text-xs font-bold tracking-[0.25em] uppercase text-[#a80303] px-4 py-1.5 rounded-full border border-[#980101]/40 bg-[#980101]/10">
-              Inscrições abertas
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex flex-col items-center gap-2 mb-6">
+            <span className={`flex items-center gap-2 text-xs font-bold tracking-[0.25em] uppercase px-4 py-1.5 rounded-full border ${psOpen ? 'text-[#a80303] border-[#980101]/40 bg-[#980101]/10' : 'text-gray-400 border-white/15 bg-white/[0.05]'}`}>
+              {psOpen ? 'Inscrições abertas' : 'Inscrições encerradas'}
             </span>
+            {psOpen && psDeadline && (
+              <p className="text-gray-400 text-xs">
+                Prazo: <Countdown deadline={psDeadline} />
+              </p>
+            )}
           </motion.div>
 
           <motion.h1
@@ -562,20 +595,22 @@ export default function ProcessoSeletivoPage() {
             para projetar, construir e voar aeronaves de competição.
           </motion.p>
 
-          <motion.a
-            href="#formulario"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.85 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.97 }}
-            className="inline-flex items-center gap-3 bg-gradient-to-r from-[#a80303] to-[#980101] hover:from-[#9b130f] hover:to-[#a80303] text-white font-bold px-10 py-4 rounded-2xl text-base shadow-[0_0_40px_rgba(152,1,1,0.4)] hover:shadow-[0_0_60px_rgba(168,3,3,0.6)] transition-all duration-300"
-          >
-            Quero me inscrever
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </motion.a>
+          {psOpen && (
+            <motion.a
+              href="#formulario"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.85 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-[#a80303] to-[#980101] hover:from-[#9b130f] hover:to-[#a80303] text-white font-bold px-10 py-4 rounded-2xl text-base shadow-[0_0_40px_rgba(152,1,1,0.4)] hover:shadow-[0_0_60px_rgba(168,3,3,0.6)] transition-all duration-300"
+            >
+              Quero me inscrever
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </motion.a>
+          )}
         </div>
       </section>
 
@@ -648,17 +683,19 @@ export default function ProcessoSeletivoPage() {
           </div>
 
           {/* CTA após etapas */}
-          <FadeIn delay={0.3} className="flex justify-center mt-14">
-            <a
-              href="#formulario"
-              className="inline-flex items-center gap-2 border border-[#a80303]/50 text-[#a80303] hover:bg-[#a80303]/10 font-bold px-8 py-3 rounded-2xl text-sm transition-all duration-300"
-            >
-              Já entendi — quero me inscrever
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </a>
-          </FadeIn>
+          {psOpen && (
+            <FadeIn delay={0.3} className="flex justify-center mt-14">
+              <a
+                href="#formulario"
+                className="inline-flex items-center gap-2 border border-[#a80303]/50 text-[#a80303] hover:bg-[#a80303]/10 font-bold px-8 py-3 rounded-2xl text-sm transition-all duration-300"
+              >
+                Já entendi — quero me inscrever
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </a>
+            </FadeIn>
+          )}
         </div>
       </section>
 
@@ -708,34 +745,80 @@ export default function ProcessoSeletivoPage() {
             <h2 className="text-4xl md:text-5xl font-black text-white leading-tight mb-4">
               Formulário de inscrição
             </h2>
-            <p className="text-gray-400 mb-6">
-              Preencha todos os campos. Entraremos em contato em até 5 dias úteis.
-            </p>
-            <p className="text-gray-600 text-xs mb-3">Leia o edital antes de preencher o formulário.</p>
-            <div className="flex flex-wrap justify-center gap-3">
-              <a
-                href={inlineEdital}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#a80303] border border-[#a80303]/40 bg-[#a80303]/10 hover:bg-[#a80303]/20 px-4 py-2 rounded-full transition-all"
-              >
-                <Icon icon="mdi:file-document-outline" width={14} />
-                Ver edital
-              </a>
-              <a
-                href={editalUrl}
-                download
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-400 border border-white/15 hover:text-white hover:border-white/30 px-4 py-2 rounded-full transition-all"
-              >
-                <Icon icon="mdi:download-outline" width={14} />
-                Baixar edital
-              </a>
-            </div>
+            {psOpen ? (
+              <>
+                <p className="text-gray-400 mb-6">
+                  Preencha todos os campos. Entraremos em contato em até 5 dias úteis.
+                </p>
+                {psDeadline && (
+                  <p className="text-gray-400 text-sm mb-6">
+                    Inscrições até: <Countdown deadline={psDeadline} />
+                  </p>
+                )}
+                <p className="text-gray-600 text-xs mb-3">Leia o edital antes de preencher o formulário.</p>
+                <div className="flex flex-wrap justify-center gap-3">
+                  <a
+                    href={inlineEdital}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#a80303] border border-[#a80303]/40 bg-[#a80303]/10 hover:bg-[#a80303]/20 px-4 py-2 rounded-full transition-all"
+                  >
+                    <Icon icon="mdi:file-document-outline" width={14} />
+                    Ver edital
+                  </a>
+                  <a
+                    href={editalUrl}
+                    download
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-400 border border-white/15 hover:text-white hover:border-white/30 px-4 py-2 rounded-full transition-all"
+                  >
+                    <Icon icon="mdi:download-outline" width={14} />
+                    Baixar edital
+                  </a>
+                </div>
+              </>
+            ) : (
+              <p className="text-gray-400">
+                As inscrições para este processo seletivo foram encerradas.
+                Fique de olho nas nossas redes sociais para o próximo PS.
+              </p>
+            )}
           </div>
 
-          <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8 md:p-12">
-            <InscricaoForm />
-          </div>
+          {psOpen ? (
+            <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8 md:p-12">
+              <InscricaoForm />
+            </div>
+          ) : (
+            <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-12 flex flex-col items-center text-center gap-4">
+              <div className="w-16 h-16 rounded-full border border-white/15 bg-white/[0.04] flex items-center justify-center">
+                <Icon icon="mdi:lock-outline" width={28} className="text-gray-500" />
+              </div>
+              <h3 className="text-white font-black text-xl">Inscrições encerradas</h3>
+              <p className="text-gray-500 text-sm max-w-sm">
+                No momento não há processo seletivo aberto. Acompanhe nossas redes sociais para saber quando as inscrições forem abertas novamente.
+              </p>
+              <div className="flex flex-wrap justify-center gap-3 mt-2">
+                <a
+                  href="https://www.instagram.com/microraptorufjf/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 border border-white/15 text-gray-400 hover:text-white hover:border-white/30 font-semibold px-6 py-2.5 rounded-2xl text-sm transition-all"
+                >
+                  <Icon icon="mdi:instagram" width={16} />
+                  Instagram
+                </a>
+                <a
+                  href="https://wa.me/553299310160"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 border border-[#a80303]/40 text-[#a80303] hover:bg-[#a80303]/10 font-semibold px-6 py-2.5 rounded-2xl text-sm transition-all"
+                >
+                  <Icon icon="mdi:whatsapp" width={16} />
+                  WhatsApp
+                </a>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

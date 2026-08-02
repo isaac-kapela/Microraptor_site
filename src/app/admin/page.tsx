@@ -380,6 +380,74 @@ interface PSDoc {
   createdAt: string;
 }
 
+function PSConfigPanel() {
+  const [isOpen, setIsOpen]     = useState(true);
+  const [deadline, setDeadline] = useState('');
+  const [saving, setSaving]     = useState(false);
+  const [saved, setSaved]       = useState(false);
+
+  useEffect(() => {
+    fetch('/api/ps-config')
+      .then((r) => r.json())
+      .then((d) => {
+        setIsOpen(d.isOpen);
+        setDeadline(d.deadline ? new Date(d.deadline).toISOString().slice(0, 16) : '');
+      });
+  }, []);
+
+  const save = async () => {
+    setSaving(true);
+    await fetch('/api/ps-config', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ isOpen, deadline: deadline || null }),
+    });
+    setSaving(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
+
+  return (
+    <div className="mb-8 p-5 rounded-2xl border border-white/[0.08] bg-white/[0.02] flex flex-col gap-5">
+      <p className="text-white font-bold text-sm">Controle de inscrições</p>
+
+      {/* Toggle aberto/fechado */}
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-gray-300 text-sm">Formulário de inscrição</p>
+          <p className="text-gray-500 text-xs mt-0.5">Quando fechado, o formulário é ocultado no site</p>
+        </div>
+        <button
+          onClick={() => setIsOpen((v) => !v)}
+          className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${isOpen ? 'bg-emerald-500' : 'bg-white/10'}`}
+        >
+          <span className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-all duration-300 ${isOpen ? 'left-7' : 'left-1'}`} />
+        </button>
+      </div>
+
+      {/* Prazo */}
+      <div>
+        <label className="block text-gray-300 text-sm mb-2">Prazo de inscrição <span className="text-gray-600 text-xs">(opcional)</span></label>
+        <input
+          type="datetime-local"
+          value={deadline}
+          onChange={(e) => setDeadline(e.target.value)}
+          className="w-full bg-white/[0.06] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-[#a80303]/60 transition-colors"
+        />
+        {deadline && <p className="text-gray-500 text-xs mt-1.5">Será exibido no site como contagem regressiva</p>}
+      </div>
+
+      <button
+        onClick={save}
+        disabled={saving}
+        className="self-start text-sm font-bold px-5 py-2 rounded-xl bg-[#a80303] hover:bg-[#9b130f] text-white transition-colors disabled:opacity-50"
+      >
+        {saved ? 'Salvo ✓' : saving ? 'Salvando…' : 'Salvar configuração'}
+      </button>
+    </div>
+  );
+}
+
 function InscricoesTab() {
   const [items, setItems] = useState<PSDoc[]>([]);
   const [loading, setLoading] = useState(true);
@@ -410,6 +478,7 @@ function InscricoesTab() {
 
   return (
     <div>
+      <PSConfigPanel />
       <div className="flex items-center justify-between mb-6">
         <p className="text-gray-400 text-sm">{items.length} inscrição(ões)</p>
         <button
