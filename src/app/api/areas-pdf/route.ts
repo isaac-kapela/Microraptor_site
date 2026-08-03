@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
   const type = (formData.get('type') as string) ?? 'areas';
   if (!file) return NextResponse.json({ error: 'Arquivo obrigatório' }, { status: 400 });
 
-  const bytes = Buffer.from(await file.arrayBuffer());
+  const bytes = await file.arrayBuffer();
   const url = await uploadToCloudinary(bytes, `ps-docs/${type}`, 'raw');
 
   await connectDB();
