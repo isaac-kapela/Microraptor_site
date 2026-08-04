@@ -26,9 +26,10 @@ function calcTimeLeft() {
 }
 
 export default function CompetitionCountdown() {
-  const [time, setTime] = useState(calcTimeLeft());
+  const [time, setTime] = useState<ReturnType<typeof calcTimeLeft>>(null);
 
   useEffect(() => {
+    setTime(calcTimeLeft());
     const id = setInterval(() => setTime(calcTimeLeft()), 1000);
     return () => clearInterval(id);
   }, []);

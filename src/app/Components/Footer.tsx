@@ -36,7 +36,7 @@ export default function Footer() {
   useEffect(() => {
     fetch('/api/contacts')
       .then((r) => r.json())
-      .then((data) => setDbContacts(data))
+      .then((data) => setDbContacts(Array.isArray(data) ? data : []))
       .catch(() => {});
   }, []);
 

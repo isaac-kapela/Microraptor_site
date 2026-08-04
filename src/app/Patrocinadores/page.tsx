@@ -141,7 +141,7 @@ export default function PatrocinadoresPage() {
   useEffect(() => {
     fetch('/api/sponsors')
       .then((r) => r.json())
-      .then((data) => setDbSponsors(data))
+      .then((data) => setDbSponsors(Array.isArray(data) ? data : []))
       .catch(() => {});
   }, []);
 
