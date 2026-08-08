@@ -545,6 +545,29 @@ function PSConfigPanel({ inscricoes }: { inscricoes: PSDoc[] }) {
                       Fechar
                     </button>
                   )}
+                  {ed.edition && (
+                    <button
+                      onClick={async () => {
+                        const count = countForEdition(ed.edition);
+                        if (!confirm(`Limpar ${count} inscrição(ões) de "${ed.edition}"? Isso não pode ser desfeito.`)) return;
+                        await fetch(`/api/ps?edition=${encodeURIComponent(ed.edition)}`, { method: 'DELETE' });
+                        loadEditions();
+                      }}
+                      className="text-xs text-orange-500/70 hover:text-orange-400 border border-orange-500/20 hover:border-orange-400/40 px-2 py-0.5 rounded-full transition-all"
+                    >
+                      Limpar inscrições
+                    </button>
+                  )}
+                  <button
+                    onClick={async () => {
+                      if (!confirm(`Excluir a edição "${ed.edition || '(sem nome)'}"? Isso não pode ser desfeito.`)) return;
+                      await fetch(`/api/ps-config?id=${ed._id}`, { method: 'DELETE' });
+                      loadEditions();
+                    }}
+                    className="text-xs text-red-500/60 hover:text-red-400 border border-red-500/20 hover:border-red-400/40 px-2 py-0.5 rounded-full transition-all"
+                  >
+                    Excluir
+                  </button>
                   <span className={`text-xs px-2 py-0.5 rounded-full border ${ed.isOpen ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' : 'text-gray-500 border-white/10 bg-white/[0.04]'}`}>
                     {ed.isOpen ? 'Aberta' : 'Fechada'}
                   </span>

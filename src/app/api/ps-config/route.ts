@@ -40,6 +40,20 @@ export async function PUT(request: NextRequest) {
   return NextResponse.json(latest);
 }
 
+// DELETE /api/ps-config?id=<id> → exclui uma edição específica (admin)
+export async function DELETE(request: NextRequest) {
+  const ok = await isAdminRequest();
+  if (!ok) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+
+  const id = request.nextUrl.searchParams.get('id');
+  if (!id) return NextResponse.json({ error: 'ID obrigatório' }, { status: 400 });
+
+  await connectDB();
+  const doc = await PSConfig.findByIdAndDelete(id);
+  if (!doc) return NextResponse.json({ error: 'Edição não encontrada' }, { status: 404 });
+  return NextResponse.json({ ok: true });
+}
+
 // PATCH /api/ps-config?id=<id> → fecha uma edição específica (admin)
 export async function PATCH(request: NextRequest) {
   const ok = await isAdminRequest();

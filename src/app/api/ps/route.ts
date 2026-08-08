@@ -102,3 +102,17 @@ export async function GET() {
   const apps = await PSApplication.find().sort({ createdAt: -1 }).lean();
   return NextResponse.json(apps);
 }
+
+// ─── DELETE — limpar inscrições de uma edição (admin only) ───────────────────
+
+export async function DELETE(req: NextRequest) {
+  const ok = await isAdminRequest();
+  if (!ok) return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 });
+
+  const edition = req.nextUrl.searchParams.get('edition');
+  if (!edition) return NextResponse.json({ error: 'Parâmetro edition obrigatório.' }, { status: 400 });
+
+  await connectDB();
+  const result = await PSApplication.deleteMany({ psEdition: edition });
+  return NextResponse.json({ ok: true, deleted: result.deletedCount });
+}
