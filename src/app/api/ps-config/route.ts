@@ -40,6 +40,20 @@ export async function PUT(request: NextRequest) {
   return NextResponse.json(latest);
 }
 
+// PATCH /api/ps-config?id=<id> → fecha uma edição específica (admin)
+export async function PATCH(request: NextRequest) {
+  const ok = await isAdminRequest();
+  if (!ok) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+
+  const id = request.nextUrl.searchParams.get('id');
+  if (!id) return NextResponse.json({ error: 'ID obrigatório' }, { status: 400 });
+
+  await connectDB();
+  const doc = await PSConfig.findByIdAndUpdate(id, { isOpen: false }, { new: true });
+  if (!doc) return NextResponse.json({ error: 'Edição não encontrada' }, { status: 404 });
+  return NextResponse.json(doc);
+}
+
 // POST /api/ps-config → cria nova edição (fecha a atual)
 export async function POST(request: NextRequest) {
   const ok = await isAdminRequest();
@@ -50,9 +64,8 @@ export async function POST(request: NextRequest) {
 
   await connectDB();
 
-  // Fecha a edição atual
-  const current = await PSConfig.findOne().sort({ createdAt: -1 });
-  if (current) { current.isOpen = false; await current.save(); }
+  // Fecha TODAS as edições abertas antes de criar a nova
+  await PSConfig.updateMany({ isOpen: true }, { isOpen: false });
 
   const newConfig = await PSConfig.create({ edition: edition.trim(), isOpen: true, deadline: null });
   return NextResponse.json(newConfig);

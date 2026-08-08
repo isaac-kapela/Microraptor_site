@@ -495,23 +495,31 @@ function PSConfigPanel({ inscricoes }: { inscricoes: PSDoc[] }) {
       {/* Criar nova edição */}
       <div className="border-t border-white/[0.08] pt-4">
         <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-3">Nova edição de PS</p>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={newEditionName}
-            onChange={(e) => setNewEditionName(e.target.value)}
-            placeholder="ex: PS 2026.2"
-            className="flex-1 bg-white/[0.06] border border-white/10 rounded-xl px-4 py-2 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-[#a80303]/60"
-          />
-          <button
-            onClick={createEdition}
-            disabled={creating || !newEditionName.trim()}
-            className="text-sm font-semibold px-4 py-2 rounded-xl bg-white/[0.06] hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white transition-colors disabled:opacity-40"
-          >
-            {creating ? 'Criando…' : 'Criar'}
-          </button>
-        </div>
-        <p className="text-gray-600 text-xs mt-1.5">Fecha a edição atual e cria uma nova</p>
+        {editions.some((e) => e.isOpen) ? (
+          <p className="text-amber-500/80 text-xs py-2">
+            Encerre a edição atual antes de criar uma nova.
+          </p>
+        ) : (
+          <>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newEditionName}
+                onChange={(e) => setNewEditionName(e.target.value)}
+                placeholder="ex: PS 2026.2"
+                className="flex-1 bg-white/[0.06] border border-white/10 rounded-xl px-4 py-2 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-[#a80303]/60"
+              />
+              <button
+                onClick={createEdition}
+                disabled={creating || !newEditionName.trim()}
+                className="text-sm font-semibold px-4 py-2 rounded-xl bg-white/[0.06] hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white transition-colors disabled:opacity-40"
+              >
+                {creating ? 'Criando…' : 'Criar'}
+              </button>
+            </div>
+            <p className="text-gray-600 text-xs mt-1.5">Cria uma nova edição do PS</p>
+          </>
+        )}
       </div>
 
       {/* Histórico de edições */}
@@ -519,15 +527,28 @@ function PSConfigPanel({ inscricoes }: { inscricoes: PSDoc[] }) {
         <div className="border-t border-white/[0.08] pt-4">
           <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-3">Histórico de edições</p>
           <div className="flex flex-col gap-2">
-            {editions.map((ed) => (
+            {editions.map((ed, idx) => (
               <div key={ed._id} className="flex items-center justify-between px-3 py-2 rounded-xl bg-white/[0.03] border border-white/[0.06]">
                 <div>
                   <p className="text-white text-sm">{ed.edition || '(sem nome)'}</p>
                   <p className="text-gray-600 text-xs">{countForEdition(ed.edition)} inscrição(ões)</p>
                 </div>
-                <span className={`text-xs px-2 py-0.5 rounded-full border ${ed.isOpen ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' : 'text-gray-500 border-white/10 bg-white/[0.04]'}`}>
-                  {ed.isOpen ? 'Aberta' : 'Fechada'}
-                </span>
+                <div className="flex items-center gap-2">
+                  {ed.isOpen && idx !== 0 && (
+                    <button
+                      onClick={async () => {
+                        await fetch(`/api/ps-config?id=${ed._id}`, { method: 'PATCH' });
+                        loadEditions();
+                      }}
+                      className="text-xs text-amber-500/80 hover:text-amber-400 border border-amber-500/20 hover:border-amber-400/40 px-2 py-0.5 rounded-full transition-all"
+                    >
+                      Fechar
+                    </button>
+                  )}
+                  <span className={`text-xs px-2 py-0.5 rounded-full border ${ed.isOpen ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' : 'text-gray-500 border-white/10 bg-white/[0.04]'}`}>
+                    {ed.isOpen ? 'Aberta' : 'Fechada'}
+                  </span>
+                </div>
               </div>
             ))}
           </div>
