@@ -582,10 +582,9 @@ function PSConfigPanel({ inscricoes }: { inscricoes: PSDoc[] }) {
 }
 
 function InscricoesTab() {
-  const [items, setItems]               = useState<PSDoc[]>([]);
-  const [filterEdition, setFilterEdition] = useState<string>('all');
-  const [loading, setLoading]           = useState(true);
-  const [selected, setSelected]         = useState<PSDoc | null>(null);
+  const [items, setItems]     = useState<PSDoc[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState<PSDoc | null>(null);
 
   useEffect(() => {
     fetch('/api/ps')
@@ -594,20 +593,27 @@ function InscricoesTab() {
       .finally(() => setLoading(false));
   }, []);
 
-  const editions = [...new Set(items.map((i) => i.psEdition ?? '').filter(Boolean))];
-  const filtered = filterEdition === 'all' ? items : items.filter((i) => i.psEdition === filterEdition);
+  // Group by edition preserving insertion order (API returns most recent first)
+  const groups: { edition: string; rows: PSDoc[] }[] = [];
+  const seenKeys = new Set<string>();
+  for (const item of items) {
+    const key = item.psEdition ?? '';
+    if (!seenKeys.has(key)) { seenKeys.add(key); groups.push({ edition: key, rows: [] }); }
+    groups.find((g) => g.edition === key)!.rows.push(item);
+  }
 
-  const exportCSV = () => {
-    const headers = ['Nome', 'Curso', 'Email', 'Telefone', 'Como conheceu', 'Período', 'Previsão conclusão', 'Áreas', 'Edição PS', 'Data'];
-    const rows = filtered.map((i) => [
+  const exportGroupCSV = (edition: string, rows: PSDoc[]) => {
+    const headers = ['Nome', 'Curso', 'Email', 'Telefone', 'Como conheceu', 'Per\u00edodo', 'Previs\u00e3o conclus\u00e3o', '\u00c1reas', 'Data'];
+    const data = rows.map((i) => [
       i.nomeCompleto, i.curso, i.email, i.telefone, i.comoConheceu,
-      i.periodo, i.previsaoConclusao, i.areas.join(' | '), i.psEdition ?? '',
+      i.periodo, i.previsaoConclusao, i.areas.join(' | '),
       new Date(i.createdAt).toLocaleDateString('pt-BR'),
     ]);
-    const csv = [headers, ...rows].map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const csv = [headers, ...data].map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
     const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = 'inscricoes_ps.csv'; a.click();
+    const a = document.createElement('a');
+    a.href = url; a.download = `inscricoes_${edition || 'sem-nome'}.csv`; a.click();
     URL.revokeObjectURL(url);
   };
 
@@ -617,91 +623,61 @@ function InscricoesTab() {
     <div>
       <PSConfigPanel inscricoes={items} />
 
-      {/* Filtro por edição */}
-      {editions.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-4">
-          <button
-            onClick={() => setFilterEdition('all')}
-            className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
-              filterEdition === 'all' ? 'bg-[#a80303] text-white' : 'bg-white/[0.06] text-gray-400 hover:text-white'
-            }`}
-          >
-            Todas ({items.length})
-          </button>
-          {editions.map((ed) => (
-            <button
-              key={ed}
-              onClick={() => setFilterEdition(ed)}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
-                filterEdition === ed ? 'bg-[#a80303] text-white' : 'bg-white/[0.06] text-gray-400 hover:text-white'
-              }`}
-            >
-              {ed} ({items.filter((i) => i.psEdition === ed).length})
-            </button>
-          ))}
-        </div>
-      )}
-
-      <div className="flex items-center justify-between mb-6">
-        <p className="text-gray-400 text-sm">
-          {filtered.length} inscrição(ões){filterEdition !== 'all' ? ` · ${filterEdition}` : ''}
-        </p>
-        <button
-          onClick={exportCSV}
-          disabled={filtered.length === 0}
-          className="flex items-center gap-2 bg-white/[0.06] hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors disabled:opacity-40"
-        >
-          ↓ Exportar CSV
-        </button>
-      </div>
-
-      {filtered.length === 0 ? (
-        <p className="text-gray-600 text-sm text-center py-20">Nenhuma inscrição recebida ainda.</p>
+      {items.length === 0 ? (
+        <p className="text-gray-600 text-sm text-center py-20">Nenhuma inscri\u00e7\u00e3o recebida ainda.</p>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-white/[0.08]">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-white/[0.06] text-gray-500 text-xs uppercase tracking-wider">
-                <th className="text-left px-4 py-3">Nome</th>
-                <th className="text-left px-4 py-3">Curso</th>
-                <th className="text-left px-4 py-3">Período</th>
-                <th className="text-left px-4 py-3">Áreas</th>
-                {editions.length > 0 && <th className="text-left px-4 py-3">Edição</th>}
-                <th className="text-left px-4 py-3">Data</th>
-                <th className="px-4 py-3" />
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((item, i) => (
-                <tr key={item._id} className={`border-b border-white/[0.04] hover:bg-white/[0.03] transition-colors ${i % 2 === 0 ? '' : 'bg-white/[0.02]'}`}>
-                  <td className="px-4 py-3 font-medium text-white">{item.nomeCompleto}</td>
-                  <td className="px-4 py-3 text-gray-400">{item.curso}</td>
-                  <td className="px-4 py-3 text-gray-400">{item.periodo}</td>
-                  <td className="px-4 py-3 text-gray-400">{item.areas.join(', ')}</td>
-                  {editions.length > 0 && (
-                    <td className="px-4 py-3">
-                      {item.psEdition ? (
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-white/[0.06] border border-white/10 text-gray-400">
-                          {item.psEdition}
-                        </span>
-                      ) : (
-                        <span className="text-gray-600 text-xs">—</span>
-                      )}
-                    </td>
-                  )}
-                  <td className="px-4 py-3 text-gray-500 text-xs">{new Date(item.createdAt).toLocaleDateString('pt-BR')}</td>
-                  <td className="px-4 py-3">
-                    <button
-                      onClick={() => setSelected(item)}
-                      className="text-xs text-[#a80303] hover:text-white transition-colors"
-                    >
-                      Ver
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="flex flex-col gap-10">
+          {groups.map(({ edition, rows }) => (
+            <div key={edition || '__sem_nome__'}>
+              {/* Cabe\u00e7alho do grupo */}
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <h3 className="text-white font-bold text-base">{edition || '(sem nome)'}</h3>
+                  <span className="text-gray-500 text-xs border border-white/10 px-2 py-0.5 rounded-full">
+                    {rows.length} inscri\u00e7\u00e3o{rows.length !== 1 ? '\u00f5es' : ''}
+                  </span>
+                </div>
+                <button
+                  onClick={() => exportGroupCSV(edition, rows)}
+                  className="flex items-center gap-1.5 bg-white/[0.06] hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white text-xs font-semibold px-3 py-1.5 rounded-xl transition-colors"
+                >
+                  \u2193 Exportar CSV
+                </button>
+              </div>
+
+              {/* Tabela do grupo */}
+              <div className="overflow-x-auto rounded-2xl border border-white/[0.08]">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-white/[0.06] text-gray-500 text-xs uppercase tracking-wider">
+                      <th className="text-left px-4 py-3">Nome</th>
+                      <th className="text-left px-4 py-3">Curso</th>
+                      <th className="text-left px-4 py-3">Per\u00edodo</th>
+                      <th className="text-left px-4 py-3">\u00c1reas</th>
+                      <th className="text-left px-4 py-3">Data</th>
+                      <th className="px-4 py-3" />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rows.map((item, i) => (
+                      <tr key={item._id} className={`border-b border-white/[0.04] hover:bg-white/[0.03] transition-colors ${i % 2 === 0 ? '' : 'bg-white/[0.02]'}`}>
+                        <td className="px-4 py-3 font-medium text-white">{item.nomeCompleto}</td>
+                        <td className="px-4 py-3 text-gray-400">{item.curso}</td>
+                        <td className="px-4 py-3 text-gray-400">{item.periodo}</td>
+                        <td className="px-4 py-3 text-gray-400">{item.areas.join(', ')}</td>
+                        <td className="px-4 py-3 text-gray-500 text-xs">{new Date(item.createdAt).toLocaleDateString('pt-BR')}</td>
+                        <td className="px-4 py-3">
+                          <button onClick={() => setSelected(item)} className="text-xs text-[#a80303] hover:text-white transition-colors">
+                            Ver
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
@@ -718,7 +694,7 @@ function InscricoesTab() {
             >
               <div className="flex items-start justify-between mb-6">
                 <h3 className="text-white font-black text-lg">{selected.nomeCompleto}</h3>
-                <button onClick={() => setSelected(null)} className="text-gray-500 hover:text-white text-xl leading-none">×</button>
+                <button onClick={() => setSelected(null)} className="text-gray-500 hover:text-white text-xl leading-none">\u00d7</button>
               </div>
 
               <div className="flex flex-col gap-3 text-sm">
@@ -727,11 +703,10 @@ function InscricoesTab() {
                   ['E-mail', selected.email],
                   ['Telefone', selected.telefone],
                   ['Como conheceu', selected.comoConheceu],
-                  ['Período', selected.periodo],
-                  ['Previsão de conclusão', selected.previsaoConclusao],
-                  ['Disponibilidade', selected.horasDisponiveis ?? '—'],
-                  ['Edição PS', selected.psEdition || '—'],
-                  ['Áreas', selected.areas.join(', ')],
+                  ['Per\u00edodo', selected.periodo],
+                  ['Previs\u00e3o de conclus\u00e3o', selected.previsaoConclusao],
+                  ['Edi\u00e7\u00e3o PS', selected.psEdition || '\u2014'],
+                  ['\u00c1reas', selected.areas.join(', ')],
                   ['Data', new Date(selected.createdAt).toLocaleString('pt-BR')],
                 ].map(([label, value]) => (
                   <div key={label} className="flex gap-2">
@@ -744,10 +719,10 @@ function InscricoesTab() {
                   <p className="text-gray-500 text-xs mb-3 uppercase tracking-wider">Arquivos enviados</p>
                   <div className="flex flex-col gap-2">
                     {[
-                      ['Currículo', selected.curriculo],
-                      ['Comprovante de matrícula', selected.comprovanteMatricula],
-                      ['Histórico escolar', selected.historicoEscolar],
-                      ['Texto de apresentação', selected.texto],
+                      ['Curr\u00edculo', selected.curriculo],
+                      ['Comprovante de matr\u00edcula', selected.comprovanteMatricula],
+                      ['Hist\u00f3rico escolar', selected.historicoEscolar],
+                      ['Texto de apresenta\u00e7\u00e3o', selected.texto],
                     ].map(([label, path]) => (
                       <a
                         key={label as string}
@@ -757,7 +732,7 @@ function InscricoesTab() {
                         className="flex items-center justify-between px-3 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] transition-colors"
                       >
                         <span className="text-gray-300 text-xs">{label as string}</span>
-                        <span className="text-[#a80303] text-xs">Abrir ↗</span>
+                        <span className="text-[#a80303] text-xs">Abrir \u2197</span>
                       </a>
                     ))}
                   </div>
