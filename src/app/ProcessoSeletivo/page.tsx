@@ -227,7 +227,7 @@ function InscricaoForm() {
         <h3 className="text-white text-xl sm:text-2xl font-black mb-3">Inscrição enviada com sucesso!</h3>
         <p className="text-gray-400 max-w-sm mx-auto text-sm sm:text-base">
           Entraremos em contato pelo e-mail{' '}
-          <span className="text-white">{successEmail}</span> em até 5 dias úteis.
+          <span className="text-white">{successEmail}</span> ou WhatsApp em até 2 dias úteis.
         </p>
       </div>
     );
@@ -725,7 +725,7 @@ export default function ProcessoSeletivoPage() {
             {formVisible ? (
               <>
                 <p className="text-gray-400 mb-5 sm:mb-6 text-sm sm:text-base">
-                  Preencha todos os campos. Entraremos em contato em até 5 dias úteis.
+                  Preencha todos os campos. Entraremos em contato por e-mail ou WhatsApp em até 2 dias úteis.
                 </p>
                 {psDeadline && (
                   <p className="text-gray-400 text-sm mb-5 sm:mb-6">
