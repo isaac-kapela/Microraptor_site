@@ -28,10 +28,11 @@ async function saveFile(file: File, subfolder: string): Promise<string> {
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
-    const config = await PSConfig.findOne().lean();
+    const config = await PSConfig.findOne().sort({ createdAt: -1 }).lean();
     const isOpen = config ? config.isOpen : true;
     const deadline = config?.deadline ? new Date(config.deadline) : null;
     const deadlinePassed = deadline ? deadline.getTime() < Date.now() : false;
+    const psEdition = config?.edition ?? '';
 
     if (!isOpen || deadlinePassed) {
       return NextResponse.json({ error: 'As inscrições estão encerradas.' }, { status: 403 });
@@ -76,6 +77,7 @@ export async function POST(req: NextRequest) {
       periodo:              get('periodo'),
       previsaoConclusao:    get('previsaoConclusao'),
       horasDisponiveis:     get('horasDisponiveis'),
+      psEdition,
       areas:                fd.getAll('areas') as string[],
       texto:                textoPath,
       curriculo:            curriculoPath,

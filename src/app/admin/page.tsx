@@ -362,6 +362,14 @@ function AlbunsTab() {
 
 // ─── Inscrições PS ────────────────────────────────────────────────────────────
 
+interface PSEditionDoc {
+  _id: string;
+  edition: string;
+  isOpen: boolean;
+  deadline: string | null;
+  createdAt: string;
+}
+
 interface PSDoc {
   _id: string;
   nomeCompleto: string;
@@ -372,6 +380,7 @@ interface PSDoc {
   periodo: string;
   previsaoConclusao: string;
   horasDisponiveis?: string;
+  psEdition?: string;
   areas: string[];
   curriculo: string;
   comprovanteMatricula: string;
@@ -380,36 +389,74 @@ interface PSDoc {
   createdAt: string;
 }
 
-function PSConfigPanel() {
-  const [isOpen, setIsOpen]     = useState(true);
-  const [deadline, setDeadline] = useState('');
-  const [saving, setSaving]     = useState(false);
-  const [saved, setSaved]       = useState(false);
+function PSConfigPanel({ inscricoes }: { inscricoes: PSDoc[] }) {
+  const [editions, setEditions]         = useState<PSEditionDoc[]>([]);
+  const [isOpen, setIsOpen]             = useState(true);
+  const [deadline, setDeadline]         = useState('');
+  const [edition, setEdition]           = useState('');
+  const [saving, setSaving]             = useState(false);
+  const [saved, setSaved]               = useState(false);
+  const [newEditionName, setNewEditionName] = useState('');
+  const [creating, setCreating]         = useState(false);
 
-  useEffect(() => {
-    fetch('/api/ps-config')
-      .then((r) => r.json())
-      .then((d) => {
-        setIsOpen(d.isOpen);
-        setDeadline(d.deadline ? new Date(d.deadline).toISOString().slice(0, 16) : '');
-      });
-  }, []);
+  const loadEditions = async () => {
+    const res = await fetch('/api/ps-config?all=1');
+    const data = await res.json();
+    if (!Array.isArray(data)) return;
+    setEditions(data);
+    const current = data[0];
+    if (current) {
+      setIsOpen(current.isOpen);
+      setDeadline(current.deadline ? new Date(current.deadline).toISOString().slice(0, 16) : '');
+      setEdition(current.edition);
+    }
+  };
+
+  useEffect(() => { loadEditions(); }, []);
 
   const save = async () => {
     setSaving(true);
     await fetch('/api/ps-config', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ isOpen, deadline: deadline || null }),
+      body: JSON.stringify({ isOpen, deadline: deadline || null, edition }),
     });
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
+    loadEditions();
   };
+
+  const createEdition = async () => {
+    if (!newEditionName.trim()) return;
+    setCreating(true);
+    await fetch('/api/ps-config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ edition: newEditionName.trim() }),
+    });
+    setNewEditionName('');
+    setCreating(false);
+    loadEditions();
+  };
+
+  const countForEdition = (ed: string) => inscricoes.filter((i) => (i.psEdition ?? '') === ed).length;
 
   return (
     <div className="mb-8 p-5 rounded-2xl border border-white/[0.08] bg-white/[0.02] flex flex-col gap-5">
       <p className="text-white font-bold text-sm">Controle de inscrições</p>
+
+      {/* Nome da edição */}
+      <div>
+        <label className="block text-gray-300 text-sm mb-2">Nome da edição atual</label>
+        <input
+          type="text"
+          value={edition}
+          onChange={(e) => setEdition(e.target.value)}
+          placeholder="ex: PS 2026.1"
+          className="w-full bg-white/[0.06] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-[#a80303]/60"
+        />
+      </div>
 
       {/* Toggle aberto/fechado */}
       <div className="flex items-center justify-between">
@@ -444,27 +491,73 @@ function PSConfigPanel() {
       >
         {saved ? 'Salvo ✓' : saving ? 'Salvando…' : 'Salvar configuração'}
       </button>
+
+      {/* Criar nova edição */}
+      <div className="border-t border-white/[0.08] pt-4">
+        <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-3">Nova edição de PS</p>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={newEditionName}
+            onChange={(e) => setNewEditionName(e.target.value)}
+            placeholder="ex: PS 2026.2"
+            className="flex-1 bg-white/[0.06] border border-white/10 rounded-xl px-4 py-2 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-[#a80303]/60"
+          />
+          <button
+            onClick={createEdition}
+            disabled={creating || !newEditionName.trim()}
+            className="text-sm font-semibold px-4 py-2 rounded-xl bg-white/[0.06] hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white transition-colors disabled:opacity-40"
+          >
+            {creating ? 'Criando…' : 'Criar'}
+          </button>
+        </div>
+        <p className="text-gray-600 text-xs mt-1.5">Fecha a edição atual e cria uma nova</p>
+      </div>
+
+      {/* Histórico de edições */}
+      {editions.length > 0 && (
+        <div className="border-t border-white/[0.08] pt-4">
+          <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-3">Histórico de edições</p>
+          <div className="flex flex-col gap-2">
+            {editions.map((ed) => (
+              <div key={ed._id} className="flex items-center justify-between px-3 py-2 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+                <div>
+                  <p className="text-white text-sm">{ed.edition || '(sem nome)'}</p>
+                  <p className="text-gray-600 text-xs">{countForEdition(ed.edition)} inscrição(ões)</p>
+                </div>
+                <span className={`text-xs px-2 py-0.5 rounded-full border ${ed.isOpen ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' : 'text-gray-500 border-white/10 bg-white/[0.04]'}`}>
+                  {ed.isOpen ? 'Aberta' : 'Fechada'}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 function InscricoesTab() {
-  const [items, setItems] = useState<PSDoc[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selected, setSelected] = useState<PSDoc | null>(null);
+  const [items, setItems]               = useState<PSDoc[]>([]);
+  const [filterEdition, setFilterEdition] = useState<string>('all');
+  const [loading, setLoading]           = useState(true);
+  const [selected, setSelected]         = useState<PSDoc | null>(null);
 
   useEffect(() => {
     fetch('/api/ps')
       .then((r) => r.json())
-      .then((data) => setItems(data))
+      .then((data) => setItems(Array.isArray(data) ? data : []))
       .finally(() => setLoading(false));
   }, []);
 
+  const editions = [...new Set(items.map((i) => i.psEdition ?? '').filter(Boolean))];
+  const filtered = filterEdition === 'all' ? items : items.filter((i) => i.psEdition === filterEdition);
+
   const exportCSV = () => {
-    const headers = ['Nome', 'Curso', 'Email', 'Telefone', 'Como conheceu', 'Período', 'Previsão conclusão', 'Áreas', 'Data'];
-    const rows = items.map((i) => [
+    const headers = ['Nome', 'Curso', 'Email', 'Telefone', 'Como conheceu', 'Período', 'Previsão conclusão', 'Áreas', 'Edição PS', 'Data'];
+    const rows = filtered.map((i) => [
       i.nomeCompleto, i.curso, i.email, i.telefone, i.comoConheceu,
-      i.periodo, i.previsaoConclusao, i.areas.join(' | '),
+      i.periodo, i.previsaoConclusao, i.areas.join(' | '), i.psEdition ?? '',
       new Date(i.createdAt).toLocaleDateString('pt-BR'),
     ]);
     const csv = [headers, ...rows].map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
@@ -478,19 +571,47 @@ function InscricoesTab() {
 
   return (
     <div>
-      <PSConfigPanel />
+      <PSConfigPanel inscricoes={items} />
+
+      {/* Filtro por edição */}
+      {editions.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-4">
+          <button
+            onClick={() => setFilterEdition('all')}
+            className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+              filterEdition === 'all' ? 'bg-[#a80303] text-white' : 'bg-white/[0.06] text-gray-400 hover:text-white'
+            }`}
+          >
+            Todas ({items.length})
+          </button>
+          {editions.map((ed) => (
+            <button
+              key={ed}
+              onClick={() => setFilterEdition(ed)}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+                filterEdition === ed ? 'bg-[#a80303] text-white' : 'bg-white/[0.06] text-gray-400 hover:text-white'
+              }`}
+            >
+              {ed} ({items.filter((i) => i.psEdition === ed).length})
+            </button>
+          ))}
+        </div>
+      )}
+
       <div className="flex items-center justify-between mb-6">
-        <p className="text-gray-400 text-sm">{items.length} inscrição(ões)</p>
+        <p className="text-gray-400 text-sm">
+          {filtered.length} inscrição(ões){filterEdition !== 'all' ? ` · ${filterEdition}` : ''}
+        </p>
         <button
           onClick={exportCSV}
-          disabled={items.length === 0}
+          disabled={filtered.length === 0}
           className="flex items-center gap-2 bg-white/[0.06] hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors disabled:opacity-40"
         >
           ↓ Exportar CSV
         </button>
       </div>
 
-      {items.length === 0 ? (
+      {filtered.length === 0 ? (
         <p className="text-gray-600 text-sm text-center py-20">Nenhuma inscrição recebida ainda.</p>
       ) : (
         <div className="overflow-x-auto rounded-2xl border border-white/[0.08]">
@@ -501,17 +622,29 @@ function InscricoesTab() {
                 <th className="text-left px-4 py-3">Curso</th>
                 <th className="text-left px-4 py-3">Período</th>
                 <th className="text-left px-4 py-3">Áreas</th>
+                {editions.length > 0 && <th className="text-left px-4 py-3">Edição</th>}
                 <th className="text-left px-4 py-3">Data</th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>
             <tbody>
-              {items.map((item, i) => (
+              {filtered.map((item, i) => (
                 <tr key={item._id} className={`border-b border-white/[0.04] hover:bg-white/[0.03] transition-colors ${i % 2 === 0 ? '' : 'bg-white/[0.02]'}`}>
                   <td className="px-4 py-3 font-medium text-white">{item.nomeCompleto}</td>
                   <td className="px-4 py-3 text-gray-400">{item.curso}</td>
                   <td className="px-4 py-3 text-gray-400">{item.periodo}</td>
                   <td className="px-4 py-3 text-gray-400">{item.areas.join(', ')}</td>
+                  {editions.length > 0 && (
+                    <td className="px-4 py-3">
+                      {item.psEdition ? (
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-white/[0.06] border border-white/10 text-gray-400">
+                          {item.psEdition}
+                        </span>
+                      ) : (
+                        <span className="text-gray-600 text-xs">—</span>
+                      )}
+                    </td>
+                  )}
                   <td className="px-4 py-3 text-gray-500 text-xs">{new Date(item.createdAt).toLocaleDateString('pt-BR')}</td>
                   <td className="px-4 py-3">
                     <button
@@ -553,6 +686,7 @@ function InscricoesTab() {
                   ['Período', selected.periodo],
                   ['Previsão de conclusão', selected.previsaoConclusao],
                   ['Disponibilidade', selected.horasDisponiveis ?? '—'],
+                  ['Edição PS', selected.psEdition || '—'],
                   ['Áreas', selected.areas.join(', ')],
                   ['Data', new Date(selected.createdAt).toLocaleString('pt-BR')],
                 ].map(([label, value]) => (

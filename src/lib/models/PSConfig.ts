@@ -1,14 +1,16 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface IPSConfig extends Document {
+  edition: string;
   isOpen: boolean;
   deadline: Date | null;
 }
 
 const PSConfigSchema = new Schema<IPSConfig>(
   {
-    isOpen:   { type: Boolean, default: true },
-    deadline: { type: Date, default: null },
+    edition: { type: String, default: '' },
+    isOpen:  { type: Boolean, default: true },
+    deadline:{ type: Date, default: null },
   },
   { timestamps: true }
 );
