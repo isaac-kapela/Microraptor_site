@@ -100,12 +100,6 @@ const COMO_CONHECEU = [
   'Outro',
 ];
 
-const HORAS = [
-  'Menos de 5h por semana',
-  'Entre 5h e 10h por semana',
-  'Entre 10h e 15h por semana',
-  'Mais de 15h por semana',
-];
 
 const fieldCls =
   'w-full bg-white/[0.06] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-none transition-colors';
@@ -170,7 +164,7 @@ function InscricaoForm() {
   const ic = (name: string) =>
     `${fieldCls} ${filled[name] ? 'border-emerald-500/40 focus:border-emerald-500/60' : 'focus:border-[#a80303]/60'}`;
 
-  const s1Done = !!(filled.nomeCompleto && filled.curso && filled.email && filled.telefone && filled.periodo && filled.previsaoConclusao && filled.horasDisponiveis && filled.comoConheceu);
+  const s1Done = !!(filled.nomeCompleto && filled.curso && filled.email && filled.telefone && filled.periodo && filled.previsaoConclusao && filled.comoConheceu);
   const s2Done = areas.length === 3;
   const s3Done = !!(curriculo && comprovante && historico);
 
@@ -316,26 +310,6 @@ function InscricaoForm() {
             <option value="" disabled className="bg-black">Selecione uma opção</option>
             {COMO_CONHECEU.map((o) => (
               <option key={o} value={o} className="bg-black">{o}</option>
-            ))}
-          </select>
-          <Icon icon="mdi:chevron-down" width={18} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
-        </div>
-      </section>
-
-      {/* Disponibilidade */}
-      <section>
-        <SectionLabel>Disponibilidade semanal</SectionLabel>
-        <div className="relative">
-          <select
-            name="horasDisponiveis"
-            required
-            defaultValue=""
-            onChange={(e) => mark('horasDisponiveis', e.target.value)}
-            className={`${ic('horasDisponiveis')} appearance-none cursor-pointer`}
-          >
-            <option value="" disabled className="bg-black">Quantas horas por semana você pode dedicar?</option>
-            {HORAS.map((h) => (
-              <option key={h} value={h} className="bg-black">{h}</option>
             ))}
           </select>
           <Icon icon="mdi:chevron-down" width={18} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
